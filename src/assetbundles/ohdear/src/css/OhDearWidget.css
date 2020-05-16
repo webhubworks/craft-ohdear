@@ -1,0 +1,48 @@
+/**
+ * Oh Dear plugin for Craft CMS
+ *
+ * Oh Dear Widget CSS
+ *
+ * @author    webhub GmbH
+ * @copyright Copyright (c) 2019 webhub GmbH
+ * @link      https://webhub.de
+ * @package   OhDear
+ * @since     1.0.0
+ */
+
+/*@import "tailwindcss/base";*/
+
+@import "tailwindcss/components";
+
+@import "tailwindcss/utilities";
+
+.webhub\\ohdear\\widgets\\ohdearwidget .front .pane {
+    padding-bottom: 0;
+}
+
+.ohdear-widget__stats {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.ohdear-widget__stat {
+    flex: 0 1 125px;
+    margin-bottom: 1.5rem;
+}
+
+.ohdear-widget__stat dt {
+    font-weight: bold;
+    color: #9da5af;
+    font-size: .875rem;
+    margin-bottom: .75rem;
+}
+
+.ohdear-widget__stat.ohdear-widget__stat--numeric dl {
+    font-size: 2rem;
+}
+.ohdear-widget__stat.ohdear-widget__stat--numeric dl,
+.ohdear-widget__stat.ohdear-widget__stat--numeric dl a {
+    color: #3f4d5a;
+    text-decoration: none;
+}

@@ -1,0 +1,13 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{% extends '_layouts/cp' %}
+
+{% do view.registerAssetBundle('webhub\\ohdear\\assetbundles\\ohdear\\OhDearAsset') %}
+
+{% set title = 'Oh Dear Broken Links' %}
+{% set selectedSubnavItem = 'broken-links' %}
+
+{% block content %}
+    <div id="ohdear-app">
+        <broken-links></broken-links>
+    </div>
+{% endblock %}

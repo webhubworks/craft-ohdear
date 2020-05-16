@@ -1,0 +1,20 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Oh Dear plugin for Craft CMS
+ *
+ * OhDearWidget Widget Body
+ *
+ * @author    webhub GmbH
+ * @copyright Copyright (c) 2019 webhub GmbH
+ * @link      https://webhub.de
+ * @package   OhDear
+ * @since     1.0.0
+ */
+#}
+
+{% do view.registerAssetBundle('webhub\\ohdear\\assetbundles\\ohdear\\OhDearWidgetAsset') %}
+
+<div class="ohdear-widget">
+    <widget period="{{ period }}" :checks="{{ checks|json_encode }}"></widget>
+</div>

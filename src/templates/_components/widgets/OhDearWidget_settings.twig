@@ -1,0 +1,66 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Oh Dear plugin for Craft CMS
+ *
+ * OhDearWidget Widget Settings
+ *
+ * @author    webhub GmbH
+ * @copyright Copyright (c) 2019 webhub GmbH
+ * @link      https://webhub.de
+ * @package   OhDear
+ * @since     1.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{% do view.registerAssetBundle("webhub\\ohdear\\assetbundles\\ohdear\\OhDearWidgetAsset") %}
+
+{{ forms.selectField({
+    label: 'Period',
+    instructions: 'Specify the timespan for the up- and downtime stats.',
+    id: 'period',
+    name: 'period',
+    value: widget['period'],
+    options: [
+        {
+            value: 'hour',
+            label: 'Last 24 hours'
+        },
+        {
+            value: 'day',
+            label: 'Last month'
+        },
+        {
+            value: 'month',
+            label: 'Last year'
+        }
+    ]
+}) }}
+
+{{ forms.checkboxGroupField({
+    label: 'Checks',
+    instructions: 'Enable or disable checks in the widget.',
+    name: 'checks',
+    id: 'checks',
+    values: widget['checks'],
+    options: [
+        {
+            label: 'Uptime',
+            value: 'uptime'
+        },
+        {
+            label: 'Broken Links',
+            value: 'broken_links'
+        },
+        {
+            label: 'Mixed Content',
+            value: 'mixed_content'
+        },
+        {
+            label: 'Certificate Health',
+            value: 'certificate_health'
+        }
+    ],
+}) }}

@@ -1,0 +1,13 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{% extends '_layouts/cp' %}
+
+{% do view.registerAssetBundle('webhub\\ohdear\\assetbundles\\ohdear\\OhDearAsset') %}
+
+{% set title = 'Oh Dear Mixed Content' %}
+{% set selectedSubnavItem = 'mixed-content' %}
+
+{% block content %}
+    <div id="ohdear-app">
+        <mixed-content></mixed-content>
+    </div>
+{% endblock %}

@@ -1,0 +1,19 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+
+{% extends '_layouts/cp' %}
+
+{% do view.registerAssetBundle('webhub\\ohdear\\assetbundles\\ohdear\\OhDearAsset') %}
+
+{% set title = 'Oh Dear Overview' %}
+{% set selectedSubnavItem = 'overview' %}
+
+{# TODO: Can this be done in the plugin base class routing? #}
+{% if not craft.app.plugins.plugin('oh-dear').settings.isValid() %}
+    {% redirect '/admin/settings/plugins/oh-dear' %}
+{% endif %}
+
+{% block main %}
+    <div id="ohdear-app">
+        <overview></overview>
+    </div>
+{% endblock %}

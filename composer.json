@@ -1,0 +1,50 @@
+{
+    "name": "webhub/oh-dear",
+    "description": "Integrate the Oh Dear monitoring service into the Control Panel.",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "oh dear",
+        "test"
+    ],
+    "support": {
+        "docs": "https://webhub.de",
+        "issues": "https://webhub.de"
+    },
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "webhub GmbH",
+            "homepage": "https://webhub.de"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.0.0",
+        "ohdearapp/ohdear-php-sdk": "^1.6.0",
+        "spatie/url": "^1.3"
+    },
+    "require-dev": {
+        "craftcms/cms": "^3.2.0",
+        "codeception/codeception": "^3.0",
+        "vlucas/phpdotenv": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+          "webhub\\ohdear\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Oh Dear",
+        "handle": "oh-dear",
+        "changelogUrl": "???",
+        "components": {
+            "ohDearService": "webhub\\ohdear\\services\\OhDearService",
+            "settingsService": "webhub\\ohdear\\services\\SettingsService"
+        },
+        "class": "webhub\\ohdear\\OhDear"
+    }
+}

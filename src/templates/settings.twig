@@ -1,0 +1,32 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Oh Dear plugin for Craft CMS 3.x
+ *
+ * Oh Dear Settings.twig
+ *
+ * @author    webhub GmbH
+ * @copyright Copyright (c) 2019 webhub GmbH
+ * @link      https://webhub.de
+ * @package   OhDear
+ * @since     1.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{% do view.registerAssetBundle("webhub\\ohdear\\assetbundles\\ohdear\\OhDearAsset") %}
+
+{% requirePermission 'oh-dear:plugin-settings' %}
+
+{% if settings.getErrors()|length %}
+    <ul class="oh-pb-4">
+        {% for error in settings.getErrors() %}
+            <li>{{ error[0] }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<div id="ohdear-app">
+    <token-field token="{{ settings['apiToken'] }}" site-id="{{ settings['selectedSiteId'] }}"></token-field>
+</div>
