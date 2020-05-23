@@ -1,8 +1,11 @@
+
+![Oh Dear Logo](resources/img/plugin-logo.png)
+
 # Oh Dear plugin for Craft CMS 3.x
 
 Integrate Oh Dear into Craft CMS.
 
-![Screenshot](resources/img/plugin-logo.png)
+![Oh Dear overview](resources/img/screenshots/overview.png)
 
 ## Requirements
 
@@ -18,7 +21,7 @@ To install the plugin, follow these instructions.
 
 2. Then tell Composer to load the plugin:
 
-        composer require /oh-dear
+        composer require webhub-works/craft-oh-dear
 
 3. In the Control Panel, go to Settings → Plugins and click the “Install” button for Oh Dear.
 
@@ -28,9 +31,13 @@ Craft Oh Dear provides deep integration into Craft and saves developer's time by
 
 With Oh Dear you don‘t just monitor your homepage but your entire website. Oh Dear monitors uptime, checks your SSL certificates, detects broken links and mixed content. Craft Oh Dear integrates all this nicely into the Control Panel.
 
+To learn more about the features visit the plugin store page.
+
 ## Configuring Oh Dear
 
 Go to the settings page and paste your Oh Dear API key. (You can create a token [here](https://ohdear.app/user-settings/api).) You can choose from the sites of all teams that your personal Oh Dear account belongs to.
+
+Currently there is no multi-site support. You can only connect to a single Oh Dear site from one Craft installation. Multi-site support is on our Roadmap. Let us know if you desperately need it.
 
 ## Oh Dear Roadmap
 
