@@ -1,6 +1,3 @@
-
-![Oh Dear Logo](resources/img/ohdear-logo.png)
-
 # Oh Dear plugin for Craft CMS 3.x
 
 Integrate Oh Dear into Craft CMS.
