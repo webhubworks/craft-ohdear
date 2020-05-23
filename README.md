@@ -1,5 +1,5 @@
 
-![Oh Dear Logo](resources/img/plugin-logo.png)
+![Oh Dear Logo](resources/img/ohdear-logo.png)
 
 # Oh Dear plugin for Craft CMS 3.x
 
