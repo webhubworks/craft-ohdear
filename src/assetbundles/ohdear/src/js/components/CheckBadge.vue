@@ -21,6 +21,9 @@
                     Typo.checks[this.check.type].badge.bad;
             },
             color() {
+                if (this.check.latestRunResult === null) {
+                    return 'green';
+                }
                 switch (this.check.latestRunResult) {
                     case 'succeeded':
                         return 'green';

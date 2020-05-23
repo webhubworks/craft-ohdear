@@ -81,17 +81,17 @@
     const LEGEND_HEIGHT = 22;
     const SCROLLBAR_HEIGHT = 8;
     const COLOR_MAP = {
-        100: '#46c49e',
-        90: '#D1D646',
-        80: '#D1D646',
-        70: '#D1D646',
-        60: '#E89B4E',
-        50: '#E89B4E',
-        40: '#E89B4E',
-        30: '#fe5f55',
-        20: '#fe5f55',
-        10: '#fe5f55',
-        0: '#fe5f55',
+        100: '#68d391',
+        90: '#c6e0a4',
+        80: '#c6e0a4',
+        70: '#c6e0a4',
+        60: '#FFD97D',
+        50: '#FFD97D',
+        40: '#FFD97D',
+        30: '#f79d69',
+        20: '#f79d69',
+        10: '#f79d69',
+        0: '#EE6055',
     };
 
     export default {
