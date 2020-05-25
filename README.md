@@ -2,7 +2,7 @@
 
 Integrate Oh Dear into Craft CMS.
 
-![Oh Dear overview](resources/img/screenshots/overview.png)
+![Oh Dear overview](resources/img/screenshots/overview.jpg)
 
 ## Requirements
 
