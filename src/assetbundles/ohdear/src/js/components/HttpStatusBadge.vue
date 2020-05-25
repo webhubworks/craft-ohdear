@@ -22,7 +22,7 @@
         computed: {
             color() {
                 if (valueIsNoResponse(this.status)) {
-                    return 'gray';
+                    return 'red';
                 }
                 const status = parseInt(this.status);
                 if (status >= 500) {
