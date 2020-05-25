@@ -1,8 +1,7 @@
 {
     "name": "webhubworks/craft-ohdear",
-    "description": "Integrate the Oh Dear monitoring service into the Control Panel.",
+    "description": "Integrate the Oh Dear monitoring service into Craft CMS.",
     "type": "craft-plugin",
-    "version": "1.0.0",
     "keywords": [
         "craft",
         "cms",
