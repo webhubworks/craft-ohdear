@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2019 webhub GmbH
  */
 
-namespace webhub\ohdear\services;
+namespace webhubworks\ohdear\services;
 
 use Craft;
 use craft\base\Component;
@@ -21,7 +21,7 @@ use OhDear\PhpSdk\Resources\MaintenancePeriod;
 use OhDear\PhpSdk\Resources\MixedContentItem;
 use OhDear\PhpSdk\Resources\Site;
 use Spatie\Url\Url;
-use webhub\ohdear\OhDear;
+use webhubworks\ohdear\OhDear;
 
 /**
  * OhDearService Service

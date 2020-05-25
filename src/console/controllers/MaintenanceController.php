@@ -8,12 +8,12 @@
  * @copyright Copyright (c) 2019 webhub GmbH
  */
 
-namespace webhub\ohdear\console\controllers;
+namespace webhubworks\ohdear\console\controllers;
 
 use craft\helpers\Console;
 use Exception;
 use OhDear\PhpSdk\Resources\MaintenancePeriod;
-use webhub\ohdear\OhDear;
+use webhubworks\ohdear\OhDear;
 use yii\console\Controller;
 use yii\console\ExitCode;
 use yii\console\widgets\Table;

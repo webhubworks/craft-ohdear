@@ -73,7 +73,7 @@
                            color="teal"
                            label="Pending"
                            :dotless="true">
-                        <info-icon class="oh-ml-1 oh-mt-0.5">This mixed content item may have been fixed because the element has been updated since the last check.<br>Wait until the next check or <a href="/admin/oh-dear/overview">request a new run</a>.</info-icon>
+                        <info-icon class="oh-ml-1 oh-mt-0.5">This mixed content item may have been fixed because the element has been updated since the last check.<br>Wait until the next check or <a href="/admin/ohdear/overview">request a new run</a>.</info-icon>
                     </badge>
                     <badge v-else color="red" label="Insecure" :dotless="true"/>
                 </td>

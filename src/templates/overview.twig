@@ -2,14 +2,14 @@
 
 {% extends '_layouts/cp' %}
 
-{% do view.registerAssetBundle('webhub\\ohdear\\assetbundles\\ohdear\\OhDearAsset') %}
+{% do view.registerAssetBundle('webhubworks\\ohdear\\assetbundles\\ohdear\\OhDearAsset') %}
 
 {% set title = 'Oh Dear Overview' %}
 {% set selectedSubnavItem = 'overview' %}
 
 {# TODO: Can this be done in the plugin base class routing? #}
-{% if not craft.app.plugins.plugin('oh-dear').settings.isValid() %}
-    {% redirect '/admin/settings/plugins/oh-dear' %}
+{% if not craft.app.plugins.plugin('ohdear').settings.isValid() %}
+    {% redirect '/admin/settings/plugins/ohdear' %}
 {% endif %}
 
 {% block main %}

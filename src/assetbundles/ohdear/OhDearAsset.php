@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2019 webhub GmbH
  */
 
-namespace webhub\ohdear\assetbundles\OhDear;
+namespace webhubworks\ohdear\assetbundles\OhDear;
 
 use Craft;
 use craft\web\AssetBundle;
@@ -43,7 +43,7 @@ class OhDearAsset extends AssetBundle
     public function init()
     {
         // define the path that your publishable resources live
-        $this->sourcePath = "@webhub/ohdear/assetbundles/ohdear/dist";
+        $this->sourcePath = "@webhubworks/ohdear/assetbundles/ohdear/dist";
 
         // define the dependencies
         $this->depends = [

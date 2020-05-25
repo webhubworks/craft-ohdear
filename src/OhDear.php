@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2019 webhub GmbH
  */
 
-namespace webhub\ohdear;
+namespace webhubworks\ohdear;
 
 use Craft;
 use craft\base\Model;
@@ -27,28 +27,20 @@ use Spatie\Url\Url;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
-use webhub\ohdear\models\Settings;
-use webhub\ohdear\services\OhDearService as OhDearServiceService;
-use webhub\ohdear\services\SettingsService;
-use webhub\ohdear\widgets\OhDearWidget;
+use webhubworks\ohdear\models\Settings;
+use webhubworks\ohdear\services\OhDearService as OhDearServiceService;
+use webhubworks\ohdear\services\SettingsService;
+use webhubworks\ohdear\widgets\OhDearWidget;
 use yii\base\Event;
 use yii\base\Exception;
 
 /**
- * Craft plugins are very much like little applications in and of themselves. We’ve made
- * it as simple as we can, but the training wheels are off. A little prior knowledge is
- * going to be required to write a plugin.
- *
- * For the purposes of the plugin docs, we’re going to assume that you know PHP and SQL,
- * as well as some semi-advanced concepts like object-oriented programming and PHP namespaces.
- *
- * https://craftcms.com/docs/plugins/introduction
- *
  * @author    webhub GmbH
  * @package   OhDear
  * @since     1.0.0
  *
  * @property  OhDearServiceService $ohDearService
+ * @property mixed $cpNavItem
  * @property  Settings $settings
  * @method    Settings getSettings()
  */
@@ -103,7 +95,7 @@ class OhDear extends Plugin
     {
         // Set the controllerNamespace based on whether this is a console request
         if (Craft::$app->getRequest()->getIsConsoleRequest()) {
-            $this->controllerNamespace = 'webhub\\ohdear\\console\\controllers';
+            $this->controllerNamespace = 'webhubworks\\ohdear\\console\\controllers';
         }
 
         parent::init();
@@ -152,7 +144,7 @@ class OhDear extends Plugin
     protected function settingsHtml(): string
     {
         return Craft::$app->view->renderTemplate(
-            'oh-dear/settings',
+            'ohdear/settings',
             [
                 'settings' => $this->getSettings()
             ]
@@ -166,7 +158,7 @@ class OhDear extends Plugin
             UserPermissions::EVENT_REGISTER_PERMISSIONS,
             function (RegisterUserPermissionsEvent $event) {
                 $event->permissions['Oh Dear'] = [
-                    'oh-dear:plugin-settings' => [
+                    'ohdear:plugin-settings' => [
                         'label' => 'Manage plugin settings',
                     ],
                 ];
@@ -179,7 +171,7 @@ class OhDear extends Plugin
      */
     protected function cpNavIconPath()
     {
-        return Craft::getAlias('@vendor/webhub/oh-dear/src/resources/icons/oh-dear.svg');
+        return Craft::getAlias('@vendor/webhubworks/craft-ohdear/src/resources/icons/ohdear.svg');
     }
 
     /**
@@ -200,29 +192,29 @@ class OhDear extends Plugin
             return $cpNavItem;
         }
 
-        if (!$currentUser->can('accessPlugin-oh-dear')) {
+        if (!$currentUser->can('accessPlugin-ohdear')) {
             return $cpNavItem;
         }
 
         $cpNavItem['subnav'] = [
             'overview' => [
-                'url' => 'oh-dear/overview',
+                'url' => 'ohdear/overview',
                 'label' => 'Overview',
             ],
             'uptime' => [
-                'url' => 'oh-dear/uptime',
+                'url' => 'ohdear/uptime',
                 'label' => 'Uptime',
             ],
             'broken-links' => [
-                'url' => 'oh-dear/broken-links',
+                'url' => 'ohdear/broken-links',
                 'label' => 'Broken Links',
             ],
             'mixed-content' => [
-                'url' => 'oh-dear/mixed-content',
+                'url' => 'ohdear/mixed-content',
                 'label' => 'Mixed Content',
             ],
             'certificate-health' => [
-                'url' => 'oh-dear/certificate-health',
+                'url' => 'ohdear/certificate-health',
                 'label' => 'Certificate Health',
             ]
         ];
@@ -249,12 +241,12 @@ class OhDear extends Plugin
             UrlManager::class,
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
             function (RegisterUrlRulesEvent $event) {
-                $event->rules['oh-dear'] = ['template' => 'oh-dear/overview'];
-                $event->rules['oh-dear/overview'] = ['template' => 'oh-dear/overview'];
-                $event->rules['oh-dear/uptime'] = ['template' => 'oh-dear/uptime'];
-                $event->rules['oh-dear/broken-links'] = ['template' => 'oh-dear/broken-links'];
-                $event->rules['oh-dear/mixed-content'] = ['template' => 'oh-dear/mixed-content'];
-                $event->rules['oh-dear/certificate-health'] = ['template' => 'oh-dear/certificate-health'];
+                $event->rules['ohdear'] = ['template' => 'ohdear/overview'];
+                $event->rules['ohdear/overview'] = ['template' => 'ohdear/overview'];
+                $event->rules['ohdear/uptime'] = ['template' => 'ohdear/uptime'];
+                $event->rules['ohdear/broken-links'] = ['template' => 'ohdear/broken-links'];
+                $event->rules['ohdear/mixed-content'] = ['template' => 'ohdear/mixed-content'];
+                $event->rules['ohdear/certificate-health'] = ['template' => 'ohdear/certificate-health'];
             }
         );
     }
@@ -265,16 +257,16 @@ class OhDear extends Plugin
             UrlManager::class,
             UrlManager::EVENT_REGISTER_SITE_URL_RULES,
             function (RegisterUrlRulesEvent $event) {
-                $event->rules['oh-dear/api/sites'] = 'oh-dear/api/sites';
-                $event->rules['oh-dear/api/site'] = 'oh-dear/api/site';
-                $event->rules['oh-dear/api/uptime'] = 'oh-dear/api/uptime';
-                $event->rules['oh-dear/api/downtime'] = 'oh-dear/api/downtime';
-                $event->rules['oh-dear/api/broken-links'] = 'oh-dear/api/broken-links';
-                $event->rules['oh-dear/api/mixed-content'] = 'oh-dear/api/mixed-content';
-                $event->rules['oh-dear/api/certificate-health'] = 'oh-dear/api/certificate-health';
-                $event->rules['oh-dear/api/disable-check'] = 'oh-dear/api/disable-check';
-                $event->rules['oh-dear/api/enable-check'] = 'oh-dear/api/enable-check';
-                $event->rules['oh-dear/api/request-run'] = 'oh-dear/api/request-run';
+                $event->rules['ohdear/api/sites'] = 'ohdear/api/sites';
+                $event->rules['ohdear/api/site'] = 'ohdear/api/site';
+                $event->rules['ohdear/api/uptime'] = 'ohdear/api/uptime';
+                $event->rules['ohdear/api/downtime'] = 'ohdear/api/downtime';
+                $event->rules['ohdear/api/broken-links'] = 'ohdear/api/broken-links';
+                $event->rules['ohdear/api/mixed-content'] = 'ohdear/api/mixed-content';
+                $event->rules['ohdear/api/certificate-health'] = 'ohdear/api/certificate-health';
+                $event->rules['ohdear/api/disable-check'] = 'ohdear/api/disable-check';
+                $event->rules['ohdear/api/enable-check'] = 'ohdear/api/enable-check';
+                $event->rules['ohdear/api/request-run'] = 'ohdear/api/request-run';
             }
         );
     }
@@ -286,11 +278,11 @@ class OhDear extends Plugin
             function (TemplateEvent $event) {
                 if ($event->template === 'entries/_edit') {
                     $referrerUrl = Url::fromString(Craft::$app->getRequest()->getReferrer());
-                    if ($referrerUrl->getPath() === '/admin/oh-dear/broken-links') {
-                        $event->output = preg_replace('/<input type="hidden" name="redirect" value=".*">/', Html::redirectInput('/admin/oh-dear/broken-links'), $event->output);
+                    if ($referrerUrl->getPath() === '/admin/ohdear/broken-links') {
+                        $event->output = preg_replace('/<input type="hidden" name="redirect" value=".*">/', Html::redirectInput('/admin/ohdear/broken-links'), $event->output);
                     }
-                    if ($referrerUrl->getPath() === '/admin/oh-dear/mixed-content') {
-                        $event->output = preg_replace('/<input type="hidden" name="redirect" value=".*">/', Html::redirectInput('/admin/oh-dear/mixed-content'), $event->output);
+                    if ($referrerUrl->getPath() === '/admin/ohdear/mixed-content') {
+                        $event->output = preg_replace('/<input type="hidden" name="redirect" value=".*">/', Html::redirectInput('/admin/ohdear/mixed-content'), $event->output);
                     }
                 }
             }

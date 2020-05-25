@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2019 webhub GmbH
  */
 
-namespace webhub\ohdear\widgets;
+namespace webhubworks\ohdear\widgets;
 
 use Craft;
 use craft\base\Widget;
@@ -88,7 +88,7 @@ class OhDearWidget extends Widget
     {
 
         return Craft::$app->getView()->renderTemplate(
-            'oh-dear/_components/widgets/OhDearWidget_settings',
+            'ohdear/_components/widgets/OhDearWidget_settings',
             [
                 'widget' => $this
             ]
@@ -108,7 +108,7 @@ class OhDearWidget extends Widget
 //        Craft::$app->getView()->registerAssetBundle(OhDearWidgetAsset::class);
 
         return Craft::$app->getView()->renderTemplate(
-            'oh-dear/_components/widgets/OhDearWidget_body',
+            'ohdear/_components/widgets/OhDearWidget_body',
             [
                 'period' => $this->period,
                 'checks' => $this->checks
@@ -121,6 +121,6 @@ class OhDearWidget extends Widget
      */
     public static function iconPath()
     {
-        return Craft::getAlias("@webhub/ohdear/assetbundles/ohdear/dist/img/OhDearWidget-icon.svg");
+        return Craft::getAlias("@webhubworks/ohdear/assetbundles/ohdear/dist/img/OhDearWidget-icon.svg");
     }
 }

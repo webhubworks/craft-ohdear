@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2019 webhub GmbH
  */
 
-namespace webhub\ohdear\services;
+namespace webhubworks\ohdear\services;
 
 use craft\base\Component;
 use craft\elements\GlobalSet;
@@ -19,7 +19,7 @@ use OhDear\PhpSdk\Resources\Check;
 use OhDear\PhpSdk\Resources\MixedContentItem;
 use OhDear\PhpSdk\Resources\Site;
 use Spatie\Url\Url;
-use webhub\ohdear\OhDear;
+use webhubworks\ohdear\OhDear;
 use yii\base\Exception;
 
 /**

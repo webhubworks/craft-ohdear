@@ -8,11 +8,11 @@
  * @copyright Copyright (c) 2019 webhub GmbH
  */
 
-namespace webhub\ohdear\controllers;
+namespace webhubworks\ohdear\controllers;
 
 use Craft;
 use craft\web\Controller;
-use webhub\ohdear\OhDear;
+use webhubworks\ohdear\OhDear;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 

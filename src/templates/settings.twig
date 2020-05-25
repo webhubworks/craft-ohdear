@@ -15,9 +15,9 @@
 
 {% import "_includes/forms" as forms %}
 
-{% do view.registerAssetBundle("webhub\\ohdear\\assetbundles\\ohdear\\OhDearAsset") %}
+{% do view.registerAssetBundle("webhubworks\\ohdear\\assetbundles\\ohdear\\OhDearAsset") %}
 
-{% requirePermission 'oh-dear:plugin-settings' %}
+{% requirePermission 'ohdear:plugin-settings' %}
 
 {% if settings.getErrors()|length %}
     <ul class="oh-pb-4">

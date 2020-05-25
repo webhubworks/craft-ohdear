@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2019 webhub GmbH
  */
 
-namespace webhub\ohdear\models;
+namespace webhubworks\ohdear\models;
 
 use craft\base\Model;
 
