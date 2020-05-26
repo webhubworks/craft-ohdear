@@ -28,7 +28,7 @@ Craft Oh Dear provides deep integration into Craft and saves developer's time by
 
 With Oh Dear you don‘t just monitor your homepage but your entire website. Oh Dear monitors uptime, checks your SSL certificates, detects broken links and mixed content. Craft Oh Dear integrates all this nicely into the Control Panel.
 
-To learn more about the features visit the plugin store page.
+To learn more about the features visit the [plugin store page](https://plugins.craftcms.com/ohdear).
 
 ## Configuring Oh Dear
 
