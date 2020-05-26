@@ -7,13 +7,15 @@
 {% set title = 'Oh Dear Overview' %}
 {% set selectedSubnavItem = 'overview' %}
 
+{% set isPreCraft34 = craft.app.plugins.plugin('ohdear').isPreCraft34 %}
+
 {# TODO: Can this be done in the plugin base class routing? #}
 {% if not craft.app.plugins.plugin('ohdear').settings.isValid() %}
     {% redirect '/admin/settings/plugins/ohdear' %}
 {% endif %}
 
 {% block main %}
-    <div id="ohdear-app">
+    <div id="ohdear-app" class="{{ isPreCraft34 ? 'oh-pre-facelift' }}">
         <overview></overview>
     </div>
 {% endblock %}

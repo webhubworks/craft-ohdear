@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="oh-grid oh-grid-cols-2 oh-gap-4 oh-max-w-6xl" v-if="site">
+        <div class="oh-grid md:oh-grid-cols-2 oh-gap-4 oh-max-w-6xl" v-if="site">
             <card v-for="check in site.checks"
                   v-if="['uptime','broken_links','mixed_content','certificate_health','certificate_transparency'].includes(check.type)"
                   :check="check"

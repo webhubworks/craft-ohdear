@@ -1,5 +1,5 @@
 <template>
-    <article class="oh-h-full oh-p-4 oh-flex-col oh-flex oh-bg-white oh-border oh-shadow-craft oh-rounded">
+    <article class="oh-h-full oh-max-w-xl oh-p-4 oh-flex-col oh-flex oh-bg-white oh-border oh-shadow-craft oh-rounded">
 
         <header class="oh-mb-4 oh-flex oh-items-center oh-justify-between">
 

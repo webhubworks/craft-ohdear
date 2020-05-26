@@ -77,6 +77,11 @@ class OhDear extends Plugin
      */
     public $hasCpSection = true;
 
+    /**
+     * @var bool Whether the Craft version has been facelifted.
+     */
+    public $isPreCraft34 = false;
+
     // Public Methods
     // =========================================================================
 
@@ -97,6 +102,8 @@ class OhDear extends Plugin
         if (Craft::$app->getRequest()->getIsConsoleRequest()) {
             $this->controllerNamespace = 'webhubworks\\ohdear\\console\\controllers';
         }
+
+        $this->isPreCraft34 = version_compare(Craft::$app->getVersion(), '3.4', '<');
 
         parent::init();
         self::$plugin = $this;
