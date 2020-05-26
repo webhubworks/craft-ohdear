@@ -11,8 +11,8 @@
         "test"
     ],
     "support": {
-        "docs": "https://github.com/webhub-works/craft-ohdear/wiki",
-        "issues": "https://github.com/webhub-works/craft-ohdear/issues"
+        "docs": "https://github.com/webhubworks/craft-ohdear/wiki",
+        "issues": "https://github.com/webhubworks/craft-ohdear/issues"
     },
     "license": "proprietary",
     "authors": [
@@ -39,7 +39,7 @@
     "extra": {
         "name": "Oh Dear",
         "handle": "ohdear",
-        "changelogUrl": "???",
+        "changelogUrl": "CHANGELOG.md",
         "components": {
             "ohDearService": "webhubworks\\ohdear\\services\\OhDearService",
             "settingsService": "webhubworks\\ohdear\\services\\SettingsService"
