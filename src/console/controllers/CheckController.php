@@ -40,6 +40,11 @@ class CheckController extends Controller
     private $checks;
 
     /**
+     * @var string
+     */
+    private $invalidTypeOptionMessage = "Invalid type option, must be on of 'uptime', 'broken-links', 'mixed-content', 'certificate-health' or 'certificate-transparency' or a comma separated list of them." . PHP_EOL;
+
+    /**
      * @param string $actionID
      * @return array|string[]
      */
@@ -61,17 +66,13 @@ class CheckController extends Controller
             return false;
         }
 
-        if (!$this->parseTypes()) {
-            return false;
-        }
+        $this->types = $this->parseTypes();
 
-        $this->checks = array_filter(OhDear::$plugin->ohDearService->getSite()->checks, function ($check) {
-            /** @var Check $check */
-            return in_array($check->type, $this->types);
-        });
+        $this->checks = $this->getChecksByType($this->types);
 
         return true; // or false to not run the action
     }
+
 
     /**
      * Requests a new run for one or multiple checks specified by their check type.
@@ -134,32 +135,48 @@ class CheckController extends Controller
     }
 
     /**
-     * Whitelists the type option with the available types and
-     * transforms them to lower snake case.
+     * Returns all available types if the type option is not set.
+     *
+     * Whitelists the type option with the available types.
      *
      * Prints a warning if the type option is empty.
      *
-     * @return bool true if successful
+     * @return array The parsed types
      */
     private function parseTypes()
     {
+        if ($this->type === null) {
+            return $this->transformCase($this->availableTypes);
+        }
+
         if (!$this->type) {
-            $this->stdout("Invalid type option, must be on of 'uptime', 'broken-links', 'mixed-content', 'certificate-health' or 'certificate-transparency' or a comma separated list of them." . PHP_EOL, Console::FG_YELLOW);
-            return false;
+            $this->stdout($this->invalidTypeOptionMessage, Console::FG_YELLOW);
+            return [];
         }
 
-        $this->types = $this->whitelistTypes(explode(',', $this->type));
+        $types = $this->whitelistTypes(explode(',', $this->type));
 
-        $this->types = array_map(function ($type) {
-            return str_replace('-', '_', mb_strtolower($type));
-        }, $this->types);
+        $types = $this->transformCase($types);
 
-        if (empty($this->types)) {
-            $this->stdout("Invalid type option, must be on of 'uptime', 'broken-links', 'mixed-content', 'certificate-health' or 'certificate-transparency' or a comma separated list of them." . PHP_EOL, Console::FG_YELLOW);
-            return false;
+        if (empty($types)) {
+            $this->stdout($this->invalidTypeOptionMessage, Console::FG_YELLOW);
+            return [];
         }
 
-        return true;
+        return $types;
+    }
+
+    /**
+     * Transforms all items in an array to lower snake case.
+     *
+     * @param array $array
+     * @return array
+     */
+    private function transformCase($array)
+    {
+        return array_map(function ($item) {
+            return str_replace('-', '_', mb_strtolower($item));
+        }, $array);
     }
 
     /**
@@ -175,5 +192,24 @@ class CheckController extends Controller
             $types,
             $this->availableTypes
         );
+    }
+
+    /**
+     * Returns all site checks whose type names are in the types
+     * array.
+     *
+     * @param array $types
+     * @return Check[]
+     */
+    private function getChecksByType($types)
+    {
+        if (empty($types)) {
+            return [];
+        }
+
+        return array_filter(OhDear::$plugin->ohDearService->getSite()->checks, function ($check) use ($types) {
+            /** @var Check $check */
+            return in_array($check->type, $types);
+        });
     }
 }
