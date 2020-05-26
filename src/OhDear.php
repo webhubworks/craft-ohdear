@@ -280,19 +280,21 @@ class OhDear extends Plugin
 
     private function registerEntryEditRedirectOverride()
     {
-        Event::on(View::class,
-            View::EVENT_AFTER_RENDER_PAGE_TEMPLATE,
-            function (TemplateEvent $event) {
-                if ($event->template === 'entries/_edit') {
-                    $referrerUrl = Url::fromString(Craft::$app->getRequest()->getReferrer());
-                    if ($referrerUrl->getPath() === '/admin/ohdear/broken-links') {
-                        $event->output = preg_replace('/<input type="hidden" name="redirect" value=".*">/', Html::redirectInput('/admin/ohdear/broken-links'), $event->output);
-                    }
-                    if ($referrerUrl->getPath() === '/admin/ohdear/mixed-content') {
-                        $event->output = preg_replace('/<input type="hidden" name="redirect" value=".*">/', Html::redirectInput('/admin/ohdear/mixed-content'), $event->output);
+        if (method_exists(Html::class, 'redirectInput')) {
+            Event::on(View::class,
+                View::EVENT_AFTER_RENDER_PAGE_TEMPLATE,
+                function (TemplateEvent $event) {
+                    if ($event->template === 'entries/_edit') {
+                        $referrerUrl = Url::fromString(Craft::$app->getRequest()->getReferrer());
+                        if ($referrerUrl->getPath() === '/admin/ohdear/broken-links') {
+                            $event->output = preg_replace('/<input type="hidden" name="redirect" value=".*">/', Html::redirectInput('/admin/ohdear/broken-links'), $event->output);
+                        }
+                        if ($referrerUrl->getPath() === '/admin/ohdear/mixed-content') {
+                            $event->output = preg_replace('/<input type="hidden" name="redirect" value=".*">/', Html::redirectInput('/admin/ohdear/mixed-content'), $event->output);
+                        }
                     }
                 }
-            }
-        );
+            );
+        }
     }
 }
