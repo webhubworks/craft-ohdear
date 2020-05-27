@@ -7,7 +7,7 @@ export default class MixedContentItem {
         this.mixedContentUrl = mixedContentUrl;
         this.foundOnUrl = foundOnUrl;
         this.elementName = elementName || 'unknown';
-        if (element instanceof Element) {
+        if (element instanceof Element || element === null) {
             this.element = element;
         } else {
             this.element = Element.fromJson(element);

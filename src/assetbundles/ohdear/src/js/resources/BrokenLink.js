@@ -7,7 +7,7 @@ export default class BrokenLink {
         this.crawledUrl = crawledUrl;
         this.foundOnUrl = foundOnUrl;
         this.statusCode = statusCode || 'No response';
-        if (element instanceof Element) {
+        if (element instanceof Element || element === null) {
             this.element = element;
         } else {
             this.element = Element.fromJson(element);
