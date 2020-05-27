@@ -12,6 +12,9 @@ namespace webhubworks\ohdear\services;
 
 use Craft;
 use craft\base\Component;
+use craft\base\Element;
+use craft\base\ElementInterface;
+use craft\elements\Entry;
 use craft\elements\GlobalSet;
 use OhDear\PhpSdk\OhDear as OhDearSdk;
 use OhDear\PhpSdk\Resources\BrokenLink;
@@ -143,7 +146,7 @@ class OhDearService extends Component
                 'crawledUrl' => $brokenLink->crawledUrl,
                 'foundOnUrl' => $brokenLink->foundOnUrl,
                 'statusCode' => $brokenLink->statusCode,
-                'element' => $this->findElementByLink($brokenLink->foundOnUrl)
+                'element' => $this->findElementByBrokenLink($brokenLink)
             ];
         }, $this->ohDearClient->brokenLinks($this->siteId));
     }
@@ -158,7 +161,7 @@ class OhDearService extends Component
                 'mixedContentUrl' => $mixedContentItem->mixedContentUrl,
                 'foundOnUrl' => $mixedContentItem->foundOnUrl,
                 'elementName' => $mixedContentItem->elementName,
-                'element' => $this->findElementByLink($mixedContentItem->foundOnUrl)
+                'element' => $this->findElementByMixedContentItem($mixedContentItem)
             ];
         }, $this->ohDearClient->mixedContent($this->siteId));
     }
@@ -198,43 +201,97 @@ class OhDearService extends Component
         return $this->ohDearClient->requestRun($checkId);
     }
 
-    private function findElementByLink(string $link)
+    /**
+     * @param ElementInterface|null $element
+     * @return array|null
+     */
+    private function transformElement($element)
+    {
+        if ($element instanceof Entry) {
+            return [
+                'id' => intval($element->id),
+                'title' => $element->title,
+                'status' => $element->status,
+                'cpEditUrl' => $element->cpEditUrl,
+                'dateUpdated' => $element->dateUpdated->format(DATE_ISO8601)
+            ];
+        }
+
+        if ($element instanceof GlobalSet) {
+            return [
+                'id' => intval($element->id),
+                'title' => $element->name,
+                'status' => $element->status,
+                'cpEditUrl' => $element->cpEditUrl,
+                'dateUpdated' => $element->dateUpdated->format(DATE_ISO8601)
+            ];
+        }
+
+        return null;
+    }
+
+    private function findElementByMixedContentItem(MixedContentItem $mixedContentItem)
+    {
+        $element = $this->findGlobalSetByCrawledUrl($mixedContentItem->mixedContentUrl);
+
+        /* another search attempt, in asset, category, ... */
+
+        // should be the last search attempt
+        if ($element === null) {
+            $element = $this->findElementByFoundOnUrl($mixedContentItem->foundOnUrl);
+        }
+
+        return $this->transformElement($element);
+    }
+
+    /**
+     * Tries to find an element that could contain the
+     * provided broken link.
+     *
+     * @param BrokenLink $brokenLink
+     * @return array|null
+     */
+    private function findElementByBrokenLink(BrokenLink $brokenLink)
+    {
+        $element = $this->findGlobalSetByCrawledUrl($brokenLink->crawledUrl);
+
+        /* another search attempt, in asset, category, ... */
+
+        // should be the last search attempt
+        if ($element === null) {
+            $element = $this->findElementByFoundOnUrl($brokenLink->foundOnUrl);
+        }
+
+        return $this->transformElement($element);
+    }
+
+    /**
+     * Tries to find a global set by searching its field values.
+     *
+     * @param string $link
+     * @return GlobalSet|null
+     */
+    private function findGlobalSetByCrawledUrl(string $link)
     {
 
-        // TODO: Was ist mit einem Link der bspw. aus einem GlobalSet kommt. Dann liefert der Code einen falschen Treffer.
+        $searchQuery = str_replace(['://', '/', '-', '.', '?', '#'], [' ', ' ', ' ', ' ', ' ', ' '], $link);
+
+        return GlobalSet::find()->search($searchQuery)->orderBy('score')->one();
+
+    }
+
+    /**
+     * Tries to find an element by its URI.
+     *
+     * @param string $link
+     * @return ElementInterface|null
+     */
+    private function findElementByFoundOnUrl(string $link)
+    {
 
         $uri = ltrim(Url::fromString($link)->getPath(), '/');
 
-        $match = Craft::$app->getElements()->getElementByUri($uri);
-
-        if ($match === null) {
-            $searchQuery = str_replace(['://', '/', '-', '.', '?', '#'], [' ', ' ', ' ', ' ', ' ', ' '], $link);
-            $match = GlobalSet::find()->search($searchQuery)->orderBy('score')->one();
-        }
-        /*if ($match === null) {
-          another element type
-        }*/
-        switch (get_class($match)) {
-            case 'craft\elements\Entry':
-                return [
-                    'id' => intval($match->id),
-                    'title' => $match->title,
-                    'status' => $match->status,
-                    'cpEditUrl' => $match->cpEditUrl,
-                    'dateUpdated' => $match->dateUpdated->format(DATE_ISO8601)
-                ];
-            case 'craft\elements\GlobalSet':
-                return [
-                    'id' => intval($match->id),
-                    'title' => $match->name,
-                    'status' => $match->status,
-                    'cpEditUrl' => $match->cpEditUrl,
-                    'dateUpdated' => $match->dateUpdated->format(DATE_ISO8601)
-                ];
-            /*case 'anothere element type'*/
-            default:
-                return null;
-        }
+        return Craft::$app->getElements()->getElementByUri($uri);
 
     }
 }
