@@ -232,7 +232,8 @@ class OhDearService extends Component
 
     private function findElementByMixedContentItem(MixedContentItem $mixedContentItem)
     {
-        $element = $this->findGlobalSetByCrawledUrl($mixedContentItem->mixedContentUrl);
+        $element = null;
+//        $element = $this->findGlobalSetByCrawledUrl($mixedContentItem->mixedContentUrl);
 
         /* another search attempt, in asset, category, ... */
 
@@ -253,7 +254,8 @@ class OhDearService extends Component
      */
     private function findElementByBrokenLink(BrokenLink $brokenLink)
     {
-        $element = $this->findGlobalSetByCrawledUrl($brokenLink->crawledUrl);
+        $element = null;
+//        $element = $this->findGlobalSetByCrawledUrl($brokenLink->crawledUrl);
 
         /* another search attempt, in asset, category, ... */
 
