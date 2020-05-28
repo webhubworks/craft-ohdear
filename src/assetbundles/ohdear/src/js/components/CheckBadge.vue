@@ -32,7 +32,7 @@
                     case 'pending':
                         return 'yellow';
                     default:
-                        return 'gray'
+                        return 'green'
                 }
             }
         }
