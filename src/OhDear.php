@@ -287,7 +287,7 @@ class OhDear extends Plugin
      */
     private function registerEntryEditRedirectOverride()
     {
-        if (method_exists(Html::class, 'redirectInput')) {
+        if (Craft::$app->getRequest()->getIsCpRequest() && method_exists(Html::class, 'redirectInput')) {
             if (is_string(Craft::$app->getRequest()->getReferrer())) {
 
                 Event::on(View::class,
