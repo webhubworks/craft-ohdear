@@ -5,10 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## 1.1.0 - 2020-05-28
+### Added
+- Added error handling if API key in use has been accidentally deleted in Oh Dear
 ### Changed
 - Improved algorithm that tries to find the element edit page of a broken link or mixed content item, it searches in entries, global sets, matrix blocks and assets now
 ### Fixed
 - Fixed typo in the mixed content report component
+- Minor UI improvements
 
 ## 1.0.2 - 2020-05-27
 ### Fixed
