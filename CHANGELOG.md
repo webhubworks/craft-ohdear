@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.1.0 - 2020-05-28
+### Changed
+- Improved algorithm that tries to find the element edit page of a broken link or mixed content item, it searches in entries, global sets, matrix blocks and assets now
+### Fixed
+- Fixed typo in the mixed content report component
+
 ## 1.0.2 - 2020-05-27
 ### Fixed
 - Fixed a bug that broke the CLI
