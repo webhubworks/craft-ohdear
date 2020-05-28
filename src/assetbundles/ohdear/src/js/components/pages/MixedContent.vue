@@ -97,7 +97,7 @@
         mixins: [fetchesSite, hasCheck],
         data() {
             return {
-                checkType: 'broken_links',
+                checkType: 'mixed_content',
                 loadingMixedContent: true,
                 mixedContentItems: [],
             }
