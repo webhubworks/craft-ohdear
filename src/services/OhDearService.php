@@ -12,10 +12,15 @@ namespace webhubworks\ohdear\services;
 
 use Craft;
 use craft\base\Component;
-use craft\base\Element;
 use craft\base\ElementInterface;
+use craft\db\Query;
+use craft\db\Table;
+use craft\elements\Asset;
 use craft\elements\Entry;
 use craft\elements\GlobalSet;
+use craft\elements\MatrixBlock;
+use craft\errors\SiteNotFoundException;
+use craft\helpers\Search;
 use OhDear\PhpSdk\OhDear as OhDearSdk;
 use OhDear\PhpSdk\Resources\BrokenLink;
 use OhDear\PhpSdk\Resources\CertificateHealth;
@@ -207,39 +212,74 @@ class OhDearService extends Component
      */
     private function transformElement($element)
     {
-        if ($element instanceof Entry) {
-            return [
-                'id' => intval($element->id),
-                'title' => $element->title,
-                'status' => $element->status,
-                'cpEditUrl' => $element->cpEditUrl,
-                'dateUpdated' => $element->dateUpdated->format(DATE_ISO8601)
-            ];
-        }
 
-        if ($element instanceof GlobalSet) {
-            return [
-                'id' => intval($element->id),
-                'title' => $element->name,
-                'status' => $element->status,
-                'cpEditUrl' => $element->cpEditUrl,
-                'dateUpdated' => $element->dateUpdated->format(DATE_ISO8601)
-            ];
+        try {
+
+            if ($element instanceof Entry) {
+                return [
+                    'id' => intval($element->id),
+                    'title' => $element->title,
+                    'status' => $element->status,
+                    'cpEditUrl' => $element->cpEditUrl,
+                    'dateUpdated' => $element->dateUpdated->format(DATE_ISO8601)
+                ];
+            }
+
+            if ($element instanceof GlobalSet) {
+                return [
+                    'id' => intval($element->id),
+                    'title' => $element->name,
+                    'status' => $element->status,
+                    'cpEditUrl' => $element->cpEditUrl,
+                    'dateUpdated' => $element->dateUpdated->format(DATE_ISO8601)
+                ];
+            }
+
+            if ($element instanceof MatrixBlock) {
+                return [
+                    'id' => intval($element->id),
+                    'title' => $element->owner->title ?? $element->owner->name ?? 'Element',
+                    'status' => $element->status,
+                    'cpEditUrl' => $element->owner->cpEditUrl ?? '#!',
+                    'dateUpdated' => $element->dateUpdated->format(DATE_ISO8601)
+                ];
+            }
+
+            if ($element instanceof Asset) {
+                return [
+                    'id' => intval($element->id),
+                    'title' => $element->owner->title ?? $element->owner->name ?? 'Element',
+                    'status' => $element->status,
+                    'cpEditUrl' => $element->cpEditUrl ?? '#!',
+                    'dateUpdated' => $element->dateUpdated->format(DATE_ISO8601)
+                ];
+            }
+
+        } catch (\Exception $exception) {
+            return null;
         }
 
         return null;
     }
 
+    /**
+     * Tries to find an element that could contain the
+     * provided mixed content item.
+     *
+     * @param MixedContentItem $mixedContentItem
+     * @return array|null
+     * @throws SiteNotFoundException
+     */
     private function findElementByMixedContentItem(MixedContentItem $mixedContentItem)
     {
-        $element = null;
-//        $element = $this->findGlobalSetByCrawledUrl($mixedContentItem->mixedContentUrl);
+        $element = $this->findElementBySearchIndex($mixedContentItem->mixedContentUrl);
 
-        /* another search attempt, in asset, category, ... */
-
-        // should be the last search attempt
         if ($element === null) {
-            $element = $this->findElementByFoundOnUrl($mixedContentItem->foundOnUrl);
+            $element = $this->findElementByUri($mixedContentItem->foundOnUrl);
+        }
+
+        if ($element === null) {
+            return null;
         }
 
         return $this->transformElement($element);
@@ -251,35 +291,43 @@ class OhDearService extends Component
      *
      * @param BrokenLink $brokenLink
      * @return array|null
+     * @throws SiteNotFoundException
      */
     private function findElementByBrokenLink(BrokenLink $brokenLink)
     {
-        $element = null;
-//        $element = $this->findGlobalSetByCrawledUrl($brokenLink->crawledUrl);
+        $element = $this->findElementBySearchIndex($brokenLink->crawledUrl);
 
-        /* another search attempt, in asset, category, ... */
-
-        // should be the last search attempt
         if ($element === null) {
-            $element = $this->findElementByFoundOnUrl($brokenLink->foundOnUrl);
+            $element = $this->findElementByUri($brokenLink->foundOnUrl);
+        }
+
+        if ($element === null) {
+            return null;
         }
 
         return $this->transformElement($element);
     }
 
     /**
-     * Tries to find a global set by searching its field values.
+     * Tries to find an Element by querying the search index
+     * directly.
      *
-     * @param string $link
-     * @return GlobalSet|null
+     * @param string $crawledUrl
+     * @return ElementInterface|null
+     * @throws SiteNotFoundException
      */
-    private function findGlobalSetByCrawledUrl(string $link)
+    private function findElementBySearchIndex(string $crawledUrl)
     {
+        $cleanKeywords = Search::normalizeKeywords($crawledUrl);
 
-        $searchQuery = str_replace(['://', '/', '-', '.', '?', '#'], [' ', ' ', ' ', ' ', ' ', ' '], $link);
+        $elementId = (new Query)
+            ->select(['elementId'])
+            ->from([Table::SEARCHINDEX])
+            ->where(['keywords' => ' ' . $cleanKeywords . ' '])
+            ->andWhere(['siteId' => Craft::$app->sites->getCurrentSite()->id])
+            ->scalar();
 
-        return GlobalSet::find()->search($searchQuery)->orderBy('score')->one();
-
+        return Craft::$app->elements->getElementById($elementId);
     }
 
     /**
@@ -288,7 +336,7 @@ class OhDearService extends Component
      * @param string $link
      * @return ElementInterface|null
      */
-    private function findElementByFoundOnUrl(string $link)
+    private function findElementByUri(string $link)
     {
 
         $uri = ltrim(Url::fromString($link)->getPath(), '/');
