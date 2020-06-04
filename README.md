@@ -44,4 +44,22 @@ Currently there is no multi-site support. You can only connect to a single Oh De
 - Optimizing the element edit workflow for broken links and mixed content
 - Translate the plug-in to German (let us know which language you‘d like to see)
 
+## Questions and answers
+
+### Why not just use Oh Dear‘s dashboard?
+
+As an Oh Dear customer you can be a member of many teams each with their own monitored websites. It is tailored to you as a developer. With Craft Oh Dear you‘ll bring all relevant features to your Craft editors. Empower them to find and fix broken links and mixed content, manage status page updates, check the certificate health and analyse uptime.
+
+### Does Craft Oh Dear detect 404s?
+
+Oh Dear crawls your website to find broken links that refer to external or internal pages from the point of view of a user that is on your site. Thus it cannot detect 404 errors for users that arrive from outside to your website. For this purpose you may find several other Craft plugins or services.
+
+### What's Mixed Content?
+
+Take a look at this good explanation on [MDN](https://developer.mozilla.org/en-US/docs/Web/Security/Mixed_content).
+
+### Is this an official Oh Dear plugin?
+
+This plugin is independent from Oh Dear. You can see all available 3rd party integrations in [Oh Dear's docs](https://ohdear.app/docs/integrations/3rd-party-integrations/introduction).
+
 Brought to you by [webhub](https://webhub.de)
