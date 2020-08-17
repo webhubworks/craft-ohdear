@@ -45,15 +45,15 @@ export default class Check {
     get reportUrl() {
         switch (this.type) {
             case 'uptime':
-                return '/admin/ohdear/uptime';
+                return '../ohdear/uptime';
             case 'broken_links':
-                return '/admin/ohdear/broken-links';
+                return '../ohdear/broken-links';
             case 'mixed_content':
-                return '/admin/ohdear/mixed-content';
+                return '../ohdear/mixed-content';
             case 'certificate_health':
-                return '/admin/ohdear/certificate-health';
+                return '../ohdear/certificate-health';
             case 'certificate_transparency':
-                return '/admin/ohdear/certificate-health';
+                return '../ohdear/certificate-health';
             default:
                 return null;
         }
