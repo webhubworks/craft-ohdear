@@ -23,6 +23,9 @@ const hasCheck = {
     watch: {
         latestRunEndedAt: {
             handler: function (newDate, oldDate) {
+                if (!newDate) {
+                    return;
+                }
                 if (!newDate.isSame(oldDate)) {
                     this.newRunRequested = false;
                 }
