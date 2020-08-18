@@ -11,7 +11,7 @@
 
 {# TODO: Can this be done in the plugin base class routing? #}
 {% if not craft.app.plugins.plugin('ohdear').settings.isValid() %}
-    {% redirect '/admin/settings/plugins/ohdear' %}
+    {% redirect '/' ~ craft.app.config.general.cpTrigger ~ '/settings/plugins/ohdear' %}
 {% endif %}
 
 {% block main %}
