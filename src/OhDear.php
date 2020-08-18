@@ -294,13 +294,15 @@ class OhDear extends Plugin
                     View::EVENT_AFTER_RENDER_PAGE_TEMPLATE,
                     function (TemplateEvent $event) {
 
+                        $cpTrigger = Craft::$app->config->general->cpTrigger;
+
                         if ($event->template === 'entries/_edit') {
                             $referrerUrl = Url::fromString(Craft::$app->getRequest()->getReferrer());
-                            if ($referrerUrl->getPath() === '/admin/ohdear/broken-links') {
-                                $event->output = preg_replace('/<input type="hidden" name="redirect" value=".*">/', Html::redirectInput('/admin/ohdear/broken-links'), $event->output);
+                            if ($referrerUrl->getPath() === "/{$cpTrigger}/ohdear/broken-links") {
+                                $event->output = preg_replace('/<input type="hidden" name="redirect" value=".*">/', Html::redirectInput("/{$cpTrigger}/ohdear/broken-links"), $event->output);
                             }
-                            if ($referrerUrl->getPath() === '/admin/ohdear/mixed-content') {
-                                $event->output = preg_replace('/<input type="hidden" name="redirect" value=".*">/', Html::redirectInput('/admin/ohdear/mixed-content'), $event->output);
+                            if ($referrerUrl->getPath() === "/{$cpTrigger}/ohdear/mixed-content") {
+                                $event->output = preg_replace('/<input type="hidden" name="redirect" value=".*">/', Html::redirectInput("/{$cpTrigger}/ohdear/mixed-content"), $event->output);
                             }
                         }
 

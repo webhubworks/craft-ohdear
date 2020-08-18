@@ -11,7 +11,6 @@ const VALID_TYPES = [
 
 export default class Check {
 
-
     constructor(enabled, id, label, latestRunEndedAt, latestRunResult, type) {
         this.enabled = enabled;
         this.id = id;
@@ -45,15 +44,15 @@ export default class Check {
     get reportUrl() {
         switch (this.type) {
             case 'uptime':
-                return '/admin/ohdear/uptime';
+                return `/${window.Craft.cpTrigger}/ohdear/uptime`;
             case 'broken_links':
-                return '/admin/ohdear/broken-links';
+                return `/${window.Craft.cpTrigger}/ohdear/broken-links`;
             case 'mixed_content':
-                return '/admin/ohdear/mixed-content';
+                return `/${window.Craft.cpTrigger}/ohdear/mixed-content`;
             case 'certificate_health':
-                return '/admin/ohdear/certificate-health';
+                return `/${window.Craft.cpTrigger}/ohdear/certificate-health`;
             case 'certificate_transparency':
-                return '/admin/ohdear/certificate-health';
+                return `/${window.Craft.cpTrigger}/ohdear/certificate-health`;
             default:
                 return null;
         }
