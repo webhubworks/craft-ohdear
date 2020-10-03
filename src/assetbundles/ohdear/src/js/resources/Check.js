@@ -6,7 +6,8 @@ const VALID_TYPES = [
     'mixed_content',
     'certificate_health',
     'certificate_transparency',
-    'performance'
+    'performance',
+    'cron'
 ];
 
 export default class Check {
@@ -20,7 +21,7 @@ export default class Check {
         this.type = type;
 
         if (!VALID_TYPES.includes(type)) {
-            throw new Error(`Invalid check type ${type}`);
+            console.warn(`Unknown check type ${type}`);
         }
     }
 
