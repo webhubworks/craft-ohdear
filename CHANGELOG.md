@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.1.2 - 2020-10-03
+### Fixed
+- Fixed incompatibilities with a new version of the Oh Dear API
+
 ## 1.1.1 - 2020-08-18
 ### Fixed
 - Fixed a bug where a custom CP trigger leads to broken links (in a broken link monitor OMG) in the control panel
