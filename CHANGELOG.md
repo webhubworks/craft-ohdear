@@ -11,8 +11,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Changed
 - Improved uptime heatmap UI
 - Settings page has now auto-suggest fields for API token and site ID
+    - The new settings page should apply existing settings without problems.
 - Available sites are no longer loaded from Oh Dear when an API token is provided on the settings page, instead the user has to provide the site ID directly
-    - Here's why: As a provider for Craft maintenance we have a lot of client sites monitored in Oh Dear. When installing Craft Oh Dear on their sites, none of the client's employees should be able to see sites from other clients. 
+    - Here's why: As a provider for Craft maintenance we have a lot of client sites monitored in Oh Dear. When installing Craft Oh Dear on their sites, none of the client's employees should be able to see the site names from other clients on the settings page. Admittedly, there is a permission to not allow the settings page for users, but not for admin users.
+    
+### Fixed
+- Fixed an issue that ignored widget settings on which checks are visible
 
 ## 1.1.2 - 2020-10-03
 ### Fixed
