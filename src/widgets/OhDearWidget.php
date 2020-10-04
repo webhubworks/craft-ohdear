@@ -105,8 +105,6 @@ class OhDearWidget extends Widget
      */
     public function getBodyHtml()
     {
-//        Craft::$app->getView()->registerAssetBundle(OhDearWidgetAsset::class);
-
         return Craft::$app->getView()->renderTemplate(
             'ohdear/_components/widgets/OhDearWidget_body',
             [

@@ -81,6 +81,10 @@ class OhDearService extends Component
         return $this->ohDearClient->createSiteMaintenance($this->siteId, $startsAt, $endsAt);
     }
 
+    /**
+     * @param int $maintenancePeriodId
+     * @return void
+     */
     public function deleteMaintenancePeriod(int $maintenancePeriodId)
     {
         $this->ohDearClient->deleteSiteMaintenance($maintenancePeriodId);
@@ -95,7 +99,9 @@ class OhDearService extends Component
         return $this->ohDearClient->startSiteMaintenance($this->siteId, $stopMaintenanceAfterSeconds);
     }
 
-
+    /**
+     * @return void
+     */
     public function stopMaintenancePeriod()
     {
         $this->ohDearClient->stopSiteMaintenance($this->siteId);

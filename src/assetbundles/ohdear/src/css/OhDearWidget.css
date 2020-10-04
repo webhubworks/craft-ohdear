@@ -20,6 +20,17 @@
     padding-bottom: 0;
 }
 
+[data-init="ohdear-widget"] {
+    min-height: 80px;
+}
+
+.ohdear-widget__loader {
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%, -50%);
+}
+
 .ohdear-widget__stats {
     display: flex;
     justify-content: space-between;
@@ -27,7 +38,7 @@
 }
 
 .ohdear-widget__stat {
-    flex: 0 1 125px;
+    flex: 0 1 140px;
     margin-bottom: 1.5rem;
 }
 
@@ -41,6 +52,7 @@
 .ohdear-widget__stat.ohdear-widget__stat--numeric dl {
     font-size: 2rem;
 }
+
 .ohdear-widget__stat.ohdear-widget__stat--numeric dl,
 .ohdear-widget__stat.ohdear-widget__stat--numeric dl a {
     color: #3f4d5a;

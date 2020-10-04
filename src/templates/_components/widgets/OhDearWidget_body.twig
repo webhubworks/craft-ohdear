@@ -15,6 +15,8 @@
 
 {% do view.registerAssetBundle('webhubworks\\ohdear\\assetbundles\\ohdear\\OhDearWidgetAsset') %}
 
-<div class="ohdear-widget">
+<div data-init="ohdear-widget">
+
     <widget period="{{ period }}" :checks="{{ checks|json_encode }}"></widget>
+
 </div>

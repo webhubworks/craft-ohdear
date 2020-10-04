@@ -1,6 +1,7 @@
 <template>
     <div class="ohdear-widget">
-        <div class="ohdear-widget__stats">
+        <loader class="ohdear-widget__loader" v-if="loadingUptime && loadingSite"></loader>
+        <div class="ohdear-widget__stats" v-if="!loadingUptime && !loadingSite">
             <dl class="ohdear-widget__stat ohdear-widget__stat--numeric" v-if="enabledChecks.includes('uptime') && !loadingUptime && uptimeCheck">
                 <dt>Uptime {{periodLabel}}</dt>
                 <dl>
@@ -11,7 +12,7 @@
                 <dt>Downtime</dt>
                 <dl>{{ downtime|friendlyDuration }}</dl>
             </dl>
-            <dl v-if="brokenLinksCheck && !loadingSite" class="ohdear-widget__stat">
+            <dl v-if="enabledChecks.includes('broken_links') && !loadingSite" class="ohdear-widget__stat">
                 <dt>{{brokenLinksCheck.label}}</dt>
                 <dl>
                     <a :href="brokenLinksCheck.reportUrl">
@@ -19,7 +20,7 @@
                     </a>
                 </dl>
             </dl>
-            <dl v-if="mixedContentCheck && !loadingSite" class="ohdear-widget__stat">
+            <dl v-if="enabledChecks.includes('mixed_content') && !loadingSite" class="ohdear-widget__stat">
                 <dt>{{mixedContentCheck.label}}</dt>
                 <dl>
                     <a :href="mixedContentCheck.reportUrl">
@@ -27,7 +28,7 @@
                     </a>
                 </dl>
             </dl>
-            <dl v-if="certificateHealthCheck && !loadingSite" class="ohdear-widget__stat">
+            <dl v-if="enabledChecks.includes('certificate_health') && !loadingSite" class="ohdear-widget__stat">
                 <dt>{{certificateHealthCheck.label}}</dt>
                 <dl>
                     <a :href="certificateHealthCheck.reportUrl">
@@ -44,6 +45,7 @@
     import DayJs from 'dayjs';
     import Api from '../helpers/Api';
     import Site from "../resources/Site";
+    import Loader from './Loader';
 
     function average(array) {
         let sum = 0;
@@ -55,6 +57,9 @@
     }
 
     export default {
+        components: {
+            Loader
+        },
         data() {
             return {
                 site: null,
@@ -70,10 +75,7 @@
             },
             period: {
                 type: String,
-                required: true,
-                validator: function (value) {
-                    return ['hour', 'day', 'month'].indexOf(value);
-                }
+                required: true
             }
         },
         computed: {
@@ -179,8 +181,8 @@
             },
             fetchSite() {
                 return Api.getSite().then(response => {
-                    this.loadingSite = false;
                     this.site = Site.fromJson(response.data.site);
+                    this.loadingSite = false;
                 });
             },
             fetchUptime() {
@@ -188,8 +190,8 @@
                 const endedAt = DayJs().format('YYYYMMDDHHmmss');
                 return Api.getUptime(startedAt, endedAt, this.period)
                     .then(response => {
-                        this.loadingUptime = false;
                         this.uptime = response.data.uptime;
+                        this.loadingUptime = false;
                     })
             },
         }

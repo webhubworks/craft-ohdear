@@ -22,9 +22,9 @@ Vue.component('check-badge', require('./components/CheckBadge').default);
  */
 DayJs.extend(require('dayjs/plugin/utc'));
 
-let widgets = document.querySelectorAll('.ohdear-widget');
-widgets.forEach(widget => {
+const dashboardGrid = document.getElementById('dashboard-grid');
+if (dashboardGrid) {
     new Vue({
-        el: widget
+        el: dashboardGrid
     });
-});
+}

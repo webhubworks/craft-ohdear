@@ -13,6 +13,7 @@ namespace webhubworks\ohdear\controllers;
 use Craft;
 use craft\web\Controller;
 use webhubworks\ohdear\OhDear;
+use Yii;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
