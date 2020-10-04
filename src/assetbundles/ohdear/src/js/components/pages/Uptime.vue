@@ -37,7 +37,7 @@
 
                 <div class="oh-flex oh-flex-col oh-flex-wrap oh-overflow-x-auto" :style="weekdayLegendStyle">
                     <div v-for="label in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']"
-                         class="oh-h-8 oh-w-8 oh-m-0.5 oh-font-medium oh-flex oh-justify-center oh-items-center oh-text-gray-500">
+                         class="oh-h-8 oh-w-8 oh-m-0.5 oh-font-medium oh-flex oh-justify-center oh-items-center light">
                         <span :title="label">{{label.substr(0,2)}}</span>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
                 <div class="oh-w-full oh-overflow-x-auto" ref="heatmap">
 
                     <div class="oh-relative" :style="monthLegendStyle">
-                    <span v-for="month in legendMonths" v-if="month.show" class="oh-block oh-absolute oh-top-0 oh-text-gray-500 oh-font-medium" :style="getMonthStyle(month)">
+                    <span v-for="month in legendMonths" v-if="month.show" class="oh-block oh-absolute oh-top-0 light oh-font-medium" :style="getMonthStyle(month)">
                         {{ month.label }}
                     </span>
                     </div>
@@ -53,10 +53,11 @@
                     <div class="oh-flex oh-flex-col oh-flex-wrap" :class="{'show-percentage': showPercentage}" :style="heatMapStyle">
 
                         <div v-for="day in uptime"
-                             v-tooltip.left="getTooltipContent(day)"
+                             v-tooltip.left="tooltipContent"
+                             @mouseover="setTooltipContent(day)"
                              :style="getCellStyle(day)"
                              class="oh-h-8 oh-w-8 oh-m-0.5 oh-rounded-sm oh-flex oh-justify-center oh-items-center cell">
-                            <span class="oh-whitespace-no-wrap oh-text-xs oh-font-medium" style="color: rgba(0,0,0,0.45)">{{day.uptimePercentage}}</span>
+                            <span class="oh-whitespace-no-wrap oh-text-xs oh-font-medium pointer-events-none" style="color: rgba(0,0,0,0.45)">{{day.uptimePercentage}}</span>
                         </div>
 
                         <div v-for="day in daysToGoThisWeek" class="oh-bg-gray-300 oh-h-8 oh-w-8 oh-m-0.5 oh-rounded-sm"></div>
@@ -73,6 +74,7 @@
     import Api from "../../helpers/Api";
     import DayJs from 'dayjs';
     import prettyTime from "../../helpers/PrettyTime";
+    import {sortBy} from 'lodash';
     import {fetchesDowntime, fetchesSite, hasCheck} from "../../helpers/Mixins";
     import LocalDate from '../../helpers/LocalDate';
 
@@ -105,7 +107,8 @@
                 uptime: [],
                 downtime: [],
                 heatMapLoading: true,
-                showPercentage: false
+                showPercentage: false,
+                tooltipContent: ''
             }
         },
         computed: {
@@ -184,7 +187,7 @@
                 .then(uptime => {
                     this.uptime = uptime;
                     // this weird thingy makes sure that we wait for render,
-                    // (~ 10 frames) then scroll to the end of the heat map
+                    // (~ 10 frames on 60fps) then scroll to the end of the heat map
                     // and finally show it
                     setTimeout(() => {
                         this.$refs.heatmap.scrollTo(this.$refs.heatmap.scrollWidth, 0);
@@ -193,10 +196,11 @@
                 });
         },
         methods: {
-            getTooltipContent(day) {
+            setTooltipContent(day) {
                 const date = day.datetime.substr(0, 10);
                 if (!this.downtimeGroupedByDay.hasOwnProperty(date)) {
-                    return `${LocalDate(date).format('L')}`;
+                    this.tooltipContent = `${LocalDate(date).format('L')}`;
+                    return;
                 }
 
                 let content = `
@@ -204,14 +208,26 @@
                     <p>Site was down</p>
                 `;
 
-                this.downtimeGroupedByDay[date].forEach(downtime => {
+                let downtimes = this.downtimeGroupedByDay[date].map(downtime => {
                     const startedAt = LocalDate(downtime.startedAt);
                     const endedAt = LocalDate(downtime.endedAt);
-                    const diff = endedAt.diff(startedAt);
-                    content += `<p>at ${startedAt.format('LT')} for ${prettyTime(diff)}</p>`;
+                    return {
+                        'startedAt': startedAt,
+                        'endedAt': endedAt,
+                        'diff': endedAt.diff(startedAt)
+                    }
                 });
 
-                return `<div>${content}</div>`;
+                downtimes = sortBy(downtimes, 'startedAt');
+
+                downtimes.forEach(downtime => {
+                    content += `<p>at ${downtime.startedAt.format('LT')} for ${prettyTime(downtime.diff)}</p>`;
+                });
+
+                const total = downtimes.map(dt => dt.diff).reduce((sum, diff) => sum + diff);
+                content += `<p>Total: ${prettyTime(total)}</p>`
+
+                this.tooltipContent = `<div>${content}</div>`;
             },
             getMonthStyle(month) {
                 return `left: ${2 + (parseInt(month.offset / 7) * 36)}px`;
@@ -273,14 +289,12 @@
         display: none;
     }
 
+    .cell:hover *,
     .show-percentage .cell * {
         display: block;
-        transform: scaleX(0.95);
     }
 
     .cell:hover {
-        transition: all .3s ease;
-        opacity: 0.65;
-        transform: scale(0.93);
+        cursor: help;
     }
 </style>

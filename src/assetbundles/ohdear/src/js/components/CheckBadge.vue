@@ -31,6 +31,8 @@
                         return 'red';
                     case 'pending':
                         return 'yellow';
+                    case 'warning':
+                        return 'yellow';
                     default:
                         return 'green'
                 }
