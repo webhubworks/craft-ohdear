@@ -63,7 +63,7 @@ class OhDearService extends Component
     {
         parent::__construct($config);
 
-        $this->siteId = intval(OhDear::$plugin->getSettings()['selectedSiteId']);
+        $this->siteId = intval(OhDear::$plugin->getSettings()->getSelectedSiteId());
         $this->apiToken = OhDear::$plugin->getSettings()->getApiToken();
 
         $this->ohDearClient = new OhDearSdk($this->apiToken);

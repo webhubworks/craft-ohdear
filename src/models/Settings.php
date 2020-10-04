@@ -57,6 +57,17 @@ class Settings extends Model
     }
 
     /**
+     * Parse the site ID if it is an env variable, otherwise
+     * just return the value.
+     *
+     * @return string
+     */
+    public function getSelectedSiteId(): string
+    {
+        return Craft::parseEnv($this->selectedSiteId);
+    }
+
+    /**
      * Parse the API token if it is an env variable, otherwise
      * just return the value.
      *
@@ -84,8 +95,7 @@ class Settings extends Model
             [['apiToken', 'selectedSiteId'], 'default', 'value' => ''],
             ['selectedSiteId', 'required', 'when' => function ($model) {
                 return !empty($model->apiToken);
-            }],
-            ['selectedSiteId', 'number'],
+            }]
         ];
     }
 }
