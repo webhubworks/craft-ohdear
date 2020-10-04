@@ -21,6 +21,7 @@ use craft\elements\GlobalSet;
 use craft\elements\MatrixBlock;
 use craft\errors\SiteNotFoundException;
 use craft\helpers\Search;
+use Exception;
 use OhDear\PhpSdk\OhDear as OhDearSdk;
 use OhDear\PhpSdk\Resources\BrokenLink;
 use OhDear\PhpSdk\Resources\CertificateHealth;
@@ -43,6 +44,11 @@ use webhubworks\ohdear\OhDear;
  * @author    webhub GmbH
  * @package   OhDear
  * @since     1.0.0
+ *
+ * @property-read array $brokenLinks
+ * @property-read CertificateHealth $certificateHealth
+ * @property-read Site $site
+ * @property-read array $mixedContent
  */
 class OhDearService extends Component
 {
@@ -58,7 +64,7 @@ class OhDearService extends Component
         parent::__construct($config);
 
         $this->siteId = intval(OhDear::$plugin->getSettings()['selectedSiteId']);
-        $this->apiToken = OhDear::$plugin->getSettings()['apiToken'];
+        $this->apiToken = OhDear::$plugin->getSettings()->getApiToken();
 
         $this->ohDearClient = new OhDearSdk($this->apiToken);
     }
@@ -255,7 +261,7 @@ class OhDearService extends Component
                 ];
             }
 
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return null;
         }
 

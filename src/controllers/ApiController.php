@@ -34,12 +34,14 @@ class ApiController extends Controller
         $this->requireAcceptsJson();
         $this->requireLogin();
 
-        $apiToken = Craft::$app->request->getQueryParam('api-token', null);
+        $apiTokenParam = Craft::$app->request->getQueryParam('api-token', null);
 
-        if ($apiToken === null) {
+        if ($apiTokenParam === null) {
             $sites = OhDear::$plugin->ohDearService->getSites();
         } else {
-            $sites = OhDear::$plugin->settingsService->getSites($apiToken);
+            $sites = OhDear::$plugin->settingsService->getSites(
+                Craft::parseEnv($apiTokenParam)
+            );
         }
 
         return $this->asJson([

@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.2.0 - 2020-10-04
+### Added
+- Settings can now be environment variables
+
+### Changed
+- Improved uptime heatmap UI
+- Settings page has now auto-suggest fields for API token and site ID
+- Available sites are no longer loaded from Oh Dear when an API token is provided on the settings page, instead the user has to provide the site ID directly
+    - Here's why: As a provider for Craft maintenance we have a lot of client sites monitored in Oh Dear. When installing Craft Oh Dear on their sites, none of the client's employees should be able to see sites from other clients. 
+
 ## 1.1.2 - 2020-10-03
 ### Fixed
 - Fixed incompatibilities with a new version of the Oh Dear API

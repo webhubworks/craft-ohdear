@@ -10,6 +10,7 @@
 
 namespace webhubworks\ohdear\models;
 
+use Craft;
 use craft\base\Model;
 
 /**
@@ -56,6 +57,17 @@ class Settings extends Model
     }
 
     /**
+     * Parse the API token if it is an env variable, otherwise
+     * just return the value.
+     *
+     * @return string
+     */
+    public function getApiToken(): string
+    {
+        return Craft::parseEnv($this->apiToken);
+    }
+
+    /**
      * Returns the validation rules for attributes.
      *
      * Validation rules are used by [[validate()]] to check if attribute values are valid.
@@ -70,7 +82,6 @@ class Settings extends Model
         return [
             [['apiToken', 'selectedSiteId'], 'trim'],
             [['apiToken', 'selectedSiteId'], 'default', 'value' => ''],
-            ['apiToken', 'string', 'length' => [60, 60]],
             ['selectedSiteId', 'required', 'when' => function ($model) {
                 return !empty($model->apiToken);
             }],

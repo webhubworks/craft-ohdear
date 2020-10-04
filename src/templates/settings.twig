@@ -15,18 +15,22 @@
 
 {% import "_includes/forms" as forms %}
 
-{% do view.registerAssetBundle("webhubworks\\ohdear\\assetbundles\\ohdear\\OhDearAsset") %}
+{{ forms.autosuggestField({
+    label: "Oh Dear API Token"|t('craft-ohdear'),
+    id: 'api-token',
+    name: 'apiToken',
+    value: settings['apiToken'],
+    suggestEnvVars: true,
+    instructions: 'Please enter your Oh Dear API token. You can create a token on the <a href="https://ohdear.app/user-settings/api" rel="noopener" target="_blank">Oh Dear API Access page</a>.',
+    errors: settings.getErrors('apiToken')
+}) }}
 
-{% requirePermission 'ohdear:plugin-settings' %}
-
-{% if settings.getErrors()|length %}
-    <ul class="oh-pb-4">
-        {% for error in settings.getErrors() %}
-            <li>{{ error[0] }}</li>
-        {% endfor %}
-    </ul>
-{% endif %}
-
-<div id="ohdear-app">
-    <token-field token="{{ settings['apiToken'] }}" site-id="{{ settings['selectedSiteId'] }}"></token-field>
-</div>
+{{ forms.autosuggestField({
+    label: "Oh Dear Site ID"|t('craft-ohdear'),
+    id: 'selected-site-id',
+    name: 'selectedSiteId',
+    value: settings['selectedSiteId'],
+    suggestEnvVars: true,
+    instructions: 'Please enter the site ID that is associated to this Craft site. You can find the site ID on the settings page of one of your <a href="https://ohdear.app/sites" rel="noopener" target="_blank">Oh Dear sites</a>.',
+    errors: settings.getErrors('selectedSiteId')
+}) }}

@@ -14,7 +14,6 @@ import Vue from 'vue';
 import VTooltip from 'v-tooltip';
 import DayJs from "dayjs";
 
-Vue.component('token-field', require('./components/TokenField').default);
 Vue.component('card', require('./components/Card').default);
 Vue.component('overview', require('./components/pages/Overview').default);
 Vue.component('uptime', require('./components/pages/Uptime').default);
@@ -45,13 +44,6 @@ DayJs.extend(require('dayjs/plugin/isToday'));
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-let settings = document.getElementById('settings-ohdear-app');
-if (settings) {
-    new Vue({
-        el: settings
-    });
-}
-
 let page = document.getElementById('ohdear-app');
 if (page) {
     new Vue({
