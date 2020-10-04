@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.2.1 - 2020-10-04
+### Fixed
+- Fixed a validation issue that occurred when settings the site ID as env var
+
 ## 1.2.0 - 2020-10-04
 ### Added
 - Settings can now be environment variables
