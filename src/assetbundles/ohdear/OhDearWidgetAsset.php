@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2019 webhub GmbH
  */
 
-namespace webhubworks\ohdear\assetbundles\OhDear;
+namespace webhubworks\ohdear\assetbundles\ohdear;
 
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
