@@ -22,8 +22,8 @@
                     return Typo.checks.bodyDisabled;
                 }
                 let body = this.check.latestRunResult === 'succeeded' ?
-                    Typo.checks[this.check.type].body.good :
-                    Typo.checks[this.check.type].body.bad;
+                    this.$t(Typo.checks[this.check.type].body.good) :
+                    this.$t(Typo.checks[this.check.type].body.bad);
                 return body.replace('{:fromNow}', this.check.latestRunEndedAt.fromNow());
             }
         }

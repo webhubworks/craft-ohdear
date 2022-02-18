@@ -13,6 +13,7 @@
 import Vue from 'vue';
 import VTooltip from 'v-tooltip';
 import DayJs from "dayjs";
+import Translator from "./Translator";
 
 Vue.component('card', require('./components/Card').default);
 Vue.component('overview', require('./components/pages/Overview').default);
@@ -28,6 +29,14 @@ Vue.component('loader', require('./components/Loader').default);
 Vue.component('info-icon', require('./components/InfoIcon').default);
 
 Vue.use(VTooltip);
+
+Vue.mixin({
+    methods: {
+        $t(key, replace = {}) {
+            return Translator(window.Craft.translations.ohdear, key, replace)
+        },
+    },
+})
 
 /**
  * DayJs Plugins

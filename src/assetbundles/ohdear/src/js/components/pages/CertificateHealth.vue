@@ -6,11 +6,11 @@
         </div>
 
         <div v-if="certificateHealth">
-            <h2>Certificate checks</h2>
+            <h2>{{ $t('Certificate checks') }}</h2>
             <table class="data collapsible">
                 <tbody>
                 <tr v-for="certificateCheck in certificateHealth.certificateChecks">
-                    <th class="light">{{certificateCheck.label}}</th>
+                    <th class="light">{{ $t(certificateCheck.label) }}</th>
                     <td>
                         <svg v-if="certificateCheck.passed" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="oh-h-6 oh-w-6">
                             <circle class="oh-text-green-200 oh-fill-current" cx="12" cy="12" r="10"/>
@@ -24,28 +24,28 @@
                 </tr>
                 </tbody>
             </table>
-            <h2>Certificate details</h2>
+            <h2>{{ $t('Certificate details') }}</h2>
             <table class="data collapsible">
                 <tbody>
                 <tr>
-                    <th class="light">Issuer</th>
+                    <th class="light">{{ $t('Issuer') }}</th>
                     <td>{{certificateHealth.certificateDetails.issuer}}</td>
                 </tr>
                 <tr>
-                    <th class="light">Valid form</th>
+                    <th class="light">{{ $t('Valid form') }}</th>
                     <td>{{certificateHealth.certificateDetails.valid_from|localDate('llll')}}</td>
                 </tr>
                 <tr>
-                    <th class="light">Valid until</th>
+                    <th class="light">{{ $t('Valid until') }}</th>
                     <td>{{certificateHealth.certificateDetails.valid_until|localDate('llll')}}</td>
                 </tr>
                 </tbody>
             </table>
-            <h2>Certificate chain</h2>
+            <h2>{{ $t('Certificate chain') }}</h2>
             <table class="data collapsible">
                 <tbody>
                 <tr>
-                    <th class="light">Valid certificate chain</th>
+                    <th class="light">{{ $t('Valid certificate chain') }}</th>
                     <td>
                         <svg v-if="certificateHealth.certificateChecks.find(check => {return check.type === 'invalidChain'}).passed" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="oh-h-6 oh-w-6">
                             <circle class="oh-text-green-200 oh-fill-current" cx="12" cy="12" r="10"/>
@@ -60,7 +60,7 @@
                 <tr v-for="(issuer, index) in certificateHealth.certificateChainIssuers">
                     <th class="light">#{{index + 1}}</th>
                     <td>
-                        Issuer: {{issuer.split(',')[1]}}
+                        {{ $t('Issuer') }}: {{issuer.split(',')[1]}}
                     </td>
                 </tr>
                 </tbody>
@@ -93,7 +93,3 @@
         }
     }
 </script>
-
-<style scoped>
-
-</style>

@@ -11,8 +11,11 @@
 namespace webhubworks\ohdear\assetbundles\ohdear;
 
 use Craft;
+use craft\helpers\Json;
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
+use Yii;
+use yii\web\View as ViewAlias;
 
 /**
  * OhDearAsset AssetBundle
@@ -45,6 +48,8 @@ class OhDearAsset extends AssetBundle
         // define the path that your publishable resources live
         $this->sourcePath = "@webhubworks/ohdear/assetbundles/ohdear/dist";
 
+        $this->registerLangFile();
+
         // define the dependencies
         $this->depends = [
             CpAsset::class,
@@ -61,5 +66,21 @@ class OhDearAsset extends AssetBundle
         ];
 
         parent::init();
+    }
+
+    // TODO: Check if file exists
+    // TODO: Check if JS object exists
+    private function registerLangFile()
+    {
+        $currentLanguage = Craft::$app->language;
+
+        $path = rtrim(Yii::getAlias("@webhubworks/ohdear/translations/{$currentLanguage}/ohdear.php"));
+
+        $craftJson = Json::encode(require $path, JSON_UNESCAPED_UNICODE);
+
+        $js = <<<JS
+window.Craft.translations.ohdear = $craftJson;
+JS;
+        Craft::$app->view->registerJs($js, ViewAlias::POS_BEGIN);
     }
 }

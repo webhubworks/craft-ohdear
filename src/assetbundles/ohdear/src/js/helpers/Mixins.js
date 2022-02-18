@@ -77,7 +77,10 @@ const fetchesSite = {
                 return "";
             }
             const latestRun = LocalDate(this.check.latestRunEndedAt);
-            return `${latestRun.fromNow()} on ${latestRun.format('llll')}`;
+            return this.$t('{fromNow} on {date}', {
+                fromNow: latestRun.fromNow(),
+                date: latestRun.format('llll'),
+            });
         },
         badgeColor() {
             if (!this.check.enabled) {

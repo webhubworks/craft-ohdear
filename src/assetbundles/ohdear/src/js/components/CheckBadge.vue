@@ -17,8 +17,8 @@
         computed: {
             label() {
                 return this.check.latestRunResult === 'succeeded' ?
-                    Typo.checks[this.check.type].badge.good :
-                    Typo.checks[this.check.type].badge.bad;
+                    this.$t(Typo.checks[this.check.type].badge.good) :
+                    this.$t(Typo.checks[this.check.type].badge.bad);
             },
             color() {
                 if (this.check.latestRunResult === null) {
@@ -40,7 +40,3 @@
         }
     }
 </script>
-
-<style scoped>
-
-</style>

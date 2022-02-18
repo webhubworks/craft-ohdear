@@ -41,12 +41,12 @@
             },
             statusLabel() {
                 if (valueIsNoResponse(this.status)) {
-                    return 'No response';
+                    return this.$t('No response');
                 }
                 if (HttpStatusMap.hasOwnProperty(this.status.toString())) {
                     return `${this.status} ${HttpStatusMap[this.status.toString()]}`;
                 }
-                return this.status;
+                return this.$t(this.status);
             }
         }
     }

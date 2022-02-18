@@ -94,7 +94,7 @@ class OhDear extends Plugin
         if (Craft::$app->getRequest()->getIsConsoleRequest()) {
             $this->controllerNamespace = 'webhubworks\\ohdear\\console\\controllers';
         }
-        dd($this->getBasePath() . DIRECTORY_SEPARATOR . 'translations', $this->t9nCategory, $this->sourceLanguage, Craft::$app->getI18n()->translations, Craft::$app->getI18n()->getMessageSource('ohdear'));
+
         $this->isPreCraft34 = version_compare(Craft::$app->getVersion(), '3.4', '<');
 
         parent::init();

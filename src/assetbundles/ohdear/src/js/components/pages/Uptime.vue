@@ -1,7 +1,7 @@
 <template>
     <div :style="rootStyle">
 
-        <h2>Check details</h2>
+        <h2>{{ $t('Check details') }}</h2>
 
         <div v-if="loadingSite" class="oh-w-full oh-justify-center oh-items-center oh-flex" style="height: 109px;">
             <loader></loader>
@@ -10,23 +10,23 @@
         <table class="data collapsible" v-if="!loadingSite">
             <tbody>
             <tr>
-                <th class="light">Status</th>
+                <th class="light">{{ $t('Status') }}</th>
                 <td>
                     <check-badge :check="check"/>
                 </td>
             </tr>
             <tr>
-                <th class="light">Last run</th>
+                <th class="light">{{ $t('Last run') }}</th>
                 <td>{{ lastRun }}</td>
             </tr>
             <tr>
-                <th class="light">Last downtime</th>
+                <th class="light">{{ $t('Last downtime') }}</th>
                 <td>{{ lastDowntime }}</td>
             </tr>
             </tbody>
         </table>
 
-        <h2>History</h2>
+        <h2>{{ $t('History') }}</h2>
 
         <div class="oh-relative">
             <div v-if="heatMapLoading" class="oh-flex oh-absolute oh-left-0 oh-top-0 oh-w-full oh-justify-center oh-items-center" :style="loaderStyle">
@@ -38,7 +38,7 @@
                 <div class="oh-flex oh-flex-col oh-flex-wrap oh-overflow-x-auto" :style="weekdayLegendStyle">
                     <div v-for="label in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']"
                          class="oh-h-8 oh-w-8 oh-m-0.5 oh-font-medium oh-flex oh-justify-center oh-items-center light">
-                        <span :title="label">{{label.substr(0,2)}}</span>
+                        <span :title="$t(label)">{{$t(label).substr(0,2)}}</span>
                     </div>
                 </div>
 
@@ -46,7 +46,7 @@
 
                     <div class="oh-relative" :style="monthLegendStyle">
                     <span v-for="month in legendMonths" v-if="month.show" class="oh-block oh-absolute oh-top-0 light oh-font-medium" :style="getMonthStyle(month)">
-                        {{ month.label }}
+                        {{ $t(month.label) }}
                     </span>
                     </div>
 

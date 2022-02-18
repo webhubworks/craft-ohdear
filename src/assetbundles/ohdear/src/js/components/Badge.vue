@@ -3,7 +3,7 @@
         <svg v-if="!dotless" :class="`oh--ml-0.5 oh-mr-1.5 oh-h-2 oh-w-2 ${dotColor}`" fill="currentColor" viewBox="0 0 8 8">
         <circle cx="4" cy="4" r="3"/>
         </svg>
-        {{ label }}
+        {{ $t(label) }}
         <slot></slot>
     </span>
 </template>
@@ -83,7 +83,3 @@
         }
     }
 </script>
-
-<style scoped>
-
-</style>
