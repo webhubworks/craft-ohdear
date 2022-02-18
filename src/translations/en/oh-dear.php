@@ -22,4 +22,10 @@
  */
 return [
     'Oh Dear plugin loaded' => 'Oh Dear plugin loaded',
+    'Manage plugin settings' => 'Manage plugin settings',
+    'Overview' => 'Overview',
+    'Uptime' => 'Uptime',
+    'Broken Links' => 'Broken Links',
+    'Mixed Content' => 'Mixed Content',
+    'Certificate Health' => 'Certificate Health',
 ];

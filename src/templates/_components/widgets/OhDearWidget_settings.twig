@@ -18,48 +18,48 @@
 {% do view.registerAssetBundle("webhubworks\\ohdear\\assetbundles\\ohdear\\OhDearWidgetAsset") %}
 
 {{ forms.selectField({
-    label: 'Period',
-    instructions: 'Specify the timespan for the up- and downtime stats.',
+    label: 'Period'|t('ohdear'),
+    instructions: 'Specify the timespan for the up- and downtime stats.'|t('ohdear'),
     id: 'period',
     name: 'period',
     value: widget['period'],
     options: [
         {
             value: 'hour',
-            label: 'Last 24 hours'
+            label: 'Last 24 hours'|t('ohdear')
         },
         {
             value: 'day',
-            label: 'Last month'
+            label: 'Last month'|t('ohdear')
         },
         {
             value: 'month',
-            label: 'Last year'
+            label: 'Last year'|t('ohdear')
         }
     ]
 }) }}
 
 {{ forms.checkboxGroupField({
-    label: 'Checks',
-    instructions: 'Enable or disable checks in the widget.',
+    label: 'Checks'|t('ohdear'),
+    instructions: 'Enable or disable checks in the widget.'|t('ohdear'),
     name: 'checks',
     id: 'checks',
     values: widget['checks'],
     options: [
         {
-            label: 'Uptime',
+            label: 'Uptime'|t('ohdear'),
             value: 'uptime'
         },
         {
-            label: 'Broken Links',
+            label: 'Broken Links'|t('ohdear'),
             value: 'broken_links'
         },
         {
-            label: 'Mixed Content',
+            label: 'Mixed Content'|t('ohdear'),
             value: 'mixed_content'
         },
         {
-            label: 'Certificate Health',
+            label: 'Certificate Health'|t('ohdear'),
             value: 'certificate_health'
         }
     ],
