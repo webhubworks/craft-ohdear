@@ -4,7 +4,7 @@
 
 {% do view.registerAssetBundle('webhubworks\\ohdear\\assetbundles\\ohdear\\OhDearAsset') %}
 
-{% set title = 'Oh Dear Overview' %}
+{% set title = 'Oh Dear Overview'|t('ohdear') %}
 {% set selectedSubnavItem = 'overview' %}
 
 {% set isPreCraft34 = craft.app.plugins.plugin('ohdear').isPreCraft34 %}

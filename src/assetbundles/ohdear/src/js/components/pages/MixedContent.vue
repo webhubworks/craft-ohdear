@@ -10,19 +10,19 @@
         <table class="data collapsible" v-if="!loadingSite">
             <tbody>
             <tr>
-                <th class="light">Status</th>
+                <th class="light">{{ $t('Status') }}</th>
                 <td>
                     <check-badge :check="check"/>
                 </td>
             </tr>
             <tr>
-                <th class="light">Last run</th>
+                <th class="light">{{ $t('Last run') }}</th>
                 <td>{{ lastRun }}</td>
             </tr>
             </tbody>
         </table>
 
-        <h2>Mixed Content</h2>
+        <h2>{{ $t('Mixed Content') }}</h2>
 
         <div v-if="loadingMixedContent" class="oh-w-full oh-justify-center oh-items-center oh-flex" style="height: 74px;">
             <loader></loader>
@@ -30,7 +30,7 @@
 
         <div class="oh-w-full oh-flex oh-justify-center oh-flex-wrap oh-py-8" v-if="!mixedContentItems.length && !loadingMixedContent">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="oh-w-32 oh-h-32"><path class="oh-fill-current oh-text-gray-300" d="M19.48 13.03l-.02-.03a1 1 0 1 1 1.75-.98A6 6 0 0 1 16 21h-4a6 6 0 1 1 0-12h1a1 1 0 0 1 0 2h-1a4 4 0 1 0 0 8h4a4 4 0 0 0 3.48-5.97z"/><path class="oh-fill-current oh-text-gray-500" d="M4.52 10.97l.02.03a1 1 0 1 1-1.75.98A6 6 0 0 1 8 3h4a6 6 0 1 1 0 12h-1a1 1 0 0 1 0-2h1a4 4 0 1 0 0-8H8a4 4 0 0 0-3.48 5.97z"/></svg>
-            <p class="oh-w-full oh-text-center">Nice work, all of your contents are safe and sound.</p>
+            <p class="oh-w-full oh-text-center">{{ $t('Nice work, all of your contents are safe and sound.') }}</p>
         </div>
 
         <table class="data fullwidth" v-if="mixedContentItems.length && !loadingMixedContent">

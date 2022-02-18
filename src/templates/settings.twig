@@ -16,21 +16,21 @@
 {% import "_includes/forms" as forms %}
 
 {{ forms.autosuggestField({
-    label: "Oh Dear API Token"|t('craft-ohdear'),
+    label: "Oh Dear API Token"|t('ohdear'),
     id: 'api-token',
     name: 'apiToken',
     value: settings['apiToken'],
     suggestEnvVars: true,
-    instructions: 'Please enter your Oh Dear API token. You can create a token on the <a href="https://ohdear.app/user/api-tokens" rel="noopener" target="_blank">Oh Dear API Access page</a>.',
+    instructions: 'Please enter your Oh Dear API token. You can create a token on the {link} page.'|t('ohdear', {link: '<a href="https://ohdear.app/user/api-tokens" rel="noopener" target="_blank">Oh Dear API Tokens</a>'}),
     errors: settings.getErrors('apiToken')
 }) }}
 
 {{ forms.autosuggestField({
-    label: "Oh Dear Site ID"|t('craft-ohdear'),
+    label: "Oh Dear Site ID"|t('ohdear'),
     id: 'selected-site-id',
     name: 'selectedSiteId',
     value: settings['selectedSiteId'],
     suggestEnvVars: true,
-    instructions: 'Please enter the site ID that is associated to this Craft site. You can find the site ID on the settings page of one of your <a href="https://ohdear.app/sites" rel="noopener" target="_blank">Oh Dear sites</a>.',
+    instructions: 'Please enter the site ID that is associated to this Craft site. You can find the site ID on the settings page of one of your {link}.'|t('ohdear', {link: '<a href="https://ohdear.app/sites" rel="noopener" target="_blank">Oh Dear Sites</a>'}),
     errors: settings.getErrors('selectedSiteId')
 }) }}

@@ -4,7 +4,7 @@
         <header class="oh-mb-4 oh-flex oh-items-center oh-justify-between">
 
             <h2 class="oh-mb-0 oh-text-lg oh-font-medium">
-                {{ check.label }}
+                {{ $t(check.label) }}
             </h2>
 
             <a :href="check.reportUrl" v-if="check.reportUrl">
@@ -22,7 +22,7 @@
             <div v-if="check.reportUrl">
                 <div>
                     <a :href="check.reportUrl" class="oh-text-xs oh-text-gray-600 oh-underline">
-                        View the latest report
+                        {{ $t('View the latest report') }}
                     </a>
                 </div>
             </div>
@@ -87,7 +87,7 @@
                 return this.checkEnabled !== this.check.enabled;
             },
             newRunLabel() {
-                return this.newRunRequested ? 'New run requested' : 'Request new run';
+                return this.newRunRequested ? this.$t('New run requested') : this.$t('Request new run');
             },
         }
     }

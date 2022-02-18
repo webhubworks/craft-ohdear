@@ -15,15 +15,10 @@ export default class BrokenLink {
     }
 
     get shortCrawledUrl() {
-        return this.crawledUrl.substr(0, 50) + '...';
-    }
-
-    get foundOnUrlPathname() {
-        try {
-            return new URL(this.foundOnUrl).pathname;
-        } catch (e) {
-            return "";
+        if (this.crawledUrl.length < 51) {
+            return this.crawledUrl;
         }
+        return this.crawledUrl.substr(0, 50) + '...';
     }
 
     static fromJson(json) {

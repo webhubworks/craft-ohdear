@@ -19,6 +19,7 @@ use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
 use craft\events\TemplateEvent;
 use craft\helpers\Html;
+use craft\i18n\PhpMessageSource;
 use craft\services\Dashboard;
 use craft\services\UserPermissions;
 use craft\web\UrlManager;
@@ -46,9 +47,6 @@ use yii\base\Exception;
  */
 class OhDear extends Plugin
 {
-    // Static Properties
-    // =========================================================================
-
     /**
      * Static property that is an instance of this plugin class so that it can be accessed via
      * OhDear::$plugin
@@ -56,9 +54,6 @@ class OhDear extends Plugin
      * @var OhDear
      */
     public static $plugin;
-
-    // Public Properties
-    // =========================================================================
 
     /**
      * To execute your plugin’s migrations, you’ll need to increase its schema version.
@@ -81,9 +76,6 @@ class OhDear extends Plugin
      * @var bool Whether the Craft version has been facelifted.
      */
     public $isPreCraft34 = false;
-
-    // Public Methods
-    // =========================================================================
 
     /**
      * Set our $plugin static property to this class so that it can be accessed via
@@ -125,13 +117,10 @@ class OhDear extends Plugin
         $this->registerEntryEditRedirectOverride();
     }
 
-    // Protected Methods
-    // =========================================================================
-
     /**
      * Creates and returns the model used to store the plugin’s settings.
      *
-     * @return Model|null
+     * @return Settings
      */
     protected function createSettingsModel()
     {
@@ -143,10 +132,6 @@ class OhDear extends Plugin
      * block on the settings page.
      *
      * @return string The rendered settings HTML
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     * @throws Exception
      */
     protected function settingsHtml(): string
     {
@@ -166,7 +151,7 @@ class OhDear extends Plugin
             function (RegisterUserPermissionsEvent $event) {
                 $event->permissions['Oh Dear'] = [
                     'ohdear:plugin-settings' => [
-                        'label' => 'Manage plugin settings',
+                        'label' => Craft::t('ohdear', 'Manage plugin settings'),
                     ],
                 ];
             }
@@ -206,23 +191,23 @@ class OhDear extends Plugin
         $cpNavItem['subnav'] = [
             'overview' => [
                 'url' => 'ohdear/overview',
-                'label' => 'Overview',
+                'label' => Craft::t('ohdear', 'Overview'),
             ],
             'uptime' => [
                 'url' => 'ohdear/uptime',
-                'label' => 'Uptime',
+                'label' => Craft::t('ohdear', 'Uptime'),
             ],
             'broken-links' => [
                 'url' => 'ohdear/broken-links',
-                'label' => 'Broken Links',
+                'label' => Craft::t('ohdear', 'Broken Links'),
             ],
             'mixed-content' => [
                 'url' => 'ohdear/mixed-content',
-                'label' => 'Mixed Content',
+                'label' => Craft::t('ohdear', 'Mixed Content'),
             ],
             'certificate-health' => [
                 'url' => 'ohdear/certificate-health',
-                'label' => 'Certificate Health',
+                'label' => Craft::t('ohdear', 'Certificate Health'),
             ]
         ];
 
