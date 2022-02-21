@@ -44,10 +44,10 @@ export default {
         return Axios.get('/ohdear/api/current-performance')
             .catch(error => handleError(error));
     },
-    getPerformance: (start, end, timeframe = null) => {
+    getPerformance: (start, end, groupBy = null) => {
         return Axios.get('/ohdear/api/performance', {
             params: {
-                start, end, timeframe
+                start, end, groupBy
             }
         })
             .catch(error => handleError(error));

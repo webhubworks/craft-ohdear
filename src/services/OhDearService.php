@@ -200,7 +200,7 @@ class OhDearService extends Component
     {
         $lastTenMinutes = $this->getPerformance(Carbon::now()->subMinutes(10), Carbon::now());
 
-        $totalTimes_s = array_filter(array_column($lastTenMinutes['data']->attributes, 'total_time_in_seconds'));
+        $totalTimes_s = array_filter(array_column($lastTenMinutes, 'totalTimeInSeconds'));
         if (count($totalTimes_s) === 0) {
             return null;
         }
@@ -213,16 +213,16 @@ class OhDearService extends Component
     /**
      * @param string $start
      * @param string $end
-     * @param string $timeframe
+     * @param ?string $groupBy
      * @return array
      */
-    public function getPerformance(string $start, string $end, ?string $timeframe = null)
+    public function getPerformance(string $start, string $end, ?string $groupBy = null)
     {
-        if (is_null($timeframe)) {
+        if (is_null($groupBy)) {
             return $this->ohDearClient->performanceRecords($this->siteId, $start, $end);
         }
 
-        return $this->ohDearClient->performanceRecords($this->siteId, $start, $end, $timeframe);
+        return $this->ohDearClient->performanceRecords($this->siteId, $start, $end, $groupBy);
     }
 
     /**

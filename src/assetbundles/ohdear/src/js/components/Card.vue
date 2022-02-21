@@ -45,7 +45,7 @@
 
                     </div>
                 </div>
-                <loader class="oh-w-5 oh-h-5 oh-ml-1 oh-p-0.5" v-show="loading"></loader>
+                <loader class="oh-w-5 oh-h-5 oh-ml-1 oh-p-0.5" v-show="cardLoading"></loader>
             </div>
 
             <div class="oh-text-xs oh-text-gray-500" v-if="check.enabled">
@@ -78,10 +78,11 @@
             check: {
                 type: Check,
                 required: true
-            }
+            },
+            siteLoading: Boolean,
         },
         computed: {
-            loading() {
+            cardLoading() {
                 return this.checkEnabled !== this.check.enabled;
             },
             newRunLabel() {

@@ -161,10 +161,10 @@ class ApiController extends Controller
         $request = \Craft::$app->request;
         $start = $request->getRequiredQueryParam('start');
         $end = $request->getRequiredQueryParam('end');
-        $timeframe = $request->getQueryParam('timeframe');
+        $groupBy = $request->getQueryParam('groupBy');
 
         return $this->asJson([
-            'performance' => OhDear::$plugin->ohDearService->getPerformance($start, $end, $timeframe),
+            'performance' => OhDear::$plugin->ohDearService->getPerformance($start, $end, $groupBy),
         ]);
     }
 

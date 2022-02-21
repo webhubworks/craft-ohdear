@@ -49,6 +49,8 @@ export default class Check {
         switch (this.type) {
             case 'uptime':
                 return `/${window.Craft.cpTrigger}/ohdear/uptime`;
+            case 'performance':
+                return `/${window.Craft.cpTrigger}/ohdear/performance`;
             case 'broken_links':
                 return `/${window.Craft.cpTrigger}/ohdear/broken-links`;
             case 'mixed_content':
@@ -57,6 +59,15 @@ export default class Check {
                 return `/${window.Craft.cpTrigger}/ohdear/certificate-health`;
             case 'certificate_transparency':
                 return `/${window.Craft.cpTrigger}/ohdear/certificate-health`;
+            default:
+                return null;
+        }
+    }
+
+    get badgeHelpText() {
+        switch (this.type) {
+            case 'performance':
+                return 'Average performance in last 15 minutes.';
             default:
                 return null;
         }

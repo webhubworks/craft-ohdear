@@ -1,5 +1,5 @@
 <template>
-    <span :class="`oh-whitespace-no-wrap oh-inline-flex oh-items-center oh-px-2.5 oh-py-0.5 oh-rounded-sm oh-text-sm oh-font-medium oh-leading-5 ${bgColor} ${textColor} hover:oh-no-underline`">
+    <span :class="`oh-whitespace-nowrap oh-inline-flex oh-items-center oh-px-2.5 oh-py-0.5 oh-rounded-sm oh-text-sm oh-font-medium oh-leading-5 ${bgColor} ${textColor} hover:oh-no-underline`">
         <svg v-if="!dotless" :class="`oh--ml-0.5 oh-mr-1.5 oh-h-2 oh-w-2 ${dotColor}`" fill="currentColor" viewBox="0 0 8 8">
         <circle cx="4" cy="4" r="3"/>
         </svg>

@@ -3,6 +3,7 @@
         <div class="oh-grid md:oh-grid-cols-2 oh-gap-4 oh-max-w-6xl" v-if="site">
             <card v-for="check in supportedChecks"
                   :check="check"
+                  :siteLoading="loading"
                   @request-new-run="requestNewRun"
                   @disable-check="disableCheck"
                   @enable-check="enableCheck"

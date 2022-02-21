@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div :title="$t(check.badgeHelpText)" class="oh-h-6">
         <a v-if="!check.hasInlineMetric && check.reportUrl" :href="check.reportUrl">
             <badge :color="color" :label="label" :dotless="false"/>
         </a>
@@ -7,7 +7,13 @@
         <div class="oh-flex oh-items-center" v-if="check.hasInlineMetric">
             <loader class="oh-mr-1" v-if="loaderPosition === 'left'" v-show="loadingMetric"></loader>
 
-            <badge v-if="!loadingMetric" :class="{'oh-opacity-0 oh-h-6': label === null}" :color="color" :label="label" :dotless="false"/>
+            <a v-if="check.reportUrl" :href="check.reportUrl">
+                <badge v-if="!loadingMetric" :class="{'oh-opacity-0': label === null}" :color="color"
+                       :label="label" :dotless="false"/>
+            </a>
+
+            <badge v-if="!loadingMetric && !check.reportUrl" :class="{'oh-opacity-0': label === null}" :color="color"
+                   :label="label" :dotless="false"/>
 
             <loader class="oh-ml-1" v-if="loaderPosition === 'right'" v-show="loadingMetric"></loader>
         </div>

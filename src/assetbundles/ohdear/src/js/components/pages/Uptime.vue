@@ -53,7 +53,7 @@
                              @mouseover="setTooltipContent(day)"
                              :style="getCellStyle(day)"
                              class="oh-h-8 oh-w-8 oh-m-0.5 oh-rounded-sm oh-flex oh-justify-center oh-items-center cell">
-                            <span class="oh-whitespace-no-wrap oh-text-xs oh-font-medium pointer-events-none" style="color: rgba(0,0,0,0.45)">{{day.uptimePercentage}}</span>
+                            <span class="oh-whitespace-nowrap oh-text-xs oh-font-medium pointer-events-none" style="color: rgba(0,0,0,0.45)">{{day.uptimePercentage}}</span>
                         </div>
 
                         <div v-for="day in daysToGoThisWeek" class="oh-bg-gray-300 oh-h-8 oh-w-8 oh-m-0.5 oh-rounded-sm"></div>
@@ -110,7 +110,7 @@
         computed: {
             lastDowntime() {
                 if (!this.downtime.length) {
-                    return "The site has never been down. Nice work!";
+                    return this.$t("The site has never been down. Nice work!");
                 }
                 const lastDowntime = LocalDate(this.downtime[0].endedAt);
                 return `${lastDowntime.fromNow()} on ${lastDowntime.format('llll')}`;
@@ -201,7 +201,7 @@
 
                 let content = `
                     <p>${LocalDate(date).format('L')}</p>
-                    <p>Site was down</p>
+                    <p>${this.$t('Site was down')}</p>
                 `;
 
                 let downtimes = this.downtimeGroupedByDay[date].map(downtime => {
@@ -217,11 +217,11 @@
                 downtimes = sortBy(downtimes, 'startedAt');
 
                 downtimes.forEach(downtime => {
-                    content += `<p>at ${downtime.startedAt.format('LT')} for ${prettyTime(downtime.diff)}</p>`;
+                    content += `<p>${this.$t('at {date} for {duration}', {date: downtime.startedAt.format('LT'), duration: prettyTime(downtime.diff)})}</p>`;
                 });
 
                 const total = downtimes.map(dt => dt.diff).reduce((sum, diff) => sum + diff);
-                content += `<p>Total: ${prettyTime(total)}</p>`
+                content += `<p>${this.$t('Total')}: ${prettyTime(total)}</p>`
 
                 this.tooltipContent = `<div>${content}</div>`;
             },

@@ -1,13 +1,31 @@
 <template>
     <div>
-        <div>
-            <label for="timespan" class="oh-block oh-text-sm oh-font-medium oh-text-gray-700">Location</label>
-            <select id="timespan" @change="setTimespan($event.target.value)" name="location" class="oh-mt-1 oh-block oh-w-full oh-pl-3 oh-pr-10 oh-py-2 oh-text-base oh-border-gray-300 oh-focus:outline-none oh-focus:ring-indigo-500 oh-focus:border-indigo-500 oh-sm:text-sm oh-rounded-md">
-                <option value="last-hour">{{ $t('Last hour') }}</option>
-                <option value="last-24-hours">{{ $t('Last 24 hours') }}</option>
-            </select>
+        <div class="oh-flex oh-justify-end">
+            <div id="timespan-field" class="field first oh-flex oh-items-center">
+                <div class="heading oh-mr-2">
+                    <label id="timespan-label" for="timespan">{{ $t('Range') }}</label>
+                </div>
+                <div class="input ltr">
+                    <div class="flex">
+                        <div>
+                            <div class="select">
+                                <select id="timespan" name="timespan" @change="update($event.target.value)">
+                                    <option value="last-hour">{{ $t('Last hour') }}</option>
+                                    <option value="last-24-hours">{{ $t('Last 24 hours') }}</option>
+                                    <option value="last-week">{{ $t('Last week') }}</option>
+                                    <option value="last-month">{{ $t('Last month') }}</option>
+                                    <option value="last-year">{{ $t('Last year') }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="flex-grow">
+                            <input type="text" id="tempSubpath" class="ltr hidden text fullwidth" name="tempSubpath"
+                                   autocomplete="off" placeholder="Pfad/zum/Unterverzeichnis" dir="ltr">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
         <loader v-show="loading"></loader>
 
         <canvas id="performanceChart"></canvas>
@@ -23,41 +41,65 @@ export default {
     data() {
         return {
             start: null,
-            end: DayJs().utc().format('YYYYMMDDHHmmss'),
+            end: DayJs().utc(),
+            groupBy: '1m',
             loading: true,
         }
     },
+    mounted() {
+        this.update('last-hour');
+    },
     methods: {
         getLabels(data) {
-            const delta = Math.floor(data.length / 14);
-            let labels = [];
-            for (let i = 0; i < data.length; i = i + delta) {
-                labels.push(data[i].created_at);
-            }
-            return labels;
+            return _.map(data, 'createdAt');
         },
         getDataColumn(data, columnName) {
             return _.map(data, columnName);
         },
-        fetchPerformance(start, end, timeframe = null) {
+        update(timespan) {
+            this.set(timespan);
+            this.fetchPerformance(this.start, this.end, this.groupBy);
+        },
+        fetchPerformance(start, end, groupBy = null) {
             this.loading = true;
-            return Api.getPerformance(start, end, timeframe).then(response => {
-                this.initChart(Object.values(response.data.performance.data));
+            return Api.getPerformance(start.format('YYYY-MM-DD HH:mm:ss'), end.format('YYYY-MM-DD HH:mm:ss'), groupBy).then(response => {
+                this.initChart(Object.values(response.data.performance));
                 this.loading = false;
             })
         },
-        setTimespan(timespan) {
+        set(timespan) {
             switch (timespan) {
                 case 'last-hour':
-                    this.start = DayJs().utc().subtract(1, 'hour').format('YYYYMMDDHHmmss')
+                    this.start = DayJs().utc().subtract(1, 'hour')
+                    this.groupBy = 'minute';
                     break;
                 case 'last-24-hours':
-                    this.start = DayJs().utc().subtract(24, 'hour').format('YYYYMMDDHHmmss')
+                    this.start = DayJs().utc().subtract(24, 'hour')
+                    this.groupBy = 'hour';
+                    break;
+                case 'last-week':
+                    this.start = DayJs().utc().subtract(7, 'day')
+                    this.groupBy = 'hour';
+                    break;
+                case 'last-month':
+                    this.start = DayJs().utc().subtract(1, 'month')
+                    this.groupBy = 'day';
+                    break;
+                case 'last-year':
+                    this.start = DayJs().utc().subtract(1, 'year')
+                    this.groupBy = 'day';
                     break;
                 default:
             }
         },
+        destroyChart() {
+            const chart = Chart.getChart('performanceChart');
+            if (chart) {
+                chart.destroy();
+            }
+        },
         initChart(data) {
+            this.destroyChart();
             data = data.filter(entry => entry !== null);
             const ctx = document.getElementById('performanceChart');
             new Chart(ctx, {
@@ -73,7 +115,7 @@ export default {
                             categoryPercentage: 1,
                             barPercentage: 1,
                             pointRadius: 0,
-                            data: this.getDataColumn(data, 'dns_time_in_seconds'),
+                            data: this.getDataColumn(data, 'dnsTimeInSeconds'),
                         },
                         {
                             label: 'TCP Connection time',
@@ -83,7 +125,7 @@ export default {
                             categoryPercentage: 1,
                             barPercentage: 1,
                             pointRadius: 0,
-                            data: this.getDataColumn(data, 'tcp_time_in_seconds'),
+                            data: this.getDataColumn(data, 'tcpTimeInSeconds'),
                         },
                         {
                             label: 'SSL Handshake',
@@ -93,7 +135,7 @@ export default {
                             categoryPercentage: 1,
                             barPercentage: 1,
                             pointRadius: 0,
-                            data: this.getDataColumn(data, 'ssl_handshake_time_in_seconds'),
+                            data: this.getDataColumn(data, 'sslHandshakeTimeInSeconds'),
                         },
                         {
                             label: 'Craft server processing',
@@ -103,7 +145,7 @@ export default {
                             categoryPercentage: 1,
                             barPercentage: 1,
                             pointRadius: 0,
-                            data: this.getDataColumn(data, 'remote_server_processing_time_in_seconds'),
+                            data: this.getDataColumn(data, 'remoteServerProcessingTimeInSeconds'),
                         },
                         {
                             label: 'Content download',
@@ -113,7 +155,7 @@ export default {
                             categoryPercentage: 1,
                             barPercentage: 1,
                             pointRadius: 0,
-                            data: this.getDataColumn(data, 'download_time_in_seconds'),
+                            data: this.getDataColumn(data, 'downloadTimeInSeconds'),
                         },
                     ]
                 },
@@ -196,9 +238,5 @@ export default {
             });
         }
     },
-    mounted() {
-        this.setTimespan('last-hour');
-        this.fetchPerformance(this.start, this.end);
-    }
 }
 </script>

@@ -11,7 +11,7 @@
  */
 
 import Vue from 'vue';
-import VTooltip from 'v-tooltip';
+import { VTooltip } from 'v-tooltip'
 import DayJs from "dayjs";
 import Translator from "./Translator";
 
@@ -30,7 +30,7 @@ Vue.component('check-body', require('./components/CheckBody').default);
 Vue.component('loader', require('./components/Loader').default);
 Vue.component('info-icon', require('./components/InfoIcon').default);
 
-Vue.use(VTooltip);
+Vue.directive('tooltip', VTooltip)
 
 Vue.mixin({
     methods: {
