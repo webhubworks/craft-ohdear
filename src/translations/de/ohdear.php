@@ -24,6 +24,8 @@ return [
     'Oh Dear plugin loaded' => 'Oh Dear plugin loaded',
     'Manage plugin settings' => 'Plugin-Einstellungen verwalten',
     'Overview' => 'Überblick',
+    'Disabled' => 'Deaktiviert',
+    'This check is currently disabled.' => 'Dieser Check ist momentan deaktiviert.',
     'Uptime' => 'Uptime',
     'Broken Links' => 'Tote Links',
     'Broken links' => 'Tote Links',
@@ -106,4 +108,6 @@ return [
     'Unchanged since last checked' => 'Unverändert seit dem letzten Check',
     'Certificate is not valid for too long' => 'Zertifikat ist nicht zu lange gültig',
     'Is not going to be revoked soon' => 'Wird nicht demnächst widerrufen',
+    'We are collecting performance metrics every time we check your site uptime.' => 'Jedes Mal, wenn wir die Uptime Ihrer Seite checken, erfassen wir auch die Ladezeit.',
+    'Performance' => 'Ladezeit',
 ];

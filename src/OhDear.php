@@ -11,7 +11,6 @@
 namespace webhubworks\ohdear;
 
 use Craft;
-use craft\base\Model;
 use craft\base\Plugin;
 use craft\elements\User;
 use craft\events\RegisterComponentTypesEvent;
@@ -19,21 +18,16 @@ use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
 use craft\events\TemplateEvent;
 use craft\helpers\Html;
-use craft\i18n\PhpMessageSource;
 use craft\services\Dashboard;
 use craft\services\UserPermissions;
 use craft\web\UrlManager;
 use craft\web\View;
 use Spatie\Url\Url;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
 use webhubworks\ohdear\models\Settings;
 use webhubworks\ohdear\services\OhDearService as OhDearServiceService;
 use webhubworks\ohdear\services\SettingsService;
 use webhubworks\ohdear\widgets\OhDearWidget;
 use yii\base\Event;
-use yii\base\Exception;
 
 /**
  * @author    webhub GmbH
@@ -208,7 +202,11 @@ class OhDear extends Plugin
             'certificate-health' => [
                 'url' => 'ohdear/certificate-health',
                 'label' => Craft::t('ohdear', 'Certificate Health'),
-            ]
+            ],
+            'performance' => [
+                'url' => 'ohdear/performance',
+                'label' => Craft::t('ohdear', 'Performance'),
+            ],
         ];
 
         return $cpNavItem;
@@ -239,6 +237,7 @@ class OhDear extends Plugin
                 $event->rules['ohdear/broken-links'] = ['template' => 'ohdear/broken-links'];
                 $event->rules['ohdear/mixed-content'] = ['template' => 'ohdear/mixed-content'];
                 $event->rules['ohdear/certificate-health'] = ['template' => 'ohdear/certificate-health'];
+                $event->rules['ohdear/performance'] = ['template' => 'ohdear/performance'];
             }
         );
     }
@@ -256,6 +255,8 @@ class OhDear extends Plugin
                 $event->rules['ohdear/api/broken-links'] = 'ohdear/api/broken-links';
                 $event->rules['ohdear/api/mixed-content'] = 'ohdear/api/mixed-content';
                 $event->rules['ohdear/api/certificate-health'] = 'ohdear/api/certificate-health';
+                $event->rules['ohdear/api/current-performance'] = 'ohdear/api/current-performance';
+                $event->rules['ohdear/api/performance'] = 'ohdear/api/performance';
                 $event->rules['ohdear/api/disable-check'] = 'ohdear/api/disable-check';
                 $event->rules['ohdear/api/enable-check'] = 'ohdear/api/enable-check';
                 $event->rules['ohdear/api/request-run'] = 'ohdear/api/request-run';

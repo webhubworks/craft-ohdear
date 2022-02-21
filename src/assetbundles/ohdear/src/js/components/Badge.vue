@@ -73,7 +73,7 @@
                 required: true
             },
             label: {
-                type: String,
+                type: String|Promise,
                 required: true
             },
             dotless: {

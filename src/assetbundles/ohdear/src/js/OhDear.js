@@ -18,6 +18,8 @@ import Translator from "./Translator";
 Vue.component('card', require('./components/Card').default);
 Vue.component('overview', require('./components/pages/Overview').default);
 Vue.component('uptime', require('./components/pages/Uptime').default);
+Vue.component('performance', require('./components/pages/Performance').default);
+Vue.component('performance-chart', require('./components/PerformanceChart').default);
 Vue.component('broken-links', require('./components/pages/BrokenLinks').default);
 Vue.component('mixed-content', require('./components/pages/MixedContent').default);
 Vue.component('certificate-health', require('./components/pages/CertificateHealth').default);

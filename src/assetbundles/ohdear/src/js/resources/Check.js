@@ -1,4 +1,5 @@
 import LocalDate from "../helpers/LocalDate";
+import Api from "../helpers/Api";
 
 const VALID_TYPES = [
     'uptime',
@@ -7,7 +8,9 @@ const VALID_TYPES = [
     'certificate_health',
     'certificate_transparency',
     'performance',
-    'cron'
+    'cron',
+    'dns',
+    'application_health',
 ];
 
 export default class Check {
@@ -54,6 +57,19 @@ export default class Check {
                 return `/${window.Craft.cpTrigger}/ohdear/certificate-health`;
             case 'certificate_transparency':
                 return `/${window.Craft.cpTrigger}/ohdear/certificate-health`;
+            default:
+                return null;
+        }
+    }
+
+    get hasInlineMetric() {
+        return ['performance'].includes(this.type);
+    }
+
+    get inlineMetric() {
+        switch (this.type) {
+            case 'performance':
+                return Api.getCurrentPerformance().then(response => response.data.currentPerformance);
             default:
                 return null;
         }

@@ -7,9 +7,7 @@
                 {{ $t(check.label) }}
             </h2>
 
-            <a :href="check.reportUrl" v-if="check.reportUrl">
-                <check-badge :check="check"/>
-            </a>
+            <check-badge :check="check"/>
 
         </header>
 

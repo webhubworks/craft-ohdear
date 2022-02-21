@@ -2000,7 +2000,7 @@ __webpack_require__.r(__webpack_exports__);
       required: true
     },
     label: {
-      type: String,
+      type: String | Promise,
       required: true
     },
     dotless: {
@@ -2027,6 +2027,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2035,13 +2048,70 @@ __webpack_require__.r(__webpack_exports__);
     check: {
       type: _resources_Check__WEBPACK_IMPORTED_MODULE_1__["default"],
       required: true
+    },
+    loaderPosition: {
+      type: String,
+      "default": 'left'
+    }
+  },
+  data: function data() {
+    return {
+      label: null,
+      loadingMetric: false,
+      shouldAutoFetchInlineMetric: false
+    };
+  },
+  watch: {
+    shouldAutoFetchInlineMetric: function shouldAutoFetchInlineMetric(itShouldIndeed) {
+      if (itShouldIndeed) {
+        this.fetchInlineMetric();
+      }
+    },
+    'check.enabled': {
+      immediate: true,
+      handler: function handler(newValue, oldValue) {
+        if (newValue === undefined) {
+          return;
+        }
+
+        if (!newValue) {
+          this.shouldAutoFetchInlineMetric = false;
+          this.label = 'Disabled';
+          return;
+        }
+
+        if (!this.check.hasInlineMetric) {
+          this.setStaticLabel();
+          return;
+        }
+
+        if (!oldValue && newValue) {
+          this.fetchInlineMetric();
+          this.shouldAutoFetchInlineMetric = true;
+        }
+      }
+    }
+  },
+  methods: {
+    setStaticLabel: function setStaticLabel() {
+      this.label = this.check.latestRunResult === 'succeeded' ? this.$t(_helpers_Typo__WEBPACK_IMPORTED_MODULE_0__["default"].checks[this.check.type].badge.good) : this.$t(_helpers_Typo__WEBPACK_IMPORTED_MODULE_0__["default"].checks[this.check.type].badge.bad);
+    },
+    fetchInlineMetric: function fetchInlineMetric() {
+      var _this = this;
+
+      this.loadingMetric = true;
+      return this.check.inlineMetric.then(function (metric) {
+        _this.label = metric + ' ms';
+        _this.loadingMetric = false;
+      });
     }
   },
   computed: {
-    label: function label() {
-      return this.check.latestRunResult === 'succeeded' ? this.$t(_helpers_Typo__WEBPACK_IMPORTED_MODULE_0__["default"].checks[this.check.type].badge.good) : this.$t(_helpers_Typo__WEBPACK_IMPORTED_MODULE_0__["default"].checks[this.check.type].badge.bad);
-    },
     color: function color() {
+      if (!this.check.enabled) {
+        return 'gray';
+      }
+
       if (this.check.latestRunResult === null) {
         return 'green';
       }
@@ -2925,9 +2995,64 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("badge", {
-    attrs: { color: _vm.color, label: _vm.label, dotless: false }
-  })
+  return _c("div", [
+    !_vm.check.hasInlineMetric && _vm.check.reportUrl
+      ? _c(
+          "a",
+          { attrs: { href: _vm.check.reportUrl } },
+          [
+            _c("badge", {
+              attrs: { color: _vm.color, label: _vm.label, dotless: false }
+            })
+          ],
+          1
+        )
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.check.hasInlineMetric
+      ? _c(
+          "div",
+          { staticClass: "oh-flex oh-items-center" },
+          [
+            _vm.loaderPosition === "left"
+              ? _c("loader", {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.loadingMetric,
+                      expression: "loadingMetric"
+                    }
+                  ],
+                  staticClass: "oh-mr-1"
+                })
+              : _vm._e(),
+            _vm._v(" "),
+            !_vm.loadingMetric
+              ? _c("badge", {
+                  class: { "oh-opacity-0 oh-h-6": _vm.label === null },
+                  attrs: { color: _vm.color, label: _vm.label, dotless: false }
+                })
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.loaderPosition === "right"
+              ? _c("loader", {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.loadingMetric,
+                      expression: "loadingMetric"
+                    }
+                  ],
+                  staticClass: "oh-ml-1"
+                })
+              : _vm._e()
+          ],
+          1
+        )
+      : _vm._e()
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -15770,6 +15895,23 @@ Axios.defaults.headers.common['Accept'] = 'application/json';
       return handleError(error);
     });
   },
+  getCurrentPerformance: function getCurrentPerformance() {
+    return Axios.get('/ohdear/api/current-performance')["catch"](function (error) {
+      return handleError(error);
+    });
+  },
+  getPerformance: function getPerformance(start, end) {
+    var timeframe = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+    return Axios.get('/ohdear/api/performance', {
+      params: {
+        start: start,
+        end: end,
+        timeframe: timeframe
+      }
+    })["catch"](function (error) {
+      return handleError(error);
+    });
+  },
   disableCheck: function disableCheck(checkId) {
     var data = {};
     data['checkId'] = checkId;
@@ -15887,6 +16029,12 @@ __webpack_require__.r(__webpack_exports__);
         bad: 'Your site is down. We last checked {:fromNow}.'
       }
     },
+    performance: {
+      body: {
+        good: 'We are collecting performance metrics every time we check your site uptime.',
+        bad: 'We are collecting performance metrics every time we check your site uptime.'
+      }
+    },
     broken_links: {
       badge: {
         good: 'None',
@@ -15943,6 +16091,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Check; });
 /* harmony import */ var _helpers_LocalDate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../helpers/LocalDate */ "./src/assetbundles/ohdear/src/js/helpers/LocalDate.js");
+/* harmony import */ var _helpers_Api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../helpers/Api */ "./src/assetbundles/ohdear/src/js/helpers/Api.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -15950,7 +16099,8 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 
-var VALID_TYPES = ['uptime', 'broken_links', 'mixed_content', 'certificate_health', 'certificate_transparency', 'performance', 'cron'];
+
+var VALID_TYPES = ['uptime', 'broken_links', 'mixed_content', 'certificate_health', 'certificate_transparency', 'performance', 'cron', 'dns', 'application_health'];
 
 var Check = /*#__PURE__*/function () {
   function Check(enabled, id, label, latestRunEndedAt, latestRunResult, type) {
@@ -15993,6 +16143,24 @@ var Check = /*#__PURE__*/function () {
 
         case 'certificate_transparency':
           return "/".concat(window.Craft.cpTrigger, "/ohdear/certificate-health");
+
+        default:
+          return null;
+      }
+    }
+  }, {
+    key: "hasInlineMetric",
+    get: function get() {
+      return ['performance'].includes(this.type);
+    }
+  }, {
+    key: "inlineMetric",
+    get: function get() {
+      switch (this.type) {
+        case 'performance':
+          return _helpers_Api__WEBPACK_IMPORTED_MODULE_1__["default"].getCurrentPerformance().then(function (response) {
+            return response.data.currentPerformance;
+          });
 
         default:
           return null;

@@ -143,6 +143,31 @@ class ApiController extends Controller
         ]);
     }
 
+    public function actionCurrentPerformance()
+    {
+        $this->requireAcceptsJson();
+        $this->requireLogin();
+
+        return $this->asJson([
+            'currentPerformance' => OhDear::$plugin->ohDearService->getCurrentPerformance()
+        ]);
+    }
+
+    public function actionPerformance()
+    {
+        $this->requireAcceptsJson();
+        $this->requireLogin();
+
+        $request = \Craft::$app->request;
+        $start = $request->getRequiredQueryParam('start');
+        $end = $request->getRequiredQueryParam('end');
+        $timeframe = $request->getQueryParam('timeframe');
+
+        return $this->asJson([
+            'performance' => OhDear::$plugin->ohDearService->getPerformance($start, $end, $timeframe),
+        ]);
+    }
+
     /**
      * @return Response
      * @throws BadRequestHttpException

@@ -10,6 +10,7 @@
 
 namespace webhubworks\ohdear\services;
 
+use Carbon\Carbon;
 use Craft;
 use craft\base\Component;
 use craft\base\ElementInterface;
@@ -68,8 +69,6 @@ class OhDearService extends Component
 
         $this->ohDearClient = new OhDearSdk($this->apiToken);
     }
-    // Public Methods
-    // =========================================================================
 
     /**
      * @param string $startsAt Y:m:d H:i
@@ -189,6 +188,41 @@ class OhDearService extends Component
     public function getCertificateHealth()
     {
         return $this->ohDearClient->certificateHealth($this->siteId);
+    }
+
+    /**
+     * Returns the average total time of the last 10 minutes in ms.
+     * Returns null if there are no records.
+     *
+     * @return int|null
+     */
+    public function getCurrentPerformance()
+    {
+        $lastTenMinutes = $this->getPerformance(Carbon::now()->subMinutes(10), Carbon::now());
+
+        $totalTimes_s = array_filter(array_column($lastTenMinutes['data']->attributes, 'total_time_in_seconds'));
+        if (count($totalTimes_s) === 0) {
+            return null;
+        }
+        $avgTotalTime_s = array_sum($totalTimes_s) / count($totalTimes_s);
+        $avgTotalTime_ms = $avgTotalTime_s * 1000;
+
+        return (int)$avgTotalTime_ms;
+    }
+
+    /**
+     * @param string $start
+     * @param string $end
+     * @param string $timeframe
+     * @return array
+     */
+    public function getPerformance(string $start, string $end, ?string $timeframe = null)
+    {
+        if (is_null($timeframe)) {
+            return $this->ohDearClient->performanceRecords($this->siteId, $start, $end);
+        }
+
+        return $this->ohDearClient->performanceRecords($this->siteId, $start, $end, $timeframe);
     }
 
     /**
