@@ -86,7 +86,7 @@ class CheckController extends Controller
     public function actionRequestRun()
     {
         foreach ($this->checks as $check) {
-            OhDear::$plugin->ohDearService->requestRun($check->id);
+            OhDear::$plugin->api->requestRun($check->id);
             $this->stdout("✓ ", Console::FG_GREEN);
             $this->stdout("New {$check->label} check run requested" . PHP_EOL);
         }
@@ -106,7 +106,7 @@ class CheckController extends Controller
     public function actionEnable()
     {
         foreach ($this->checks as $check) {
-            OhDear::$plugin->ohDearService->enableCheck($check->id);
+            OhDear::$plugin->api->enableCheck($check->id);
             $this->stdout("Enabled ", Console::FG_GREEN);
             $this->stdout("{$check->label} check" . PHP_EOL);
         }
@@ -126,7 +126,7 @@ class CheckController extends Controller
     public function actionDisable()
     {
         foreach ($this->checks as $check) {
-            OhDear::$plugin->ohDearService->disableCheck($check->id);
+            OhDear::$plugin->api->disableCheck($check->id);
             $this->stdout("Disabled ", Console::FG_YELLOW);
             $this->stdout("{$check->label} check" . PHP_EOL);
         }
@@ -207,7 +207,7 @@ class CheckController extends Controller
             return [];
         }
 
-        return array_filter(OhDear::$plugin->ohDearService->getSite()->checks, function ($check) use ($types) {
+        return array_filter(OhDear::$plugin->api->getSite()->checks, function ($check) use ($types) {
             /** @var Check $check */
             return in_array($check->type, $types);
         });

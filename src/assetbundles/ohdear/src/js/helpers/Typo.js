@@ -58,5 +58,36 @@ export default {
                 bad: 'We\'ll notify you when someone issues a new certificate for your site. This check is always running.'
             }
         },
+        dns: {
+            badge: {
+                good: 'good',
+                bad: 'bad',
+            },
+            body: {
+                good: 'good',
+                bad: 'bad',
+            }
+        },
+        cron: {
+            badge: {
+                good: 'good',
+                bad: 'bad',
+                empty: 'empty',
+            },
+            body: {
+                good: 'good',
+                bad: 'bad',
+            }
+        },
+        application_health: {
+            badge: {
+                good: 'Healthy',
+                bad: 'Not healthy',
+            },
+            body: {
+                good: 'Your application seems to be healthy. We last checked {:fromNow}.',
+                bad: 'We detected some problems with your application. We last checked {:fromNow}.',
+            }
+        }
     }
 }

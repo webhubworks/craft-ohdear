@@ -21,11 +21,15 @@ export default {
             .catch(error => handleError(error));
     },
     getUptime: (startedAt, endedAt, split) => {
-        return Axios.get(`/ohdear/api/uptime?filter[started_at]=${startedAt}&filter[ended_at]=${endedAt}&split=${split}`)
+        return Axios.get(`/ohdear/api/uptime`, {
+            params: {startedAt, endedAt, split}
+        })
             .catch(error => handleError(error));
     },
     getDowntime: (startedAt, endedAt) => {
-        return Axios.get(`/ohdear/api/downtime?filter[started_at]=${startedAt}&filter[ended_at]=${endedAt}`)
+        return Axios.get(`/ohdear/api/downtime`, {
+            params: {startedAt, endedAt}
+        })
             .catch(error => handleError(error));
     },
     getBrokenLinks: () => {
@@ -40,15 +44,27 @@ export default {
         return Axios.get('/ohdear/api/certificate-health')
             .catch(error => handleError(error));
     },
+    getApplicationHealthChecks: () => {
+        return Axios.get('/ohdear/api/application-health-checks')
+            .catch(error => handleError(error));
+    },
+    getApplicationHealthCheckResults: (checkId) => {
+        return Axios.get('/ohdear/api/application-health-check-results', {
+            params: {checkId}
+        })
+            .catch(error => handleError(error));
+    },
+    getCronChecks: () => {
+        return Axios.get('/ohdear/api/cron-checks')
+            .catch(error => handleError(error));
+    },
     getCurrentPerformance: () => {
         return Axios.get('/ohdear/api/current-performance')
             .catch(error => handleError(error));
     },
     getPerformance: (start, end, groupBy = null) => {
         return Axios.get('/ohdear/api/performance', {
-            params: {
-                start, end, groupBy
-            }
+            params: {start, end, groupBy}
         })
             .catch(error => handleError(error));
     },

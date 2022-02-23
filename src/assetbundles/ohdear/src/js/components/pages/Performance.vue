@@ -3,7 +3,11 @@
 
         <h2>{{ $t('Check details') }}</h2>
 
-        <table class="data collapsible">
+        <div v-if="loadingSite" class="oh-w-full oh-justify-center oh-items-center oh-flex" style="height: 74px;">
+            <loader/>
+        </div>
+
+        <table v-if="!loadingSite" class="data collapsible">
             <tbody>
             <tr>
                 <th class="light">{{ $t('Status') }}</th>

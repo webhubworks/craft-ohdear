@@ -38,7 +38,7 @@ class ApiController extends Controller
         $apiTokenParam = Craft::$app->request->getQueryParam('api-token', null);
 
         if ($apiTokenParam === null) {
-            $sites = OhDear::$plugin->ohDearService->getSites();
+            $sites = OhDear::$plugin->api->getSites();
         } else {
             $sites = OhDear::$plugin->settingsService->getSites(
                 Craft::parseEnv($apiTokenParam)
@@ -60,7 +60,7 @@ class ApiController extends Controller
         $this->requireLogin();
 
         return $this->asJson([
-            'site' => OhDear::$plugin->ohDearService->getSite()
+            'site' => OhDear::$plugin->api->getSite()
         ]);
     }
 
@@ -74,12 +74,12 @@ class ApiController extends Controller
         $this->requireLogin();
 
         $request = \Craft::$app->request;
-        $startedAt = $request->getRequiredQueryParam('filter.started_at');
-        $endedAt = $request->getRequiredQueryParam('filter.ended_at');
+        $startedAt = $request->getRequiredQueryParam('startedAt');
+        $endedAt = $request->getRequiredQueryParam('endedAt');
         $split = $request->getQueryParam('split', null);
 
         return $this->asJson([
-            'uptime' => OhDear::$plugin->ohDearService->getUptime($startedAt, $endedAt, $split)
+            'uptime' => OhDear::$plugin->api->getUptime($startedAt, $endedAt, $split)
         ]);
     }
 
@@ -93,11 +93,11 @@ class ApiController extends Controller
         $this->requireLogin();
 
         $request = \Craft::$app->request;
-        $startedAt = $request->getRequiredQueryParam('filter.started_at');
-        $endedAt = $request->getRequiredQueryParam('filter.ended_at');
+        $startedAt = $request->getRequiredQueryParam('startedAt');
+        $endedAt = $request->getRequiredQueryParam('endedAt');
 
         return $this->asJson([
-            'downtime' => OhDear::$plugin->ohDearService->getDowntime($startedAt, $endedAt)
+            'downtime' => OhDear::$plugin->api->getDowntime($startedAt, $endedAt)
         ]);
     }
 
@@ -111,7 +111,7 @@ class ApiController extends Controller
         $this->requireLogin();
 
         return $this->asJson([
-            'brokenLinks' => OhDear::$plugin->ohDearService->getBrokenLinks()
+            'brokenLinks' => OhDear::$plugin->api->getBrokenLinks()
         ]);
     }
 
@@ -125,7 +125,7 @@ class ApiController extends Controller
         $this->requireLogin();
 
         return $this->asJson([
-            'mixedContentItems' => OhDear::$plugin->ohDearService->getMixedContent()
+            'mixedContentItems' => OhDear::$plugin->api->getMixedContent()
         ]);
     }
 
@@ -139,20 +139,74 @@ class ApiController extends Controller
         $this->requireLogin();
 
         return $this->asJson([
-            'certificateHealth' => OhDear::$plugin->ohDearService->getCertificateHealth()
+            'certificateHealth' => OhDear::$plugin->api->getCertificateHealth()
         ]);
     }
 
+    /**
+     * @return Response
+     * @throws BadRequestHttpException
+     */
+    public function actionApplicationHealthChecks()
+    {
+        $this->requireAcceptsJson();
+        $this->requireLogin();
+
+        return $this->asJson([
+            'applicationHealthChecks' => OhDear::$plugin->api->getApplicationHealthChecks()
+        ]);
+    }
+
+    /**
+     * @return Response
+     * @throws BadRequestHttpException
+     */
+    public function actionApplicationHealthCheckResults()
+    {
+        $this->requireAcceptsJson();
+        $this->requireLogin();
+
+        $checkId = intval(
+            \Craft::$app->request->getRequiredQueryParam('checkId')
+        );
+
+        return $this->asJson([
+            'applicationHealthCheckResults' => OhDear::$plugin->api->getApplicationHealthCheckResults($checkId)
+        ]);
+    }
+
+    /**
+     * @return Response
+     * @throws BadRequestHttpException
+     */
+    public function actionCronChecks()
+    {
+        $this->requireAcceptsJson();
+        $this->requireLogin();
+
+        return $this->asJson([
+            'cronChecks' => OhDear::$plugin->api->getCronChecks()
+        ]);
+    }
+
+    /**
+     * @return Response
+     * @throws BadRequestHttpException
+     */
     public function actionCurrentPerformance()
     {
         $this->requireAcceptsJson();
         $this->requireLogin();
 
         return $this->asJson([
-            'currentPerformance' => OhDear::$plugin->ohDearService->getCurrentPerformance()
+            'currentPerformance' => OhDear::$plugin->api->getCurrentPerformance()
         ]);
     }
 
+    /**
+     * @return Response
+     * @throws BadRequestHttpException
+     */
     public function actionPerformance()
     {
         $this->requireAcceptsJson();
@@ -164,7 +218,7 @@ class ApiController extends Controller
         $groupBy = $request->getQueryParam('groupBy');
 
         return $this->asJson([
-            'performance' => OhDear::$plugin->ohDearService->getPerformance($start, $end, $groupBy),
+            'performance' => OhDear::$plugin->api->getPerformance($start, $end, $groupBy),
         ]);
     }
 
@@ -182,7 +236,7 @@ class ApiController extends Controller
         );
 
         return $this->asJson([
-            'check' => OhDear::$plugin->ohDearService->disableCheck($checkId)
+            'check' => OhDear::$plugin->api->disableCheck($checkId)
         ]);
     }
 
@@ -200,7 +254,7 @@ class ApiController extends Controller
         );
 
         return $this->asJson([
-            'check' => OhDear::$plugin->ohDearService->enableCheck($checkId)
+            'check' => OhDear::$plugin->api->enableCheck($checkId)
         ]);
     }
 
@@ -217,8 +271,13 @@ class ApiController extends Controller
             \Craft::$app->request->getRequiredBodyParam('checkId')
         );
 
-        return $this->asJson([
-            'check' => OhDear::$plugin->ohDearService->requestRun($checkId)
-        ]);
+        try {
+            return $this->asJson([
+                'check' => OhDear::$plugin->api->requestRun($checkId)
+            ]);
+        } catch (\Exception $e) {
+            $error = json_decode($e->getMessage(), true);
+            return $this->asErrorJson($error['message'] ?? 'An error occurred');
+        }
     }
 }

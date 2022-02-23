@@ -23,6 +23,7 @@ Vue.component('performance-chart', require('./components/PerformanceChart').defa
 Vue.component('broken-links', require('./components/pages/BrokenLinks').default);
 Vue.component('mixed-content', require('./components/pages/MixedContent').default);
 Vue.component('certificate-health', require('./components/pages/CertificateHealth').default);
+Vue.component('application-health', require('./components/pages/ApplicationHealth').default);
 Vue.component('http-status-badge', require('./components/HttpStatusBadge').default);
 Vue.component('badge', require('./components/Badge').default);
 Vue.component('check-badge', require('./components/CheckBadge').default);

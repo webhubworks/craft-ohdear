@@ -49,7 +49,7 @@
             </div>
 
             <div class="oh-text-xs oh-text-gray-500" v-if="check.enabled">
-                <button :class="{'oh-pointer-events-none': newRunRequested}" class="oh-outline-none hover:oh-underline" @click.prevent="onRequestNewRun" :disabled="newRunRequested">
+                <button :class="{'oh-pointer-events-none': newRunRequested}" class="oh-outline-none hover:oh-underline" @click.prevent="requestNewRun" :disabled="newRunRequested">
                     {{ newRunLabel }}
                 </button>
             </div>

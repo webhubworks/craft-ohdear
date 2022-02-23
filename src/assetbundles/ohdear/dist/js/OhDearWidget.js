@@ -1812,6 +1812,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Badge",
   computed: {
+    padding: function padding() {
+      return this.small ? 'oh-px-1' : 'oh-px-2.5 oh-py-0.5';
+    },
+    fontSize: function fontSize() {
+      return this.small ? 'oh-text-xs' : 'oh-text-sm';
+    },
     bgColor: function bgColor() {
       switch (this.color) {
         case 'green':
@@ -1886,6 +1892,10 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   props: {
+    small: {
+      type: Boolean,
+      "default": false
+    },
     color: {
       type: String,
       required: true
@@ -1916,6 +1926,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _helpers_Typo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../helpers/Typo */ "./src/assetbundles/ohdear/src/js/helpers/Typo.js");
 /* harmony import */ var _resources_Check__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../resources/Check */ "./src/assetbundles/ohdear/src/js/resources/Check.js");
+//
+//
 //
 //
 //
@@ -2000,7 +2012,7 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loadingMetric = true;
       return this.check.inlineMetric.then(function (metric) {
-        _this.label = metric + ' ms';
+        _this.label = _this.$t(metric);
         _this.loadingMetric = false;
       });
     }
@@ -2318,6 +2330,28 @@ function average(array) {
 
 /***/ }),
 
+/***/ "./src/assetbundles/ohdear/src/js/Translator.js":
+/*!******************************************************!*\
+  !*** ./src/assetbundles/ohdear/src/js/Translator.js ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* export default binding */ __WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ function __WEBPACK_DEFAULT_EXPORT__(languageLines, key) {
+  var replace = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+  var translation = languageLines[key] ? languageLines[key] : key;
+  Object.keys(replace).forEach(function (key) {
+    translation = translation.replace('{' + key + '}', replace[key]);
+  });
+  return translation;
+}
+
+/***/ }),
+
 /***/ "./src/assetbundles/ohdear/src/js/helpers/Api.js":
 /*!*******************************************************!*\
   !*** ./src/assetbundles/ohdear/src/js/helpers/Api.js ***!
@@ -2362,12 +2396,23 @@ Axios.defaults.headers.common['Accept'] = 'application/json';
     });
   },
   getUptime: function getUptime(startedAt, endedAt, split) {
-    return Axios.get("/ohdear/api/uptime?filter[started_at]=".concat(startedAt, "&filter[ended_at]=").concat(endedAt, "&split=").concat(split))["catch"](function (error) {
+    return Axios.get("/ohdear/api/uptime", {
+      params: {
+        startedAt: startedAt,
+        endedAt: endedAt,
+        split: split
+      }
+    })["catch"](function (error) {
       return handleError(error);
     });
   },
   getDowntime: function getDowntime(startedAt, endedAt) {
-    return Axios.get("/ohdear/api/downtime?filter[started_at]=".concat(startedAt, "&filter[ended_at]=").concat(endedAt))["catch"](function (error) {
+    return Axios.get("/ohdear/api/downtime", {
+      params: {
+        startedAt: startedAt,
+        endedAt: endedAt
+      }
+    })["catch"](function (error) {
       return handleError(error);
     });
   },
@@ -2383,6 +2428,25 @@ Axios.defaults.headers.common['Accept'] = 'application/json';
   },
   getCertificateHealth: function getCertificateHealth() {
     return Axios.get('/ohdear/api/certificate-health')["catch"](function (error) {
+      return handleError(error);
+    });
+  },
+  getApplicationHealthChecks: function getApplicationHealthChecks() {
+    return Axios.get('/ohdear/api/application-health-checks')["catch"](function (error) {
+      return handleError(error);
+    });
+  },
+  getApplicationHealthCheckResults: function getApplicationHealthCheckResults(checkId) {
+    return Axios.get('/ohdear/api/application-health-check-results', {
+      params: {
+        checkId: checkId
+      }
+    })["catch"](function (error) {
+      return handleError(error);
+    });
+  },
+  getCronChecks: function getCronChecks() {
+    return Axios.get('/ohdear/api/cron-checks')["catch"](function (error) {
       return handleError(error);
     });
   },
@@ -2568,6 +2632,37 @@ __webpack_require__.r(__webpack_exports__);
         good: 'We\'ll notify you when someone issues a new certificate for your site. This check is always running.',
         bad: 'We\'ll notify you when someone issues a new certificate for your site. This check is always running.'
       }
+    },
+    dns: {
+      badge: {
+        good: 'good',
+        bad: 'bad'
+      },
+      body: {
+        good: 'good',
+        bad: 'bad'
+      }
+    },
+    cron: {
+      badge: {
+        good: 'good',
+        bad: 'bad',
+        empty: 'empty'
+      },
+      body: {
+        good: 'good',
+        bad: 'bad'
+      }
+    },
+    application_health: {
+      badge: {
+        good: 'Healthy',
+        bad: 'Not healthy'
+      },
+      body: {
+        good: 'Your application seems to be healthy. We last checked {:fromNow}.',
+        bad: 'We detected some problems with your application. We last checked {:fromNow}.'
+      }
     }
   }
 });
@@ -2587,11 +2682,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _helpers_LocalDate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../helpers/LocalDate */ "./src/assetbundles/ohdear/src/js/helpers/LocalDate.js");
 /* harmony import */ var _helpers_Api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../helpers/Api */ "./src/assetbundles/ohdear/src/js/helpers/Api.js");
+/* harmony import */ var _helpers_Typo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../helpers/Typo */ "./src/assetbundles/ohdear/src/js/helpers/Typo.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
 
 
 
@@ -2642,6 +2739,9 @@ var Check = /*#__PURE__*/function () {
         case 'certificate_transparency':
           return "/".concat(window.Craft.cpTrigger, "/ohdear/certificate-health");
 
+        case 'application_health':
+          return "/".concat(window.Craft.cpTrigger, "/ohdear/application-health");
+
         default:
           return null;
       }
@@ -2660,15 +2760,26 @@ var Check = /*#__PURE__*/function () {
   }, {
     key: "hasInlineMetric",
     get: function get() {
-      return ['performance'].includes(this.type);
+      return ['performance', 'cron'].includes(this.type);
     }
   }, {
     key: "inlineMetric",
     get: function get() {
+      var _this = this;
+
       switch (this.type) {
         case 'performance':
           return _helpers_Api__WEBPACK_IMPORTED_MODULE_1__["default"].getCurrentPerformance().then(function (response) {
-            return response.data.currentPerformance;
+            return response.data.currentPerformance + ' ms';
+          });
+
+        case 'cron':
+          return _helpers_Api__WEBPACK_IMPORTED_MODULE_1__["default"].getCronChecks().then(function (response) {
+            if (response.data.cronChecks.length === 0) {
+              return _helpers_Typo__WEBPACK_IMPORTED_MODULE_2__["default"].checks[_this.type].badge.empty;
+            }
+
+            _this.latestRunResult === 'succeeded' ? _helpers_Typo__WEBPACK_IMPORTED_MODULE_2__["default"].checks[_this.type].badge.good : _helpers_Typo__WEBPACK_IMPORTED_MODULE_2__["default"].checks[_this.type].badge.bad;
           });
 
         default:
@@ -2746,7 +2857,7 @@ var Site = /*#__PURE__*/function () {
   _createClass(Site, null, [{
     key: "fromJson",
     value: function fromJson(json) {
-      return new this(json.checks, json.id, json.label, json.updatedAt, json.createdAt, json.latestRunDate, json.sortUrl, json.summarizedCheckResult, json.teamId, json.url, json.usesHttps);
+      return new this(json.checks, json.createdAt, json.id, json.label, json.latestRunDate, json.sortUrl, json.summarizedCheckResult, json.teamId, json.updatedAt, json.url, json.usesHttps);
     }
   }]);
 
@@ -3299,7 +3410,11 @@ var render = function () {
     "span",
     {
       class:
-        "oh-whitespace-nowrap oh-inline-flex oh-items-center oh-px-2.5 oh-py-0.5 oh-rounded-sm oh-text-sm oh-font-medium oh-leading-5 " +
+        "oh-whitespace-nowrap oh-inline-flex oh-items-center " +
+        _vm.padding +
+        " " +
+        _vm.fontSize +
+        " oh-leading-5 oh-font-medium oh-rounded-sm " +
         _vm.bgColor +
         " " +
         _vm.textColor +
@@ -3363,6 +3478,12 @@ var render = function () {
             ],
             1
           )
+        : _vm._e(),
+      _vm._v(" "),
+      !_vm.check.hasInlineMetric && !_vm.check.reportUrl
+        ? _c("badge", {
+            attrs: { color: _vm.color, label: _vm.label, dotless: false },
+          })
         : _vm._e(),
       _vm._v(" "),
       _vm.check.hasInlineMetric
@@ -3432,7 +3553,8 @@ var render = function () {
             1
           )
         : _vm._e(),
-    ]
+    ],
+    1
   )
 }
 var staticRenderFns = []
@@ -16013,9 +16135,10 @@ var __webpack_exports__ = {};
   !*** ./src/assetbundles/ohdear/src/js/OhDearWidget.js ***!
   \********************************************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Translator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Translator */ "./src/assetbundles/ohdear/src/js/Translator.js");
 /**
  * Oh Dear plugin for Craft CMS
  *
@@ -16029,18 +16152,27 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 
-vue__WEBPACK_IMPORTED_MODULE_1__["default"].component('widget', (__webpack_require__(/*! ./components/Widget */ "./src/assetbundles/ohdear/src/js/components/Widget.vue")["default"]));
-vue__WEBPACK_IMPORTED_MODULE_1__["default"].component('badge', (__webpack_require__(/*! ./components/Badge */ "./src/assetbundles/ohdear/src/js/components/Badge.vue")["default"]));
-vue__WEBPACK_IMPORTED_MODULE_1__["default"].component('check-badge', (__webpack_require__(/*! ./components/CheckBadge */ "./src/assetbundles/ohdear/src/js/components/CheckBadge.vue")["default"]));
+
+vue__WEBPACK_IMPORTED_MODULE_2__["default"].component('widget', (__webpack_require__(/*! ./components/Widget */ "./src/assetbundles/ohdear/src/js/components/Widget.vue")["default"]));
+vue__WEBPACK_IMPORTED_MODULE_2__["default"].component('badge', (__webpack_require__(/*! ./components/Badge */ "./src/assetbundles/ohdear/src/js/components/Badge.vue")["default"]));
+vue__WEBPACK_IMPORTED_MODULE_2__["default"].component('check-badge', (__webpack_require__(/*! ./components/CheckBadge */ "./src/assetbundles/ohdear/src/js/components/CheckBadge.vue")["default"]));
 /**
  * DayJs Plugins
  */
 
 dayjs__WEBPACK_IMPORTED_MODULE_0___default().extend(__webpack_require__(/*! dayjs/plugin/utc */ "./node_modules/dayjs/plugin/utc.js"));
+vue__WEBPACK_IMPORTED_MODULE_2__["default"].mixin({
+  methods: {
+    $t: function $t(key) {
+      var replace = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      return (0,_Translator__WEBPACK_IMPORTED_MODULE_1__["default"])(window.Craft.translations.ohdear, key, replace);
+    }
+  }
+});
 var dashboardGrid = document.getElementById('dashboard-grid');
 
 if (dashboardGrid) {
-  new vue__WEBPACK_IMPORTED_MODULE_1__["default"]({
+  new vue__WEBPACK_IMPORTED_MODULE_2__["default"]({
     el: dashboardGrid
   });
 }

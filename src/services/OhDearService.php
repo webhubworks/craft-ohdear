@@ -1,12 +1,4 @@
 <?php
-/**
- * Oh Dear plugin for Craft CMS 3.x
- *
- * Integrate Oh Dear into Craft CMS.
- *
- * @link      https://webhub.de
- * @copyright Copyright (c) 2019 webhub GmbH
- */
 
 namespace webhubworks\ohdear\services;
 
@@ -34,14 +26,6 @@ use Spatie\Url\Url;
 use webhubworks\ohdear\OhDear;
 
 /**
- * OhDearService Service
- *
- * All of your plugin’s business logic should go in services, including saving data,
- * retrieving data, etc. They provide APIs that your controllers, template variables,
- * and other plugins can interact with.
- *
- * https://craftcms.com/docs/plugins/services
- *
  * @author    webhub GmbH
  * @package   OhDear
  * @since     1.0.0
@@ -56,7 +40,7 @@ class OhDearService extends Component
     /**
      * @var OhDearSdk
      */
-    private $ohDearClient;
+    private OhDearSdk $ohDearClient;
     private $siteId;
     private $apiToken;
 
@@ -188,6 +172,28 @@ class OhDearService extends Component
     public function getCertificateHealth()
     {
         return $this->ohDearClient->certificateHealth($this->siteId);
+    }
+
+    /**
+     * @return CertificateHealth
+     */
+    public function getApplicationHealthChecks()
+    {
+        return $this->ohDearClient->applicationHealthChecks($this->siteId);
+    }
+
+    /**
+     * @param int $applicationHealthCheckId
+     * @return array
+     */
+    public function getApplicationHealthCheckResults(int $applicationHealthCheckId)
+    {
+        return $this->ohDearClient->applicationHealthCheckResults($this->siteId, $applicationHealthCheckId);
+    }
+
+    public function getCronChecks()
+    {
+        return $this->ohDearClient->cronChecks($this->siteId);
     }
 
     /**

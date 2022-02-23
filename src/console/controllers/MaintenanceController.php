@@ -31,7 +31,7 @@ class MaintenanceController extends Controller
      */
     public function actionList()
     {
-        $periods = OhDear::$plugin->ohDearService->maintenancePeriods();
+        $periods = OhDear::$plugin->api->maintenancePeriods();
 
         if (empty($periods)) {
             $this->stdout("No maintenance periods for this site." . PHP_EOL, Console::FG_GREEN);
@@ -64,7 +64,7 @@ class MaintenanceController extends Controller
      */
     public function actionStart(int $stopAfter = 60 * 60)
     {
-        $period = OhDear::$plugin->ohDearService->startMaintenancePeriod($stopAfter);
+        $period = OhDear::$plugin->api->startMaintenancePeriod($stopAfter);
 
         $this->stdout("Maintenance period started." . PHP_EOL, Console::FG_GREEN);
 
@@ -89,7 +89,7 @@ class MaintenanceController extends Controller
      */
     public function actionStop()
     {
-        OhDear::$plugin->ohDearService->stopMaintenancePeriod();
+        OhDear::$plugin->api->stopMaintenancePeriod();
 
         $this->stdout("Maintenance period stopped." . PHP_EOL, Console::FG_GREEN);
 

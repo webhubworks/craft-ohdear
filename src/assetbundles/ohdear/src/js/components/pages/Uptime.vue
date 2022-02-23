@@ -3,6 +3,10 @@
 
         <h2>{{ $t('Check details') }}</h2>
 
+        <div v-if="loadingSite" class="oh-w-full oh-justify-center oh-items-center oh-flex" style="height: 74px;">
+            <loader/>
+        </div>
+
         <table class="data collapsible" v-if="!loadingSite">
             <tbody>
             <tr>
