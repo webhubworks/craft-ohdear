@@ -32,14 +32,14 @@ export default class Site {
     static fromJson(json) {
         return new this(
             json.checks,
+            json.createdAt,
             json.id,
             json.label,
-            json.updatedAt,
-            json.createdAt,
             json.latestRunDate,
             json.sortUrl,
             json.summarizedCheckResult,
             json.teamId,
+            json.updatedAt,
             json.url,
             json.usesHttps,
         )

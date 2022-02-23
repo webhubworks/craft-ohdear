@@ -42,6 +42,16 @@ class Settings extends Model
      */
     public $selectedSiteId = '';
 
+    /**
+     * @var ?string
+     */
+    public $healthCheckSecret = null;
+
+    /**
+     * @var array
+     */
+    public $healthChecks = [];
+
     // Public Methods
     // =========================================================================
 

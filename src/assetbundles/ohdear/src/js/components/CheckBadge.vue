@@ -4,6 +4,8 @@
             <badge :color="color" :label="label" :dotless="false"/>
         </a>
 
+        <badge v-if="!check.hasInlineMetric && !check.reportUrl" :color="color" :label="label" :dotless="false"/>
+
         <div class="oh-flex oh-items-center" v-if="check.hasInlineMetric">
             <loader class="oh-mr-1" v-if="loaderPosition === 'left'" v-show="loadingMetric"></loader>
 
@@ -81,7 +83,7 @@ export default {
         fetchInlineMetric() {
             this.loadingMetric = true;
             return this.check.inlineMetric.then(metric => {
-                this.label = metric + ' ms';
+                this.label = this.$t(metric);
                 this.loadingMetric = false;
             });
         }

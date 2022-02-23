@@ -1,5 +1,6 @@
 <template>
     <div>
+
         <div class="oh-flex oh-justify-end">
             <div id="timespan-field" class="field first oh-flex oh-items-center">
                 <div class="heading oh-mr-2">
@@ -26,9 +27,12 @@
                 </div>
             </div>
         </div>
-        <loader v-show="loading"></loader>
 
-        <canvas id="performanceChart"></canvas>
+        <div v-if="loading" class="oh-w-full oh-py-32 oh-justify-center oh-items-center oh-flex" style="height: 74px;">
+            <loader/>
+        </div>
+
+        <canvas v-show="!loading" id="performanceChart"></canvas>
     </div>
 </template>
 

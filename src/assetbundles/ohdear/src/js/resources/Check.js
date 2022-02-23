@@ -1,5 +1,6 @@
 import LocalDate from "../helpers/LocalDate";
 import Api from "../helpers/Api";
+import Typo from "../helpers/Typo";
 
 const VALID_TYPES = [
     'uptime',
@@ -59,6 +60,8 @@ export default class Check {
                 return `/${window.Craft.cpTrigger}/ohdear/certificate-health`;
             case 'certificate_transparency':
                 return `/${window.Craft.cpTrigger}/ohdear/certificate-health`;
+            case 'application_health':
+                return `/${window.Craft.cpTrigger}/ohdear/application-health`;
             default:
                 return null;
         }
@@ -74,13 +77,22 @@ export default class Check {
     }
 
     get hasInlineMetric() {
-        return ['performance'].includes(this.type);
+        return ['performance', 'cron'].includes(this.type);
     }
 
     get inlineMetric() {
         switch (this.type) {
             case 'performance':
-                return Api.getCurrentPerformance().then(response => response.data.currentPerformance);
+                return Api.getCurrentPerformance().then(response => response.data.currentPerformance + ' ms');
+            case 'cron':
+                return Api.getCronChecks().then(response => {
+                    if (response.data.cronChecks.length === 0) {
+                        return Typo.checks[this.type].badge.empty;
+                    }
+                    this.latestRunResult === 'succeeded' ?
+                        Typo.checks[this.type].badge.good :
+                        Typo.checks[this.type].badge.bad;
+                });
             default:
                 return null;
         }

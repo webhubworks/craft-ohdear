@@ -4,9 +4,7 @@
             <card v-for="check in supportedChecks"
                   :check="check"
                   :siteLoading="loading"
-                  @request-new-run="requestNewRun"
-                  @disable-check="disableCheck"
-                  @enable-check="enableCheck"
+                  @should-refresh-site="fetchSite"
                   :key="check.type"
             />
         </div>
@@ -30,13 +28,23 @@ export default {
     },
     mounted() {
         this.fetchSite().then(() => {
-            setInterval(this.fetchSite, 5000);
+            setInterval(this.fetchSite, 7500);
         });
     },
     computed: {
         supportedChecks() {
             return this.site.checks.filter(check => {
-                return ['uptime', 'performance', 'broken_links', 'mixed_content', 'certificate_health', 'certificate_transparency'].includes(check.type);
+                return [
+                    'uptime',
+                    'performance',
+                    'broken_links',
+                    'mixed_content',
+                    'certificate_health',
+                    'certificate_transparency',
+                    'dns',
+                    'application_health',
+                    'cron',
+                ].includes(check.type);
             });
         }
     },
@@ -46,30 +54,6 @@ export default {
             return Api.getSite().then(response => {
                 this.site = Site.fromJson(response.data.site);
                 this.loading = false;
-            });
-        },
-        disableCheck(checkId) {
-            if (this.loading) {
-                return;
-            }
-            return Api.disableCheck(checkId).then(() => {
-                this.fetchSite();
-            });
-        },
-        enableCheck(checkId) {
-            if (this.loading) {
-                return;
-            }
-            return Api.enableCheck(checkId).then(() => {
-                this.fetchSite();
-            });
-        },
-        requestNewRun(checkId) {
-            if (this.loading) {
-                return;
-            }
-            return Api.requestRun(checkId).then(() => {
-                this.fetchSite();
             });
         },
     }

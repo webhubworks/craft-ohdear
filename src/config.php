@@ -23,6 +23,7 @@
  */
 
 return [
-    "apiToken" => null,
-    "siteId" => null
+    'apiToken' => null,
+    'siteId' => null,
+    'healthCheckSecret' => null,
 ];

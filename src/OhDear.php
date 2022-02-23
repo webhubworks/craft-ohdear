@@ -24,7 +24,8 @@ use craft\web\UrlManager;
 use craft\web\View;
 use Spatie\Url\Url;
 use webhubworks\ohdear\models\Settings;
-use webhubworks\ohdear\services\OhDearService as OhDearServiceService;
+use webhubworks\ohdear\services\HealthCheckService;
+use webhubworks\ohdear\services\OhDearService;
 use webhubworks\ohdear\services\SettingsService;
 use webhubworks\ohdear\widgets\OhDearWidget;
 use yii\base\Event;
@@ -34,7 +35,9 @@ use yii\base\Event;
  * @package   OhDear
  * @since     1.0.0
  *
- * @property  OhDearServiceService $ohDearService
+ * @property HealthCheckService $health
+ * @property SettingsService $settingsService
+ * @property OhDearService $api
  * @property mixed $cpNavItem
  * @property  Settings $settings
  * @method    Settings getSettings()
@@ -95,7 +98,9 @@ class OhDear extends Plugin
         self::$plugin = $this;
 
         $this->setComponents([
-            'settingsService' => SettingsService::class
+            'settingsService' => SettingsService::class,
+            'api' => OhDearService::class,
+            'health' => HealthCheckService::class,
         ]);
 
         $this->registerPermissions();
@@ -203,6 +208,10 @@ class OhDear extends Plugin
                 'url' => 'ohdear/certificate-health',
                 'label' => Craft::t('ohdear', 'Certificate Health'),
             ],
+            'application-health' => [
+                'url' => 'ohdear/application-health',
+                'label' => Craft::t('ohdear', 'Application Health'),
+            ],
             'performance' => [
                 'url' => 'ohdear/performance',
                 'label' => Craft::t('ohdear', 'Performance'),
@@ -237,6 +246,7 @@ class OhDear extends Plugin
                 $event->rules['ohdear/broken-links'] = ['template' => 'ohdear/broken-links'];
                 $event->rules['ohdear/mixed-content'] = ['template' => 'ohdear/mixed-content'];
                 $event->rules['ohdear/certificate-health'] = ['template' => 'ohdear/certificate-health'];
+                $event->rules['ohdear/application-health'] = ['template' => 'ohdear/application-health'];
                 $event->rules['ohdear/performance'] = ['template' => 'ohdear/performance'];
             }
         );
@@ -255,11 +265,15 @@ class OhDear extends Plugin
                 $event->rules['ohdear/api/broken-links'] = 'ohdear/api/broken-links';
                 $event->rules['ohdear/api/mixed-content'] = 'ohdear/api/mixed-content';
                 $event->rules['ohdear/api/certificate-health'] = 'ohdear/api/certificate-health';
+                $event->rules['ohdear/api/application-health-checks'] = 'ohdear/api/application-health-checks';
+                $event->rules['ohdear/api/application-health-check-results'] = 'ohdear/api/application-health-check-results';
+                $event->rules['ohdear/api/cron-checks'] = 'ohdear/api/cron-checks';
                 $event->rules['ohdear/api/current-performance'] = 'ohdear/api/current-performance';
                 $event->rules['ohdear/api/performance'] = 'ohdear/api/performance';
                 $event->rules['ohdear/api/disable-check'] = 'ohdear/api/disable-check';
                 $event->rules['ohdear/api/enable-check'] = 'ohdear/api/enable-check';
                 $event->rules['ohdear/api/request-run'] = 'ohdear/api/request-run';
+                $event->rules['ohdear/api/health-check-results'] = 'ohdear/health-check/results';
             }
         );
     }

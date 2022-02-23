@@ -7,17 +7,42 @@ import Site from "../resources/Site";
 
 const hasCheck = {
     methods: {
-        onRequestNewRun() {
-            this.newRunRequested = true;
-            this.$emit('request-new-run', this.check.id)
-        },
         onToggleCheck() {
             if (this.loading) {
                 return;
             }
             this.checkEnabled = !this.checkEnabled;
-            const eventName = this.check.enabled ? 'disable-check' : 'enable-check';
-            this.$emit(eventName, this.check.id);
+            this.check.enabled ? this.disableCheck() : this.enableCheck();
+        },
+        disableCheck() {
+            if (this.siteLoading) {
+                return;
+            }
+            return Api.disableCheck(this.check.id).then(() => {
+                this.$emit('should-refresh-site');
+            });
+        },
+        enableCheck() {
+            if (this.siteLoading) {
+                return;
+            }
+            return Api.enableCheck(this.check.id).then(() => {
+                this.$emit('should-refresh-site');
+            });
+        },
+        requestNewRun() {
+            this.newRunRequested = true;
+            if (this.siteLoading) {
+                return;
+            }
+            return Api.requestRun(this.check.id).then(response => {
+                if (response.error) {
+                    alert(response.error);
+                    this.newRunRequested = false;
+                    return;
+                }
+                this.$emit('should-refresh-site');
+            });
         },
     },
     watch: {

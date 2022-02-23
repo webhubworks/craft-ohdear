@@ -38,11 +38,15 @@ Currently there is no multi-site support. You can only connect to a single Oh De
 
 ## Oh Dear Roadmap
 
+### In progress
+- Translate the plug-in to German (let us know which language you‘d like to see)
 - Add Oh Dear performance monitoring
-- Manage status page updates directly from the Control Panel
+
+### Planning
+- Health checks
 - Multi-site support
 - Optimizing the element edit workflow for broken links and mixed content
-- Translate the plug-in to German (let us know which language you‘d like to see)
+- Manage status page updates directly from the Control Panel
 
 ## Questions and answers
 

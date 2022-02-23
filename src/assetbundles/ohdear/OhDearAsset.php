@@ -48,7 +48,7 @@ class OhDearAsset extends AssetBundle
         // define the path that your publishable resources live
         $this->sourcePath = "@webhubworks/ohdear/assetbundles/ohdear/dist";
 
-        $this->registerLangFile();
+        static::registerLangFile();
 
         // define the dependencies
         $this->depends = [
@@ -70,7 +70,7 @@ class OhDearAsset extends AssetBundle
 
     // TODO: Check if file exists
     // TODO: Check if JS object exists
-    private function registerLangFile()
+    public static function registerLangFile()
     {
         $currentLanguage = Craft::$app->language;
 
