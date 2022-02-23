@@ -12,6 +12,12 @@ export default {
                 bad: 'Your site is down. We last checked {:fromNow}.'
             }
         },
+        performance: {
+            body: {
+                good: 'We are collecting performance metrics every time we check your site uptime.',
+                bad: 'We are collecting performance metrics every time we check your site uptime.'
+            }
+        },
         broken_links: {
             badge: {
                 good: 'None',

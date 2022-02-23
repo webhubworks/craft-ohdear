@@ -1,5 +1,4 @@
 let mix = require('laravel-mix');
-const glob = require('glob-all');
 
 /*
  |--------------------------------------------------------------------------
@@ -12,7 +11,7 @@ const glob = require('glob-all');
  |
  */
 
-const BROWSER_SYNC_PROXY = 'wod.hub';
+const BROWSER_SYNC_PROXY = 'localhost';
 const EXTRACT_VENDORS = ['vue'];
 
 mix.setPublicPath('src/assetbundles/');
@@ -31,8 +30,8 @@ mix.setPublicPath('src/assetbundles/');
 |
 */
 
-mix.js('src/assetbundles/ohdear/src/js/OhDear.js', 'ohdear/dist/js/');
-mix.js('src/assetbundles/ohdear/src/js/OhDearWidget.js', 'ohdear/dist/js/');
+mix.js('src/assetbundles/ohdear/src/js/OhDear.js', 'ohdear/dist/js/').vue({version: 2});
+mix.js('src/assetbundles/ohdear/src/js/OhDearWidget.js', 'ohdear/dist/js/').vue({version: 2});
 
 /*
 |--------------------------------------------------------------------------
@@ -89,11 +88,11 @@ mix.browserSync({
     proxy: BROWSER_SYNC_PROXY,
     host: BROWSER_SYNC_PROXY,
     open: 'external',
-    files: glob.sync([
+    files: [
         'src/templates/**/*.twig',
         'src/assetbundles/**/src/**/*.{js,vue,css}',
         'tailwind.config.js'
-    ]),
+    ],
 });
 
 /*
@@ -108,6 +107,6 @@ mix.browserSync({
 |
 */
 
-// if (mix.inProduction()) {
-//     mix.version();
-// }
+if (mix.inProduction()) {
+    mix.version();
+}

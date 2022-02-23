@@ -97,7 +97,7 @@ const fetchesSite = {
         },
         check() {
             if (this.checkType === undefined) {
-                console.error('checkType data property is missing');
+                console.warn('checkType data property is missing');
             }
             if (this.site === null) {
                 return {};
@@ -163,5 +163,5 @@ export {
     fetchesSite,
     fetchesDowntime,
     hasCheck,
-    localDateFilter
+    localDateFilter,
 };

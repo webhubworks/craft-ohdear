@@ -1,9 +1,9 @@
 <template>
     <div>
         <div class="oh-grid md:oh-grid-cols-2 oh-gap-4 oh-max-w-6xl" v-if="site">
-            <card v-for="check in site.checks"
-                  v-if="['uptime','broken_links','mixed_content','certificate_health','certificate_transparency'].includes(check.type)"
+            <card v-for="check in supportedChecks"
                   :check="check"
+                  :siteLoading="loading"
                   @request-new-run="requestNewRun"
                   @disable-check="disableCheck"
                   @enable-check="enableCheck"
@@ -17,58 +17,61 @@
 </template>
 
 <script>
-    import Api from "../../helpers/Api";
-    import Site from "../../resources/Site";
+import Api from "../../helpers/Api";
+import Site from "../../resources/Site";
 
-    export default {
-        name: "Cards",
-        data() {
-            return {
-                site: null,
-                loading: true
-            }
-        },
-        mounted() {
-            this.fetchSite().then(() => {
-                setInterval(this.fetchSite, 5000);
+export default {
+    name: "Cards",
+    data() {
+        return {
+            site: null,
+            loading: true
+        }
+    },
+    mounted() {
+        this.fetchSite().then(() => {
+            setInterval(this.fetchSite, 5000);
+        });
+    },
+    computed: {
+        supportedChecks() {
+            return this.site.checks.filter(check => {
+                return ['uptime', 'performance', 'broken_links', 'mixed_content', 'certificate_health', 'certificate_transparency'].includes(check.type);
+            });
+        }
+    },
+    methods: {
+        fetchSite() {
+            this.loading = true;
+            return Api.getSite().then(response => {
+                this.site = Site.fromJson(response.data.site);
+                this.loading = false;
             });
         },
-        methods: {
-            fetchSite() {
-                this.loading = true;
-                return Api.getSite().then(response => {
-                    this.site = Site.fromJson(response.data.site);
-                    this.loading = false;
-                });
-            },
-            disableCheck(checkId) {
-                if (this.loading) {
-                    return;
-                }
-                return Api.disableCheck(checkId).then(() => {
-                    this.fetchSite();
-                });
-            },
-            enableCheck(checkId) {
-                if (this.loading) {
-                    return;
-                }
-                return Api.enableCheck(checkId).then(() => {
-                    this.fetchSite();
-                });
-            },
-            requestNewRun(checkId) {
-                if (this.loading) {
-                    return;
-                }
-                return Api.requestRun(checkId).then(() => {
-                    this.fetchSite();
-                });
-            },
-        }
+        disableCheck(checkId) {
+            if (this.loading) {
+                return;
+            }
+            return Api.disableCheck(checkId).then(() => {
+                this.fetchSite();
+            });
+        },
+        enableCheck(checkId) {
+            if (this.loading) {
+                return;
+            }
+            return Api.enableCheck(checkId).then(() => {
+                this.fetchSite();
+            });
+        },
+        requestNewRun(checkId) {
+            if (this.loading) {
+                return;
+            }
+            return Api.requestRun(checkId).then(() => {
+                this.fetchSite();
+            });
+        },
     }
+}
 </script>
-
-<style scoped>
-
-</style>

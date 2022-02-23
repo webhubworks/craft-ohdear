@@ -1,0 +1,18 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{% extends '_layouts/cp' %}
+
+{% do view.registerAssetBundle('webhubworks\\ohdear\\assetbundles\\ohdear\\OhDearAsset') %}
+
+{% set title = 'Oh Dear Performance'|t('ohdear') %}
+{% set selectedSubnavItem = 'performance' %}
+
+{% block head %}
+    {{ parent() }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js" integrity="sha512-QSkVNOCYLtj73J4hbmVoOV6KVZuMluZlioC+trLpewV8qMjsWqlIQvkn1KGX2StWvPMdWGBqim1xlC8krl1EKQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock %}
+
+{% block content %}
+    <div id="ohdear-app">
+        <performance></performance>
+    </div>
+{% endblock %}

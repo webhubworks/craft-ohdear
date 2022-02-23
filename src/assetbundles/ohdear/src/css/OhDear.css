@@ -10,50 +10,50 @@
  * @since     1.0.0
  */
 
-@import "tailwindcss/base";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@import "tailwindcss/components";
-
-@import "tailwindcss/utilities";
-
-h1 {
-    margin-bottom: 24px;
-    font-size: 18px;
-    font-weight: bold;
-    line-height: 1.2;
-}
-
-h2 {
-    margin: 14px 0;
-    font-size: 16px;
-    font-weight: bold;
-    line-height: 20px;
-}
-
-a {
-    color: #0B69A3;
-}
-
-@keyframes ohdear-pulse {
-    0% {
-        opacity: 1
+@layer components {
+    h1 {
+        margin-bottom: 24px;
+        font-size: 18px;
+        font-weight: bold;
+        line-height: 1.2;
     }
 
-    50% {
-        opacity: 0.65
+    h2 {
+        margin: 14px 0;
+        font-size: 16px;
+        font-weight: bold;
+        line-height: 20px;
     }
 
-    100% {
-        opacity: 1
+    a {
+        color: #0B69A3;
     }
-}
 
-.oh-pre-facelift {
-    padding: 12px 12px 48px 12px;
-}
+    @keyframes ohdear-pulse {
+        0% {
+            opacity: 1
+        }
 
-@media only screen and (min-width: 768px) {
+        50% {
+            opacity: 0.65
+        }
+
+        100% {
+            opacity: 1
+        }
+    }
+
     .oh-pre-facelift {
-        padding: 24px 24px 48px 24px;
+        padding: 12px 12px 48px 12px;
+    }
+
+    @media only screen and (min-width: 768px) {
+        .oh-pre-facelift {
+            padding: 24px 24px 48px 24px;
+        }
     }
 }

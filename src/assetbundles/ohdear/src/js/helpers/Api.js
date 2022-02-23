@@ -40,6 +40,18 @@ export default {
         return Axios.get('/ohdear/api/certificate-health')
             .catch(error => handleError(error));
     },
+    getCurrentPerformance: () => {
+        return Axios.get('/ohdear/api/current-performance')
+            .catch(error => handleError(error));
+    },
+    getPerformance: (start, end, groupBy = null) => {
+        return Axios.get('/ohdear/api/performance', {
+            params: {
+                start, end, groupBy
+            }
+        })
+            .catch(error => handleError(error));
+    },
     disableCheck: checkId => {
         let data = {};
         data['checkId'] = checkId;

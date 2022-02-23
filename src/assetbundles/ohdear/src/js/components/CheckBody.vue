@@ -19,7 +19,7 @@
         computed: {
             body() {
                 if (!this.check.enabled) {
-                    return Typo.checks.bodyDisabled;
+                    return this.$t(Typo.checks.bodyDisabled);
                 }
                 let body = this.check.latestRunResult === 'succeeded' ?
                     this.$t(Typo.checks[this.check.type].body.good) :
