@@ -64,7 +64,7 @@ export default {
                 bad: 'bad',
             },
             body: {
-                good: 'good',
+                good: 'DNS records found. We last checked {:fromNow}.',
                 bad: 'bad',
             }
         },

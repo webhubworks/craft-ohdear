@@ -17,6 +17,7 @@
 <script>
 import Api from "../../helpers/Api";
 import Site from "../../resources/Site";
+import {VALID_TYPES} from "../../resources/Check";
 
 export default {
     name: "Cards",
@@ -34,17 +35,7 @@ export default {
     computed: {
         supportedChecks() {
             return this.site.checks.filter(check => {
-                return [
-                    'uptime',
-                    'performance',
-                    'broken_links',
-                    'mixed_content',
-                    'certificate_health',
-                    'certificate_transparency',
-                    'dns',
-                    'application_health',
-                    'cron',
-                ].includes(check.type);
+                return VALID_TYPES.includes(check.type);
             });
         }
     },

@@ -32,6 +32,7 @@ mix.setPublicPath('src/assetbundles/');
 
 mix.js('src/assetbundles/ohdear/src/js/OhDear.js', 'ohdear/dist/js/').vue({version: 2});
 mix.js('src/assetbundles/ohdear/src/js/OhDearWidget.js', 'ohdear/dist/js/').vue({version: 2});
+mix.sourceMaps();
 
 /*
 |--------------------------------------------------------------------------

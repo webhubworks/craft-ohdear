@@ -36,7 +36,7 @@ Vue.directive('tooltip', VTooltip)
 Vue.mixin({
     methods: {
         $t(key, replace = {}) {
-            return Translator(window.Craft.translations.ohdear, key, replace)
+            return Translator(window.OhDear.translations, key, replace)
         },
     },
 })

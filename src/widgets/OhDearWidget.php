@@ -15,15 +15,11 @@ use craft\base\Widget;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use webhubworks\ohdear\assetbundles\ohdear\OhDearAsset;
 use yii\base\Exception;
 
 /**
- * Oh Dear Widget
- *
- * Dashboard widgets allow you to display information in the Admin CP Dashboard.
- * Adding new types of widgets to the dashboard couldn’t be easier in Craft
- *
- * https://craftcms.com/docs/plugins/widgets
+ * https://craftcms.com/docs/3.x/extend/widget-types.html
  *
  * @author    webhub GmbH
  * @package   OhDear
@@ -34,14 +30,8 @@ use yii\base\Exception;
  */
 class OhDearWidget extends Widget
 {
-    /**
-     * @var string
-     */
-    public $period = 'month';
+    public string $period = 'month';
 
-    /**
-     * @var
-     */
     public $checks;
 
     /**
@@ -55,7 +45,7 @@ class OhDearWidget extends Widget
     /**
      * @inheritDoc
      */
-    public static function maxColspan()
+    public static function maxColspan(): int
     {
         return 2;
     }
@@ -63,7 +53,7 @@ class OhDearWidget extends Widget
     /**
      * @inheritDoc
      */
-    public function rules()
+    public function rules(): array
     {
         $rules = parent::rules();
         $rules = array_merge(
@@ -84,7 +74,7 @@ class OhDearWidget extends Widget
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function getSettingsHtml()
+    public function getSettingsHtml(): string
     {
 
         return Craft::$app->getView()->renderTemplate(
@@ -103,8 +93,10 @@ class OhDearWidget extends Widget
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function getBodyHtml()
+    public function getBodyHtml(): string
     {
+        OhDearAsset::registerLangFile();
+
         return Craft::$app->getView()->renderTemplate(
             'ohdear/_components/widgets/OhDearWidget_body',
             [
@@ -117,7 +109,7 @@ class OhDearWidget extends Widget
     /**
      * @inheritDoc
      */
-    public static function iconPath()
+    public static function iconPath(): false|string
     {
         return Craft::getAlias("@webhubworks/ohdear/assetbundles/ohdear/dist/img/OhDearWidget-icon.svg");
     }

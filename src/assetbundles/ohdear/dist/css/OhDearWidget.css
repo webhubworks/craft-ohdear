@@ -27,13 +27,17 @@
     }
 .ohdear-widget__stat {
         flex: 0 1 140px;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1.25rem;
+    }
+.ohdear-widget__stat:last-child,
+    .ohdear-widget__stat:nth-last-child(2) {
+        margin-bottom: 0;
     }
 .ohdear-widget__stat dt {
         font-weight: bold;
         color: #9da5af;
         font-size: .875rem;
-        margin-bottom: .75rem;
+        margin-bottom: .5rem;
     }
 .ohdear-widget__stat.ohdear-widget__stat--numeric dl {
         font-size: 2rem;

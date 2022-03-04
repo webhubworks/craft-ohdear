@@ -2,15 +2,15 @@ import LocalDate from "../helpers/LocalDate";
 import Api from "../helpers/Api";
 import Typo from "../helpers/Typo";
 
-const VALID_TYPES = [
+export const VALID_TYPES = [
     'uptime',
     'broken_links',
     'mixed_content',
     'certificate_health',
     'certificate_transparency',
     'performance',
-    'cron',
-    'dns',
+    // 'cron',
+    // 'dns',
     'application_health',
 ];
 
