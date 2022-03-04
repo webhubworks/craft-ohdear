@@ -11,6 +11,7 @@
 namespace webhubworks\ohdear\assetbundles\ohdear;
 
 use Craft;
+use craft\helpers\FileHelper;
 use craft\helpers\Json;
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
@@ -49,13 +50,20 @@ class OhDearAsset extends AssetBundle
         parent::init();
     }
 
-    // TODO: Check if file exists
-    // TODO: Check if JS object exists
+    /**
+     * Save plugin translations into the browser window object.
+     * 
+     * @return void
+     */
     public static function registerLangFile()
     {
         $currentLanguage = Craft::$app->language;
 
         $path = rtrim(Yii::getAlias("@webhubworks/ohdear/translations/{$currentLanguage}/ohdear.php"));
+
+        if (!file_exists($path)) {
+            return;
+        }
 
         $craftJson = Json::encode(require $path, JSON_UNESCAPED_UNICODE);
 
