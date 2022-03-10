@@ -3,6 +3,7 @@
 namespace webhubworks\ohdear\services;
 
 use craft\helpers\FileHelper;
+use OhDear\HealthCheckResults\CheckResults;
 use webhubworks\ohdear\health\checks\Check;
 use webhubworks\ohdear\health\exceptions\DuplicateCheckNamesFound;
 use webhubworks\ohdear\health\exceptions\InvalidCheck;
@@ -26,6 +27,19 @@ class HealthCheckService extends Component
         if (is_array($checks)) {
             $this->addChecks($checks);
         }
+    }
+
+    public function getCheckResults(): CheckResults
+    {
+        $checkResults = array_map(function (Check $check) {
+            try {
+                return $check->run();
+            } catch (\Throwable $e) {
+                return $check->getGenericCrashResult($e->getMessage());
+            }
+        }, $this->registeredChecks());
+
+        return (new CheckResults(null, $checkResults));
     }
 
     /** @param array<int, Check> $checks */

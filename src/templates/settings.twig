@@ -45,7 +45,7 @@
 
 {{ forms.textField({
     label: "Health Report URL"|t('ohdear') ~ " (" ~ "readonly"|t('ohdear') ~ ")",
-    placeholder: 'Please provide a valid API token and site ID.'t('ohdear'),
+    placeholder: 'Please provide a valid API token and site ID.'|t('ohdear'),
     value: healthReportUrl,
     readonly: true,
     instructions: 'The URL where Oh Dear can get the results of your health checks. Paste this URL into Oh Dear\'s {link}.'|t('ohdear', {link: '<a href="https://ohdear.app/sites/'~settings['selectedSiteId']~'/settings/application-health" rel="noopener" target="_blank">Application Health settings</a>'})
@@ -55,7 +55,7 @@
     label: "Health Check Secret"|t('ohdear'),
     id: 'health-check-secret',
     name: 'healthCheckSecret',
-    placeholder: 'Paste the secret from Oh Dear here.'t('ohdear'),
+    placeholder: 'Paste the secret from Oh Dear here.'|t('ohdear'),
     value: settings['healthCheckSecret'],
     instructions: 'Your Health Check endpoint is protected by this secret. You can find the secret on Oh Dear\'s {link} page. If you change it, make sure to change it in Oh Dear as well.'|t('ohdear', {link: '<a href="https://ohdear.app/sites/'~settings['selectedSiteId']~'/settings/application-health" rel="noopener" target="_blank">Application Health settings</a>'}),
     suggestEnvVars: true,

@@ -20,6 +20,7 @@ use craft\events\TemplateEvent;
 use craft\helpers\Html;
 use craft\services\Dashboard;
 use craft\services\UserPermissions;
+use craft\services\Utilities;
 use craft\web\UrlManager;
 use craft\web\View;
 use Spatie\Url\Url;
@@ -27,6 +28,7 @@ use webhubworks\ohdear\models\Settings;
 use webhubworks\ohdear\services\HealthCheckService;
 use webhubworks\ohdear\services\OhDearService;
 use webhubworks\ohdear\services\SettingsService;
+use webhubworks\ohdear\utilities\HealthCheckUtility;
 use webhubworks\ohdear\widgets\OhDearWidget;
 use yii\base\Event;
 
@@ -113,6 +115,8 @@ class OhDear extends Plugin
 
         $this->registerWidgets();
 
+        $this->registerUtilityTypes();
+
         $this->registerPermissions();
 
         $this->registerEntryEditRedirectOverride();
@@ -182,11 +186,11 @@ class OhDear extends Plugin
             return $cpNavItem;
         }
 
-        if (!$this->settings->isValid()) {
+        if (! $this->settings->isValid()) {
             return $cpNavItem;
         }
 
-        if (!$currentUser->can('accessPlugin-ohdear')) {
+        if (! $currentUser->can('accessPlugin-ohdear')) {
             return $cpNavItem;
         }
 
@@ -235,6 +239,17 @@ class OhDear extends Plugin
                 }
             );
         }
+    }
+
+    private function registerUtilityTypes()
+    {
+        Event::on(
+            Utilities::class,
+            Utilities::EVENT_REGISTER_UTILITY_TYPES,
+            function (RegisterComponentTypesEvent $event) {
+                $event->types[] = HealthCheckUtility::class;
+            }
+        );
     }
 
     private function registerCpRoutes()

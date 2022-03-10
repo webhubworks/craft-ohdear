@@ -17,19 +17,15 @@ class HealthCheckController extends Controller
     {
         $this->ensureSecretIsValid();
 
-        $checkResults = array_map(function (Check $check) {
-            try {
-                return $check->run();
-            } catch (\Throwable $e) {
-                return $check->getGenericCrashResult($e->getMessage());
-            }
-        }, OhDear::$plugin->health->registeredChecks());
-
-        return (new CheckResults(null, $checkResults))->toJson();
+        return OhDear::$plugin->health->getCheckResults()->toJson();
     }
 
     private function ensureSecretIsValid()
     {
+        if (\Craft::$app->getUser()->getIdentity() && \Craft::$app->getUser()->getIdentity()->admin) {
+            return;
+        }
+
         $secretHeader = $this->request->headers->get('oh-dear-health-check-secret');
 
         if (is_null($secretHeader)) {
