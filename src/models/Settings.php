@@ -60,7 +60,7 @@ class Settings extends Model
      */
     public function isValid(): bool
     {
-        return !empty($this->apiToken) && !empty($this->selectedSiteId);
+        return ! empty($this->apiToken) && ! empty($this->selectedSiteId);
     }
 
     /**
@@ -83,6 +83,10 @@ class Settings extends Model
 
     public function getSite(): ?Site
     {
+        if (! $this->isValid()) {
+            return null;
+        }
+
         return OhDear::$plugin->api->getSite($this->selectedSiteId);
     }
 
@@ -111,7 +115,7 @@ class Settings extends Model
             [['apiToken', 'selectedSiteId'], 'trim'],
             [['apiToken', 'selectedSiteId'], 'default', 'value' => ''],
             ['selectedSiteId', 'required', 'when' => function ($model) {
-                return !empty($model->apiToken);
+                return ! empty($model->apiToken);
             }]
         ];
     }
