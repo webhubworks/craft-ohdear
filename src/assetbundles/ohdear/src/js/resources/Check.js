@@ -83,7 +83,12 @@ export default class Check {
     get inlineMetric() {
         switch (this.type) {
             case 'performance':
-                return Api.getCurrentPerformance().then(response => response.data.currentPerformance + ' ms');
+                return Api.getCurrentPerformance().then(response => {
+                    if (Number.isInteger(response.data.currentPerformance)) {
+                        return response.data.currentPerformance + ' ms';
+                    }
+                    return 'OK';
+                });
             case 'cron':
                 return Api.getCronChecks().then(response => {
                     if (response.data.cronChecks.length === 0) {
