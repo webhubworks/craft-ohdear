@@ -22,8 +22,13 @@
  * you do for 'general.php'
  */
 
+//use webhubworks\ohdear\health\checks\AvailableUpdatesCheck;
+
 return [
-    'apiToken' => null,
-    'siteId' => null,
-    'healthCheckSecret' => null,
+//    'apiToken' => null,
+//    'siteId' => null,
+//    'healthCheckSecret' => null,
+//    'healthChecks' => [
+//        AvailableUpdatesCheck::new()->warnWhenTotalAvailableUpdatesIsAtLeast(3),
+//    ],
 ];

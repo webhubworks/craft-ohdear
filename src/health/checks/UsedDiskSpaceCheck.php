@@ -5,6 +5,10 @@ namespace webhubworks\ohdear\health\checks;
 use OhDear\HealthCheckResults\CheckResult;
 use OhDear\HealthCheckResults\CheckResults;
 use Spatie\Regex\Regex;
+use Symfony\Component\Process\Exception\LogicException;
+use Symfony\Component\Process\Exception\ProcessSignaledException;
+use Symfony\Component\Process\Exception\ProcessTimedOutException;
+use Symfony\Component\Process\Exception\RuntimeException;
 use Symfony\Component\Process\Process;
 use webhubworks\ohdear\health\checks\Check;
 
@@ -29,14 +33,23 @@ class UsedDiskSpaceCheck extends Check
 
     public function run(): CheckResult
     {
-        $diskSpaceUsedPercentage = $this->getDiskUsagePercentage();
-
         $result = new CheckResult(
             name: 'UsedDiskSpace',
             label: 'Used disk space',
-            shortSummary: "{$diskSpaceUsedPercentage}%",
-            meta: ['used_disk_space_percentage' => $diskSpaceUsedPercentage]
         );
+
+        try {
+            $diskSpaceUsedPercentage = $this->getDiskUsagePercentage();
+        } catch (\Throwable $e) {
+            return $result
+                ->shortSummary("Cannot evaluate")
+                ->meta(['error' => $e->getMessage()])
+                ->status(CheckResult::STATUS_CRASHED)
+                ->notificationMessage("Error evaluating disk space on server.");
+        }
+
+        $result->shortSummary = "{$diskSpaceUsedPercentage}%";
+        $result->meta = ['used_disk_space_percentage' => $diskSpaceUsedPercentage];
 
         if ($diskSpaceUsedPercentage > $this->errorThreshold) {
             return $result
@@ -54,6 +67,18 @@ class UsedDiskSpaceCheck extends Check
             ->notificationMessage('The disk has plenty of space left.');
     }
 
+    /**
+     * @return int
+     * @throws \Spatie\Regex\Exceptions\RegexFailed
+     * @throws LogicException               When proc_open is not installed
+     * @throws RuntimeException             When process can't be launched
+     * @throws RuntimeException             When process is already running
+     * @throws ProcessTimedOutException     When process timed out
+     * @throws ProcessSignaledException     When process stopped after receiving signal
+     * @throws LogicException               In case a callback is provided and output has been disabled
+     * @throws LogicException               In case the output has been disabled
+     * @throws LogicException               In case the process is not started
+     */
     protected function getDiskUsagePercentage(): int
     {
         $process = Process::fromShellCommandline('df -P .');

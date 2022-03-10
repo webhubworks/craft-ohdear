@@ -15,6 +15,8 @@
 
 {% import "_includes/forms" as forms %}
 
+<h2>{{ 'General'|t('ohdear') }}</h2>
+
 {{ forms.autosuggestField({
     label: "Oh Dear API Token"|t('ohdear'),
     id: 'api-token',
@@ -32,5 +34,30 @@
     value: settings['selectedSiteId'],
     suggestEnvVars: true,
     instructions: 'Please enter the site ID that is associated to this Craft site. You can find the site ID on the settings page of one of your {link}.'|t('ohdear', {link: '<a href="https://ohdear.app/sites" rel="noopener" target="_blank">Oh Dear Sites</a>'}),
-    errors: settings.getErrors('selectedSiteId')
+    errors: settings.getErrors('selectedSiteId'),
+}) }}
+
+<hr />
+
+<h2>{{ 'Application health'|t('ohdear') }}</h2>
+
+<p>{{ 'This check works by letting your server respond with health check results as JSON. Read more in the docs to learn about setting up built-in and even custom Health Checks.'|t('ohdear') }}</p>
+
+{{ forms.textField({
+    label: "Health Report URL"|t('ohdear') ~ " (" ~ "readonly"|t('ohdear') ~ ")",
+    placeholder: 'Please provide a valid API token and site ID.'|t('ohdear'),
+    value: healthReportUrl,
+    readonly: true,
+    instructions: 'The URL where Oh Dear can get the results of your health checks. Paste this URL into Oh Dear\'s {link}.'|t('ohdear', {link: '<a href="https://ohdear.app/sites/'~settings['selectedSiteId']~'/settings/application-health" rel="noopener" target="_blank">Application Health settings</a>'})
+}) }}
+
+{{ forms.autosuggestField({
+    label: "Health Check Secret"|t('ohdear'),
+    id: 'health-check-secret',
+    name: 'healthCheckSecret',
+    placeholder: 'Paste the secret from Oh Dear here.'|t('ohdear'),
+    value: settings['healthCheckSecret'],
+    instructions: 'Your Health Check endpoint is protected by this secret. You can find the secret on Oh Dear\'s {link} page. If you change it, make sure to change it in Oh Dear as well.'|t('ohdear', {link: '<a href="https://ohdear.app/sites/'~settings['selectedSiteId']~'/settings/application-health" rel="noopener" target="_blank">Application Health settings</a>'}),
+    suggestEnvVars: true,
+    errors: settings.getErrors('healthCheckSecret'),
 }) }}

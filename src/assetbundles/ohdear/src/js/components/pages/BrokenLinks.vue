@@ -1,7 +1,7 @@
 <template>
     <div>
 
-        <h2>Check details</h2>
+        <h2>{{ $t('Check details') }}</h2>
 
         <div v-if="loadingSite" class="oh-w-full oh-justify-center oh-items-center oh-flex" style="height: 74px;">
             <loader/>

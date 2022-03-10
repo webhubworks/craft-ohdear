@@ -12,6 +12,8 @@ namespace webhubworks\ohdear\models;
 
 use Craft;
 use craft\base\Model;
+use OhDear\PhpSdk\Resources\Site;
+use webhubworks\ohdear\OhDear;
 
 /**
  * OhDear Settings Model
@@ -52,25 +54,18 @@ class Settings extends Model
      */
     public $healthChecks = [];
 
-    // Public Methods
-    // =========================================================================
-
     /**
      * Determines if the plugin has an API key and
      * a selected site ID.
-     *
-     * @return bool
      */
-    public function isValid()
+    public function isValid(): bool
     {
-        return !empty($this->apiToken) && !empty($this->selectedSiteId);
+        return ! empty($this->apiToken) && ! empty($this->selectedSiteId);
     }
 
     /**
      * Parse the site ID if it is an env variable, otherwise
      * just return the value.
-     *
-     * @return string
      */
     public function getSelectedSiteId(): string
     {
@@ -80,12 +75,30 @@ class Settings extends Model
     /**
      * Parse the API token if it is an env variable, otherwise
      * just return the value.
-     *
-     * @return string
      */
     public function getApiToken(): string
     {
         return Craft::parseEnv($this->apiToken);
+    }
+
+    public function getSite(): ?Site
+    {
+        if (! $this->isValid()) {
+            return null;
+        }
+
+        return OhDear::$plugin->api->getSite($this->selectedSiteId);
+    }
+
+    public function getHealthReportUrl(string $healthReportUri): ?string
+    {
+        $site = $this->getSite();
+
+        if ($site instanceof Site) {
+            return implode("/", [$site->url, $healthReportUri]);
+        }
+
+        return null;
     }
 
     /**
@@ -95,16 +108,14 @@ class Settings extends Model
      * Child classes may override this method to declare different validation rules.
      *
      * More info: http://www.yiiframework.com/doc-2.0/guide-input-validation.html
-     *
-     * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['apiToken', 'selectedSiteId'], 'trim'],
             [['apiToken', 'selectedSiteId'], 'default', 'value' => ''],
             ['selectedSiteId', 'required', 'when' => function ($model) {
-                return !empty($model->apiToken);
+                return ! empty($model->apiToken);
             }]
         ];
     }

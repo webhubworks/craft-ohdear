@@ -52,25 +52,28 @@ class OhDearAsset extends AssetBundle
 
     /**
      * Save plugin translations into the browser window object.
-     * 
+     *
      * @return void
      */
     public static function registerLangFile()
     {
         $currentLanguage = Craft::$app->language;
 
-        $path = rtrim(Yii::getAlias("@webhubworks/ohdear/translations/{$currentLanguage}/ohdear.php"));
-
-        if (!file_exists($path)) {
-            return;
-        }
-
-        $craftJson = Json::encode(require $path, JSON_UNESCAPED_UNICODE);
-
         $js = <<<JS
 window.OhDear = window.OhDear || {};
+window.OhDear.translations = window.OhDear.translations || {};
+JS;
+
+        $path = rtrim(Yii::getAlias("@webhubworks/ohdear/translations/{$currentLanguage}/ohdear.php"));
+
+        if (file_exists($path)) {
+            $craftJson = Json::encode(require $path, JSON_UNESCAPED_UNICODE);
+
+            $js .= <<<JS
 window.OhDear.translations = $craftJson;
 JS;
+        }
+
         Craft::$app->view->registerJs($js, ViewAlias::POS_BEGIN);
     }
 }

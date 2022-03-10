@@ -7,18 +7,33 @@ use craft\web\Controller;
 use OhDear\HealthCheckResults\CheckResults;
 use webhubworks\ohdear\health\checks\Check;
 use webhubworks\ohdear\OhDear;
+use yii\web\ForbiddenHttpException;
 
 class HealthCheckController extends Controller
 {
-
     protected $allowAnonymous = ['results'];
 
     public function actionResults()
     {
-        $checkResults = array_map(function(Check $check) {
-            return $check->run();
-        }, OhDear::$plugin->health->registeredChecks());
+        $this->ensureSecretIsValid();
 
-        return (new CheckResults(null, $checkResults))->toJson();
+        return OhDear::$plugin->health->getCheckResults()->toJson();
+    }
+
+    private function ensureSecretIsValid()
+    {
+        if (\Craft::$app->getUser()->getIdentity() && \Craft::$app->getUser()->getIdentity()->admin) {
+            return;
+        }
+
+        $secretHeader = $this->request->headers->get('oh-dear-health-check-secret');
+
+        if (is_null($secretHeader)) {
+            throw new ForbiddenHttpException('Invalid secret');
+        }
+
+        if ($secretHeader !== OhDear::$plugin->settings->healthCheckSecret) {
+            throw new ForbiddenHttpException('Invalid secret');
+        }
     }
 }
