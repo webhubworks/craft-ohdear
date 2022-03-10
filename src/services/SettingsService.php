@@ -23,12 +23,6 @@ use webhubworks\ohdear\OhDear;
 use yii\base\Exception;
 
 /**
- * OhDearService Service
- *
- * All of your plugin’s business logic should go in services, including saving data,
- * retrieving data, etc. They provide APIs that your controllers, template variables,
- * and other plugins can interact with.
- *
  * https://craftcms.com/docs/plugins/services
  *
  * @author    webhub GmbH
@@ -37,9 +31,6 @@ use yii\base\Exception;
  */
 class SettingsService extends Component
 {
-    // Public Methods
-    // =========================================================================
-
     /**
      * @param string $apiToken
      * @return array

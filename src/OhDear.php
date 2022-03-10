@@ -44,6 +44,8 @@ use yii\base\Event;
  */
 class OhDear extends Plugin
 {
+    const HEALTH_REPORT_URI = 'ohdear/api/health-check-results';
+
     /**
      * Static property that is an instance of this plugin class so that it can be accessed via
      * OhDear::$plugin
@@ -137,7 +139,8 @@ class OhDear extends Plugin
         return Craft::$app->view->renderTemplate(
             'ohdear/settings',
             [
-                'settings' => $this->getSettings()
+                'settings' => $this->getSettings(),
+                'healthReportUrl' => $this->getSettings()->getHealthReportUrl(self::HEALTH_REPORT_URI),
             ]
         );
     }
@@ -273,7 +276,7 @@ class OhDear extends Plugin
                 $event->rules['ohdear/api/disable-check'] = 'ohdear/api/disable-check';
                 $event->rules['ohdear/api/enable-check'] = 'ohdear/api/enable-check';
                 $event->rules['ohdear/api/request-run'] = 'ohdear/api/request-run';
-                $event->rules['ohdear/api/health-check-results'] = 'ohdear/health-check/results';
+                $event->rules[self::HEALTH_REPORT_URI] = 'ohdear/health-check/results';
             }
         );
     }
