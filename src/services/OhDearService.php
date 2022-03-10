@@ -37,9 +37,6 @@ use webhubworks\ohdear\OhDear;
  */
 class OhDearService extends Component
 {
-    /**
-     * @var OhDearSdk
-     */
     private OhDearSdk $ohDearClient;
     private $siteId;
     private $apiToken;
@@ -54,92 +51,52 @@ class OhDearService extends Component
         $this->ohDearClient = new OhDearSdk($this->apiToken);
     }
 
-    /**
-     * @param string $startsAt Y:m:d H:i
-     * @param string $endsAt Y:m:d H:i
-     * @return MaintenancePeriod
-     */
-    public function createMaintenancePeriod(string $startsAt, string $endsAt)
+    public function createMaintenancePeriod(string $startsAt, string $endsAt): MaintenancePeriod
     {
         return $this->ohDearClient->createSiteMaintenance($this->siteId, $startsAt, $endsAt);
     }
 
-    /**
-     * @param int $maintenancePeriodId
-     * @return void
-     */
     public function deleteMaintenancePeriod(int $maintenancePeriodId)
     {
         $this->ohDearClient->deleteSiteMaintenance($maintenancePeriodId);
     }
 
-    /**
-     * @param int|null $stopMaintenanceAfterSeconds
-     * @return MaintenancePeriod
-     */
     public function startMaintenancePeriod(int $stopMaintenanceAfterSeconds = 60 * 60): MaintenancePeriod
     {
         return $this->ohDearClient->startSiteMaintenance($this->siteId, $stopMaintenanceAfterSeconds);
     }
 
-    /**
-     * @return void
-     */
     public function stopMaintenancePeriod()
     {
         $this->ohDearClient->stopSiteMaintenance($this->siteId);
     }
 
-    /**
-     * @return array
-     */
-    public function maintenancePeriods()
+    public function maintenancePeriods(): array
     {
         return $this->ohDearClient->maintenancePeriods($this->siteId);
     }
 
-    /**
-     * @param string|null $apiToken
-     * @return array
-     */
-    public function getSites($apiToken = null)
+    public function getSites(?string $apiToken = null): array
     {
         return $this->ohDearClient->sites();
     }
 
-    /**
-     * @return Site
-     */
-    public function getSite()
+    public function getSite(): Site
     {
         return $this->ohDearClient->site($this->siteId);
     }
 
-    /**
-     * @param string $startedAt - YYYYMMDDHHmmss
-     * @param string $endedAt - YYYYMMDDHHmmss
-     * @param string $split - hour|day|month
-     * @return array
-     */
-    public function getUptime($startedAt, $endedAt, $split = 'month')
+    public function getUptime(string $startedAt, string $endedAt, string $split = 'month'): array
     {
         return $this->ohDearClient->uptime($this->siteId, $startedAt, $endedAt, $split);
     }
 
-    /**
-     * @param string $startedAt - YYYYMMDDHHmmss
-     * @param string $endedAt - YYYYMMDDHHmmss
-     * @return array
-     */
-    public function getDowntime($startedAt, $endedAt)
+    public function getDowntime(string $startedAt, string $endedAt): array
     {
         return $this->ohDearClient->downtime($this->siteId, $startedAt, $endedAt);
     }
 
-    /**
-     * @return array
-     */
-    public function getBrokenLinks()
+    public function getBrokenLinks(): array
     {
         return array_map(function (BrokenLink $brokenLink) {
             return [
@@ -151,10 +108,7 @@ class OhDearService extends Component
         }, $this->ohDearClient->brokenLinks($this->siteId));
     }
 
-    /**
-     * @return array
-     */
-    public function getMixedContent()
+    public function getMixedContent(): array
     {
         return array_map(function (MixedContentItem $mixedContentItem) {
             return [
@@ -166,32 +120,22 @@ class OhDearService extends Component
         }, $this->ohDearClient->mixedContent($this->siteId));
     }
 
-    /**
-     * @return CertificateHealth
-     */
-    public function getCertificateHealth()
+    public function getCertificateHealth(): CertificateHealth
     {
         return $this->ohDearClient->certificateHealth($this->siteId);
     }
 
-    /**
-     * @return CertificateHealth
-     */
-    public function getApplicationHealthChecks()
+    public function getApplicationHealthChecks(): array
     {
         return $this->ohDearClient->applicationHealthChecks($this->siteId);
     }
 
-    /**
-     * @param int $applicationHealthCheckId
-     * @return array
-     */
-    public function getApplicationHealthCheckResults(int $applicationHealthCheckId)
+    public function getApplicationHealthCheckResults(int $applicationHealthCheckId): array
     {
         return $this->ohDearClient->applicationHealthCheckResults($this->siteId, $applicationHealthCheckId);
     }
 
-    public function getCronChecks()
+    public function getCronChecks(): array
     {
         return $this->ohDearClient->cronChecks($this->siteId);
     }
@@ -199,10 +143,8 @@ class OhDearService extends Component
     /**
      * Returns the average total time of the last 10 minutes in ms.
      * Returns null if there are no records.
-     *
-     * @return int|null
      */
-    public function getCurrentPerformance()
+    public function getCurrentPerformance(): ?int
     {
         $lastTenMinutes = $this->getPerformance(Carbon::now()->subMinutes(10), Carbon::now());
 
@@ -216,13 +158,7 @@ class OhDearService extends Component
         return (int)$avgTotalTime_ms;
     }
 
-    /**
-     * @param string $start
-     * @param string $end
-     * @param ?string $groupBy
-     * @return array
-     */
-    public function getPerformance(string $start, string $end, ?string $groupBy = null)
+    public function getPerformance(string $start, string $end, ?string $groupBy = null): array
     {
         if (is_null($groupBy)) {
             return $this->ohDearClient->performanceRecords($this->siteId, $start, $end);
@@ -231,42 +167,24 @@ class OhDearService extends Component
         return $this->ohDearClient->performanceRecords($this->siteId, $start, $end, $groupBy);
     }
 
-    /**
-     * @param int $checkId
-     * @return Check
-     */
-    public function disableCheck($checkId)
+    public function disableCheck(int $checkId): Check
     {
         return $this->ohDearClient->disableCheck($checkId);
     }
 
-    /**
-     * @param int $checkId
-     * @return Check
-     */
-    public function enableCheck($checkId)
+    public function enableCheck(int $checkId): Check
     {
         return $this->ohDearClient->enableCheck($checkId);
     }
 
-    /**
-     * @param int $checkId
-     * @return Check
-     */
-    public function requestRun($checkId)
+    public function requestRun(int $checkId): Check
     {
         return $this->ohDearClient->requestRun($checkId);
     }
 
-    /**
-     * @param ElementInterface|null $element
-     * @return array|null
-     */
-    private function transformElement($element)
+    private function transformElement(?ElementInterface $element): ?array
     {
-
         try {
-
             if ($element instanceof Entry) {
                 return [
                     'id' => intval($element->id),
@@ -318,11 +236,9 @@ class OhDearService extends Component
      * Tries to find an element that could contain the
      * provided mixed content item.
      *
-     * @param MixedContentItem $mixedContentItem
-     * @return array|null
      * @throws SiteNotFoundException
      */
-    private function findElementByMixedContentItem(MixedContentItem $mixedContentItem)
+    private function findElementByMixedContentItem(MixedContentItem $mixedContentItem): ?array
     {
         $element = $this->findElementBySearchIndex($mixedContentItem->mixedContentUrl);
 
@@ -341,11 +257,9 @@ class OhDearService extends Component
      * Tries to find an element that could contain the
      * provided broken link.
      *
-     * @param BrokenLink $brokenLink
-     * @return array|null
      * @throws SiteNotFoundException
      */
-    private function findElementByBrokenLink(BrokenLink $brokenLink)
+    private function findElementByBrokenLink(BrokenLink $brokenLink): ?array
     {
         $element = $this->findElementBySearchIndex($brokenLink->crawledUrl);
 
@@ -364,11 +278,9 @@ class OhDearService extends Component
      * Tries to find an Element by querying the search index
      * directly.
      *
-     * @param string $crawledUrl
-     * @return ElementInterface|null
      * @throws SiteNotFoundException
      */
-    private function findElementBySearchIndex(string $crawledUrl)
+    private function findElementBySearchIndex(string $crawledUrl): ?ElementInterface
     {
         $cleanKeywords = Search::normalizeKeywords($crawledUrl);
 
@@ -382,18 +294,9 @@ class OhDearService extends Component
         return Craft::$app->elements->getElementById($elementId);
     }
 
-    /**
-     * Tries to find an element by its URI.
-     *
-     * @param string $link
-     * @return ElementInterface|null
-     */
-    private function findElementByUri(string $link)
+    private function findElementByUri(string $link): ?ElementInterface
     {
-
         $uri = ltrim(Url::fromString($link)->getPath(), '/');
-
         return Craft::$app->getElements()->getElementByUri($uri);
-
     }
 }
