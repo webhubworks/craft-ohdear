@@ -6,6 +6,8 @@ use OhDear\HealthCheckResults\CheckResult;
 
 abstract class Check
 {
+    use MakesChecks;
+
     protected ?string $name = null;
 
     final public function __construct()
