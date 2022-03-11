@@ -25,11 +25,12 @@ class AvailableUpdatesCheck extends Check
             name: 'AvailableUpdates',
             label: 'Available Updates',
             shortSummary: $totalUpdates,
-        ))->meta([
-            'threshold' => $this->warningThreshold,
-            'totalUpdates' => $totalUpdates,
-            'hasCriticalUpdate' => $hasCritical,
-        ]);
+            meta: [
+                'threshold' => $this->warningThreshold,
+                'totalUpdates' => $totalUpdates,
+                'hasCriticalUpdate' => $hasCritical,
+            ],
+        ));
 
         if ($totalUpdates >= $this->warningThreshold) {
             return $result->status(CheckResult::STATUS_WARNING)

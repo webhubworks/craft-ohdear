@@ -8,7 +8,7 @@ class EnvironmentCheck extends Check
 {
     protected string $expectedEnvironment = 'production';
 
-    public function expectEnvironment(string $expectedEnvironment): self
+    public function expect(string $expectedEnvironment): self
     {
         $this->expectedEnvironment = $expectedEnvironment;
 
@@ -23,11 +23,11 @@ class EnvironmentCheck extends Check
             name: 'Environment',
             label: 'App environment',
             shortSummary: $actualEnvironment,
-        ))
-            ->meta([
+            meta: [
                 'actual' => $actualEnvironment,
                 'expected' => $this->expectedEnvironment,
-            ]);
+            ],
+        ));
 
         if ($this->expectedEnvironment !== $actualEnvironment) {
             return $result->status(CheckResult::STATUS_FAILED)

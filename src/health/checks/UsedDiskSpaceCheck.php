@@ -49,7 +49,11 @@ class UsedDiskSpaceCheck extends Check
         }
 
         $result->shortSummary = "{$diskSpaceUsedPercentage}%";
-        $result->meta = ['used_disk_space_percentage' => $diskSpaceUsedPercentage];
+        $result->meta = [
+            'usedDiskSpacePercentage' => $diskSpaceUsedPercentage,
+            'warningThreshold' => $this->warningThreshold,
+            'errorThreshold' => $this->errorThreshold,
+        ];
 
         if ($diskSpaceUsedPercentage > $this->errorThreshold) {
             return $result
@@ -60,7 +64,7 @@ class UsedDiskSpaceCheck extends Check
         if ($diskSpaceUsedPercentage > $this->warningThreshold) {
             return $result
                 ->status(CheckResult::STATUS_WARNING)
-                ->notificationMessage("The disk is almost full ({$diskSpaceUsedPercentage}% used).");
+                ->notificationMessage("The disk is quite full ({$diskSpaceUsedPercentage}% used).");
         }
 
         return $result->status(CheckResult::STATUS_OK)
