@@ -2,7 +2,7 @@
 
 Integrate Oh Dear into Craft CMS.
 
-![Oh Dear overview](https://github.com/webhubworks/craft-ohdear/blob/master/resources/img/screenshots/overview.jpeg?raw=true)
+![Oh Dear overview](https://github.com/webhubworks/craft-ohdear/blob/master/resources/img/screenshots/overview.jpg?raw=true)
 
 ## Requirements
 
