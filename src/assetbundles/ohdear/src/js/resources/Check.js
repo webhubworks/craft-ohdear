@@ -7,7 +7,7 @@ export const VALID_TYPES = [
     'broken_links',
     'mixed_content',
     'certificate_health',
-    'certificate_transparency',
+    // 'certificate_transparency',
     'performance',
     // 'cron',
     // 'dns',
@@ -25,7 +25,7 @@ export default class Check {
         this.type = type;
 
         if (!VALID_TYPES.includes(type)) {
-            console.warn(`Unknown check type ${type}`);
+            // console.warn(`Unknown check type ${type}`);
         }
     }
 
