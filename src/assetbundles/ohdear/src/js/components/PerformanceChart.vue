@@ -32,7 +32,10 @@
             <loader/>
         </div>
 
-        <canvas v-show="!loading" id="performanceChart"></canvas>
+        <div style="position: relative; height: 500px;">
+            <canvas v-show="!loading" id="performanceChart"></canvas>
+        </div>
+
     </div>
 </template>
 
@@ -208,12 +211,15 @@ export default {
                         },
                     },
                     responsive: true,
-                    aspectRatio: 2,
-                    maintainAspectRatio: true,
+                    maintainAspectRatio: false,
                     scales: {
                         xAxes: {
                             stacked: true,
                             ticks: {
+                                callback: function (value, index, ticks) {
+                                    console.log(DayJs.tz.guess());
+                                    return DayJs.utc(this.getLabelForValue(value), "YYYY-MM-DD HH:mm:ss").local().format('YYYY-MM-DD HH:mm');
+                                },
                                 major: {
                                     enabled: true,
                                     fontStyle: 'bold'
@@ -221,8 +227,8 @@ export default {
                                 source: 'data',
                                 autoSkip: true,
                                 autoSkipPadding: 50,
-                                maxRotation: 60,
-                                minRotation: 50,
+                                maxRotation: 50,
+                                minRotation: 30,
                             },
                         },
                         yAxes: {

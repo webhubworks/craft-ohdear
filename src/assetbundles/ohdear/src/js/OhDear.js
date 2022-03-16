@@ -46,6 +46,7 @@ Vue.mixin({
  */
 DayJs.extend(require('dayjs/plugin/customParseFormat'));
 DayJs.extend(require('dayjs/plugin/utc'));
+DayJs.extend(require('dayjs/plugin/timezone'));
 DayJs.extend(require('dayjs/plugin/localizedFormat'));
 DayJs.extend(require('dayjs/plugin/isoWeek'));
 DayJs.extend(require('dayjs/plugin/relativeTime'));
