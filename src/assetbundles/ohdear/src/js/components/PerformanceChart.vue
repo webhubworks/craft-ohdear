@@ -217,7 +217,6 @@ export default {
                             stacked: true,
                             ticks: {
                                 callback: function (value, index, ticks) {
-                                    console.log(DayJs.tz.guess());
                                     return DayJs.utc(this.getLabelForValue(value), "YYYY-MM-DD HH:mm:ss").local().format('YYYY-MM-DD HH:mm');
                                 },
                                 major: {

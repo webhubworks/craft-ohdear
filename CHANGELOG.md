@@ -4,6 +4,30 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.0.0 - 2022-03-16
+### Added
+- Application health checks
+  - Added overview card
+  - Added app health report
+  - Added the ability to enable built-in application health checks, including available updates, dev mode, environment, failed jobs, server requirements, used disk space
+  - Added the ability to define custom application health checks
+- Performance checks
+  - Added overview card
+  - Added performence report
+- Added German translation 🇩🇪
+
+### Changed
+- The plugin now requires PHP 8+ due to new dependencies
+- Improved widget to provide access to newly added checks
+
+### Fixed
+- Oh Dear changed their links, fixed that in the CP
+- Fixed bug in uptime chart with shifted week days
+
+## 1.2.2 - 2020-10-23
+### Fixed
+- PSR-4 compliance
+
 ## 1.2.1 - 2020-10-04
 ### Fixed
 - Fixed a validation issue that occurred when settings the site ID as env var
