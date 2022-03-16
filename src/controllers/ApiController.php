@@ -87,6 +87,27 @@ class ApiController extends Controller
      * @return Response
      * @throws BadRequestHttpException
      */
+    public function actionPaddedUptime()
+    {
+        $this->requireAcceptsJson();
+        $this->requireLogin();
+
+        $request = \Craft::$app->request;
+        $startedAt = $request->getRequiredQueryParam('startedAt');
+        $endedAt = $request->getRequiredQueryParam('endedAt');
+        $split = $request->getQueryParam('split', null);
+
+        return $this->asJson([
+            'uptime' => OhDear::$plugin->api->leftPadUptimeToMonday(
+                OhDear::$plugin->api->getUptime($startedAt, $endedAt, $split)
+            )
+        ]);
+    }
+
+    /**
+     * @return Response
+     * @throws BadRequestHttpException
+     */
     public function actionDowntime()
     {
         $this->requireAcceptsJson();

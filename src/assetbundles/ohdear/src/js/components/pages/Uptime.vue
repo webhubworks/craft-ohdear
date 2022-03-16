@@ -35,7 +35,7 @@
 
             <div class="oh-flex" :class="{'oh-opacity-0': heatMapLoading}">
 
-                <div class="oh-flex oh-flex-col oh-flex-wrap oh-overflow-x-auto" :style="weekdayLegendStyle">
+                <div class="oh-flex oh-flex-col oh-flex-wrap" :style="weekdayLegendStyle">
                     <div v-for="label in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']"
                          class="oh-h-8 oh-w-8 oh-m-0.5 oh-font-medium oh-flex oh-justify-center oh-items-center light">
                         <span :title="$t(label)">{{$t(label).substr(0,2)}}</span>
@@ -92,8 +92,8 @@
         40: '#FFD97D',
         30: '#f79d69',
         20: '#f79d69',
-        10: '#f79d69',
-        0: '#EE6055',
+        10: '#EE6055',
+        0: 'transparent',
     };
 
     export default {
@@ -243,7 +243,7 @@
                 };
             },
             fetchUptime(startedAt, endedAt, period) {
-                return Api.getUptime(startedAt, endedAt, period)
+                return Api.getPaddedUptime(startedAt, endedAt, period)
                     .then(response => {
                         return response.data.uptime;
                     })

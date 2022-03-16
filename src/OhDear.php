@@ -279,6 +279,7 @@ class OhDear extends Plugin
                 $event->rules['ohdear/api/sites'] = 'ohdear/api/sites';
                 $event->rules['ohdear/api/site'] = 'ohdear/api/site';
                 $event->rules['ohdear/api/uptime'] = 'ohdear/api/uptime';
+                $event->rules['ohdear/api/padded-uptime'] = 'ohdear/api/padded-uptime';
                 $event->rules['ohdear/api/downtime'] = 'ohdear/api/downtime';
                 $event->rules['ohdear/api/broken-links'] = 'ohdear/api/broken-links';
                 $event->rules['ohdear/api/mixed-content'] = 'ohdear/api/mixed-content';

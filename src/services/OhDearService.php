@@ -22,6 +22,7 @@ use OhDear\PhpSdk\Resources\Check;
 use OhDear\PhpSdk\Resources\MaintenancePeriod;
 use OhDear\PhpSdk\Resources\MixedContentItem;
 use OhDear\PhpSdk\Resources\Site;
+use OhDear\PhpSdk\Resources\Uptime;
 use Spatie\Url\Url;
 use webhubworks\ohdear\OhDear;
 
@@ -89,6 +90,31 @@ class OhDearService extends Component
     public function getUptime(string $startedAt, string $endedAt, string $split = 'month'): array
     {
         return $this->ohDearClient->uptime($this->siteId, $startedAt, $endedAt, $split);
+    }
+
+    public function leftPadUptimeToMonday(array $uptimes): array
+    {
+        if (! count($uptimes)) {
+            return $uptimes;
+        }
+
+        $firstUptimeDate = Carbon::parse($uptimes[0]->datetime);
+
+        $daysToPad = $firstUptimeDate->isoWeekday() - 1;
+
+        $pad = [];
+
+        for ($i = $daysToPad; $i > 0; $i--) {
+            $pad[] = new Uptime([
+                'datetime' => $firstUptimeDate->copy()->subDays($i)->toDateTimeString(),
+                'uptimePercentage' => 0,
+            ]);
+        }
+
+        return [
+            ...$pad,
+            ...$uptimes,
+        ];
     }
 
     public function getDowntime(string $startedAt, string $endedAt): array

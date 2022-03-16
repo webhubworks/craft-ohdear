@@ -26,6 +26,12 @@ export default {
         })
             .catch(error => handleError(error));
     },
+    getPaddedUptime: (startedAt, endedAt, split) => {
+        return Axios.get(`/ohdear/api/padded-uptime`, {
+            params: {startedAt, endedAt, split}
+        })
+            .catch(error => handleError(error));
+    },
     getDowntime: (startedAt, endedAt) => {
         return Axios.get(`/ohdear/api/downtime`, {
             params: {startedAt, endedAt}
