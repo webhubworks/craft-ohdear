@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.0.1 - 2022-05-06
+### Fixed
+- Fixed an issues with API routes when running Craft in Headless Mode
+
+### Changed
+- Improved German translation
+
 ## 2.0.0 - 2022-03-16
 ### Added
 - Application health checks
