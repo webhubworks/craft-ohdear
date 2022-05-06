@@ -45,10 +45,10 @@
 
 {{ forms.textField({
     label: "Health Report URL"|t('ohdear') ~ " (" ~ "readonly"|t('ohdear') ~ ")",
-    placeholder: 'Please provide a valid API token and site ID.'|t('ohdear'),
+    placeholder: 'Please provide a valid API token and site ID at first.'|t('ohdear'),
     value: healthReportUrl,
     readonly: true,
-    instructions: 'The URL where Oh Dear can get the results of your health checks. Paste this URL into Oh Dear\'s {link}.'|t('ohdear', {link: '<a href="https://ohdear.app/sites/'~settings['selectedSiteId']~'/settings/application-health" rel="noopener" target="_blank">Application Health settings</a>'})
+    instructions: 'The URL where Oh Dear can get the results of your health checks. Paste this URL into Oh Dear\'s {link}.'|t('ohdear', {link: '<a href="https://ohdear.app/sites/'~settings['selectedSiteId']~'/settings/application-health" rel="noopener" target="_blank">Application Health Settings</a>'})
 }) }}
 
 {{ forms.autosuggestField({
