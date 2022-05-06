@@ -11,65 +11,65 @@ Axios.defaults.headers.common['Accept'] = 'application/json';
 export default {
     getSites: (token = null) => {
         if (token !== null) {
-            return Axios.get('/ohdear/api/sites', {params: {'api-token': token}});
+            return Axios.get('/actions/ohdear/api/sites', {params: {'api-token': token}});
         }
-        return Axios.get('/ohdear/api/sites')
+        return Axios.get('/actions/ohdear/api/sites')
             .catch(error => handleError(error));
     },
     getSite: () => {
-        return Axios.get('/ohdear/api/site')
+        return Axios.get('/actions/ohdear/api/site')
             .catch(error => handleError(error));
     },
     getUptime: (startedAt, endedAt, split) => {
-        return Axios.get(`/ohdear/api/uptime`, {
+        return Axios.get(`/actions/ohdear/api/uptime`, {
             params: {startedAt, endedAt, split}
         })
             .catch(error => handleError(error));
     },
     getPaddedUptime: (startedAt, endedAt, split) => {
-        return Axios.get(`/ohdear/api/padded-uptime`, {
+        return Axios.get(`/actions/ohdear/api/padded-uptime`, {
             params: {startedAt, endedAt, split}
         })
             .catch(error => handleError(error));
     },
     getDowntime: (startedAt, endedAt) => {
-        return Axios.get(`/ohdear/api/downtime`, {
+        return Axios.get(`/actions/ohdear/api/downtime`, {
             params: {startedAt, endedAt}
         })
             .catch(error => handleError(error));
     },
     getBrokenLinks: () => {
-        return Axios.get('/ohdear/api/broken-links')
+        return Axios.get('/actions/ohdear/api/broken-links')
             .catch(error => handleError(error));
     },
     getMixedContent: () => {
-        return Axios.get('/ohdear/api/mixed-content')
+        return Axios.get('/actions/ohdear/api/mixed-content')
             .catch(error => handleError(error));
     },
     getCertificateHealth: () => {
-        return Axios.get('/ohdear/api/certificate-health')
+        return Axios.get('/actions/ohdear/api/certificate-health')
             .catch(error => handleError(error));
     },
     getApplicationHealthChecks: () => {
-        return Axios.get('/ohdear/api/application-health-checks')
+        return Axios.get('/actions/ohdear/api/application-health-checks')
             .catch(error => handleError(error));
     },
     getApplicationHealthCheckResults: (checkId) => {
-        return Axios.get('/ohdear/api/application-health-check-results', {
+        return Axios.get('/actions/ohdear/api/application-health-check-results', {
             params: {checkId}
         })
             .catch(error => handleError(error));
     },
     getCronChecks: () => {
-        return Axios.get('/ohdear/api/cron-checks')
+        return Axios.get('/actions/ohdear/api/cron-checks')
             .catch(error => handleError(error));
     },
     getCurrentPerformance: () => {
-        return Axios.get('/ohdear/api/current-performance')
+        return Axios.get('/actions/ohdear/api/current-performance')
             .catch(error => handleError(error));
     },
     getPerformance: (start, end, groupBy = null) => {
-        return Axios.get('/ohdear/api/performance', {
+        return Axios.get('/actions/ohdear/api/performance', {
             params: {start, end, groupBy}
         })
             .catch(error => handleError(error));
@@ -78,21 +78,21 @@ export default {
         let data = {};
         data['checkId'] = checkId;
         data[window.Craft.csrfTokenName] = window.Craft.csrfTokenValue;
-        return Axios.post('/ohdear/api/disable-check', data).then(response => response.data)
+        return Axios.post('/actions/ohdear/api/disable-check', data).then(response => response.data)
             .catch(error => handleError(error));
     },
     enableCheck: checkId => {
         let data = {};
         data['checkId'] = checkId;
         data[window.Craft.csrfTokenName] = window.Craft.csrfTokenValue;
-        return Axios.post('/ohdear/api/enable-check', data).then(response => response.data)
+        return Axios.post('/actions/ohdear/api/enable-check', data).then(response => response.data)
             .catch(error => handleError(error));
     },
     requestRun: checkId => {
         let data = {};
         data['checkId'] = checkId;
         data[window.Craft.csrfTokenName] = window.Craft.csrfTokenValue;
-        return Axios.post('/ohdear/api/request-run', data).then(response => response.data)
+        return Axios.post('/actions/ohdear/api/request-run', data).then(response => response.data)
             .catch(error => handleError(error));
     },
 };
