@@ -276,22 +276,6 @@ class OhDear extends Plugin
             UrlManager::class,
             UrlManager::EVENT_REGISTER_SITE_URL_RULES,
             function (RegisterUrlRulesEvent $event) {
-                $event->rules['ohdear/api/sites'] = 'ohdear/api/sites';
-                $event->rules['ohdear/api/site'] = 'ohdear/api/site';
-                $event->rules['ohdear/api/uptime'] = 'ohdear/api/uptime';
-                $event->rules['ohdear/api/padded-uptime'] = 'ohdear/api/padded-uptime';
-                $event->rules['ohdear/api/downtime'] = 'ohdear/api/downtime';
-                $event->rules['ohdear/api/broken-links'] = 'ohdear/api/broken-links';
-                $event->rules['ohdear/api/mixed-content'] = 'ohdear/api/mixed-content';
-                $event->rules['ohdear/api/certificate-health'] = 'ohdear/api/certificate-health';
-                $event->rules['ohdear/api/application-health-checks'] = 'ohdear/api/application-health-checks';
-                $event->rules['ohdear/api/application-health-check-results'] = 'ohdear/api/application-health-check-results';
-                $event->rules['ohdear/api/cron-checks'] = 'ohdear/api/cron-checks';
-                $event->rules['ohdear/api/current-performance'] = 'ohdear/api/current-performance';
-                $event->rules['ohdear/api/performance'] = 'ohdear/api/performance';
-                $event->rules['ohdear/api/disable-check'] = 'ohdear/api/disable-check';
-                $event->rules['ohdear/api/enable-check'] = 'ohdear/api/enable-check';
-                $event->rules['ohdear/api/request-run'] = 'ohdear/api/request-run';
                 $event->rules[self::HEALTH_REPORT_URI] = 'ohdear/health-check/results';
             }
         );
