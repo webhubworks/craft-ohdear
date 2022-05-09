@@ -39,12 +39,11 @@
 
 <hr/>
 
-
 <h2>{{ 'Application health'|t('ohdear') }}</h2>
 
 {% if settings['apiToken'] and settings['selectedSiteId'] %}
 
-    <p>{{ 'This check works by letting your server respond with health check results as JSON. Read more in the docs to learn about setting up built-in and even custom Health Checks.'|t('ohdear') }}</p>
+    <p>{{ 'This check works by letting your server respond with health check results as JSON. Read more in the docs to learn about setting up built-in and even custom Health Checks.'|t('ohdear') }} <a href="https://github.com/webhubworks/craft-ohdear/wiki/Application-Health-Checks" rel="noopener" target="_blank">Getting Started with Application Health Checks</a></p>
 
     {{ forms.textField({
         label: "Health Report URL"|t('ohdear') ~ " (" ~ "readonly"|t('ohdear') ~ ")",
