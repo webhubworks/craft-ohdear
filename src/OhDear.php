@@ -61,17 +61,17 @@ class OhDear extends Plugin
      *
      * @var string
      */
-    public $schemaVersion = '1.0.0';
+    public string $schemaVersion = '1.0.0';
 
     /**
      * @var bool Whether the plugin has a settings page in the control panel
      */
-    public $hasCpSettings = true;
+    public bool $hasCpSettings = true;
 
     /**
      * @var bool Whether the plugin has its own section in the control panel
      */
-    public $hasCpSection = true;
+    public bool $hasCpSection = true;
 
     /**
      * @var bool Whether the Craft version has been facelifted.
@@ -127,7 +127,7 @@ class OhDear extends Plugin
      *
      * @return Settings
      */
-    protected function createSettingsModel()
+    protected function createSettingsModel(): ?\craft\base\Model
     {
         return new Settings();
     }
@@ -138,7 +138,7 @@ class OhDear extends Plugin
      *
      * @return string The rendered settings HTML
      */
-    protected function settingsHtml(): string
+    protected function settingsHtml(): ?string
     {
         return Craft::$app->view->renderTemplate(
             'ohdear/settings',
@@ -167,7 +167,7 @@ class OhDear extends Plugin
     /**
      * @inheritdoc
      */
-    protected function cpNavIconPath()
+    protected function cpNavIconPath(): ?string
     {
         return Craft::getAlias('@vendor/webhubworks/craft-ohdear/src/resources/icons/ohdear.svg');
     }
@@ -175,7 +175,7 @@ class OhDear extends Plugin
     /**
      * @inheritdoc
      */
-    public function getCpNavItem()
+    public function getCpNavItem(): ?array
     {
         $cpNavItem = parent::getCpNavItem();
 

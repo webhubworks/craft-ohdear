@@ -45,7 +45,7 @@ class OhDearWidget extends Widget
     /**
      * @inheritDoc
      */
-    public static function maxColspan(): int
+    public static function maxColspan(): ?int
     {
         return 2;
     }
@@ -74,7 +74,7 @@ class OhDearWidget extends Widget
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function getSettingsHtml(): string
+    public function getSettingsHtml(): ?string
     {
 
         return Craft::$app->getView()->renderTemplate(
@@ -93,7 +93,7 @@ class OhDearWidget extends Widget
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function getBodyHtml(): string
+    public function getBodyHtml(): ?string
     {
         OhDearAsset::registerLangFile();
 
