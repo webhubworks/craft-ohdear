@@ -144,7 +144,7 @@ class OhDear extends Plugin
             'ohdear/settings',
             [
                 'settings' => $this->getSettings(),
-                'healthReportUrl' => $this->getSettings()->getHealthReportUrl(self::HEALTH_REPORT_URI),
+                'healthReportUrl' => $this->getSettings()->getHealthReportUrl('actions/ohdear/health-check/results'),
             ]
         );
     }
