@@ -1,4 +1,4 @@
-# Oh Dear plugin for Craft CMS 3.x
+# Oh Dear plugin for Craft CMS 4.x
 
 Integrate Oh Dear into Craft CMS.
 
@@ -6,7 +6,7 @@ Integrate Oh Dear into Craft CMS.
 
 ## Requirements
 
-This plugin requires **Craft CMS 3.6.0** or later and **PHP 8.0** or later.
+This plugin requires **Craft CMS 4.0.0** or later and **PHP 8.0** or later.
 
 ## Installation
 
@@ -68,5 +68,9 @@ Take a look at this good explanation on [MDN](https://developer.mozilla.org/en-U
 ### Is this an official Oh Dear plugin?
 
 This plugin is independent from Oh Dear. You can see all available 3rd party integrations in [Oh Dear's docs](https://ohdear.app/docs/integrations/3rd-party-integrations/introduction).
+
+### Where is version 3?
+
+Starting at version 4 the version number will correspond to the Craft version that the plugin runs on. Craft Oh Dear 2 requires Craft 3 and Craft Oh Dear 3 does not exist. New features will only be available in Craft Oh Dear 4 which requires Craft 4.  
 
 Brought to you by [webhub](https://webhub.de)

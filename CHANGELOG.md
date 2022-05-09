@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.0.0 - 2022-05-09
+### Added
+- Added support for Craft CMS 4
+
+### Changed
+- Type hints and code format
+- Updated permission registration for Craft 4
+
 ## 2.0.2 - 2022-05-09
 ### Changed
 - Improved settings page
