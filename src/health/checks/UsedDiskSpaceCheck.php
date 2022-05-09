@@ -3,14 +3,12 @@
 namespace webhubworks\ohdear\health\checks;
 
 use OhDear\HealthCheckResults\CheckResult;
-use OhDear\HealthCheckResults\CheckResults;
 use Spatie\Regex\Regex;
 use Symfony\Component\Process\Exception\LogicException;
 use Symfony\Component\Process\Exception\ProcessSignaledException;
 use Symfony\Component\Process\Exception\ProcessTimedOutException;
 use Symfony\Component\Process\Exception\RuntimeException;
 use Symfony\Component\Process\Process;
-use webhubworks\ohdear\health\checks\Check;
 
 class UsedDiskSpaceCheck extends Check
 {

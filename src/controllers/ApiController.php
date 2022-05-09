@@ -13,7 +13,6 @@ namespace webhubworks\ohdear\controllers;
 use Craft;
 use craft\web\Controller;
 use webhubworks\ohdear\OhDear;
-use Yii;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
@@ -46,7 +45,7 @@ class ApiController extends Controller
         }
 
         return $this->asJson([
-            'sites' => $sites
+            'sites' => $sites,
         ]);
     }
 
@@ -60,7 +59,7 @@ class ApiController extends Controller
         $this->requireLogin();
 
         return $this->asJson([
-            'site' => OhDear::$plugin->api->getSite()
+            'site' => OhDear::$plugin->api->getSite(),
         ]);
     }
 
@@ -79,7 +78,7 @@ class ApiController extends Controller
         $split = $request->getQueryParam('split', null);
 
         return $this->asJson([
-            'uptime' => OhDear::$plugin->api->getUptime($startedAt, $endedAt, $split)
+            'uptime' => OhDear::$plugin->api->getUptime($startedAt, $endedAt, $split),
         ]);
     }
 
@@ -100,7 +99,7 @@ class ApiController extends Controller
         return $this->asJson([
             'uptime' => OhDear::$plugin->api->leftPadUptimeToMonday(
                 OhDear::$plugin->api->getUptime($startedAt, $endedAt, $split)
-            )
+            ),
         ]);
     }
 
@@ -118,7 +117,7 @@ class ApiController extends Controller
         $endedAt = $request->getRequiredQueryParam('endedAt');
 
         return $this->asJson([
-            'downtime' => OhDear::$plugin->api->getDowntime($startedAt, $endedAt)
+            'downtime' => OhDear::$plugin->api->getDowntime($startedAt, $endedAt),
         ]);
     }
 
@@ -132,7 +131,7 @@ class ApiController extends Controller
         $this->requireLogin();
 
         return $this->asJson([
-            'brokenLinks' => OhDear::$plugin->api->getBrokenLinks()
+            'brokenLinks' => OhDear::$plugin->api->getBrokenLinks(),
         ]);
     }
 
@@ -146,7 +145,7 @@ class ApiController extends Controller
         $this->requireLogin();
 
         return $this->asJson([
-            'mixedContentItems' => OhDear::$plugin->api->getMixedContent()
+            'mixedContentItems' => OhDear::$plugin->api->getMixedContent(),
         ]);
     }
 
@@ -160,7 +159,7 @@ class ApiController extends Controller
         $this->requireLogin();
 
         return $this->asJson([
-            'certificateHealth' => OhDear::$plugin->api->getCertificateHealth()
+            'certificateHealth' => OhDear::$plugin->api->getCertificateHealth(),
         ]);
     }
 
@@ -174,7 +173,7 @@ class ApiController extends Controller
         $this->requireLogin();
 
         return $this->asJson([
-            'applicationHealthChecks' => OhDear::$plugin->api->getApplicationHealthChecks()
+            'applicationHealthChecks' => OhDear::$plugin->api->getApplicationHealthChecks(),
         ]);
     }
 
@@ -192,7 +191,7 @@ class ApiController extends Controller
         );
 
         return $this->asJson([
-            'applicationHealthCheckResults' => OhDear::$plugin->api->getApplicationHealthCheckResults($checkId)
+            'applicationHealthCheckResults' => OhDear::$plugin->api->getApplicationHealthCheckResults($checkId),
         ]);
     }
 
@@ -206,7 +205,7 @@ class ApiController extends Controller
         $this->requireLogin();
 
         return $this->asJson([
-            'cronChecks' => OhDear::$plugin->api->getCronChecks()
+            'cronChecks' => OhDear::$plugin->api->getCronChecks(),
         ]);
     }
 
@@ -220,7 +219,7 @@ class ApiController extends Controller
         $this->requireLogin();
 
         return $this->asJson([
-            'currentPerformance' => OhDear::$plugin->api->getCurrentPerformance()
+            'currentPerformance' => OhDear::$plugin->api->getCurrentPerformance(),
         ]);
     }
 
@@ -257,7 +256,7 @@ class ApiController extends Controller
         );
 
         return $this->asJson([
-            'check' => OhDear::$plugin->api->disableCheck($checkId)
+            'check' => OhDear::$plugin->api->disableCheck($checkId),
         ]);
     }
 
@@ -275,7 +274,7 @@ class ApiController extends Controller
         );
 
         return $this->asJson([
-            'check' => OhDear::$plugin->api->enableCheck($checkId)
+            'check' => OhDear::$plugin->api->enableCheck($checkId),
         ]);
     }
 
@@ -294,7 +293,7 @@ class ApiController extends Controller
 
         try {
             return $this->asJson([
-                'check' => OhDear::$plugin->api->requestRun($checkId)
+                'check' => OhDear::$plugin->api->requestRun($checkId),
             ]);
         } catch (\Exception $e) {
             $error = json_decode($e->getMessage(), true);

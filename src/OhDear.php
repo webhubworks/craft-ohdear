@@ -154,7 +154,7 @@ class OhDear extends Plugin
         Event::on(
             UserPermissions::class,
             UserPermissions::EVENT_REGISTER_PERMISSIONS,
-            function (RegisterUserPermissionsEvent $event) {
+            function(RegisterUserPermissionsEvent $event) {
                 $event->permissions['Oh Dear'] = [
                     'ohdear:plugin-settings' => [
                         'label' => Craft::t('ohdear', 'Manage plugin settings'),
@@ -186,11 +186,11 @@ class OhDear extends Plugin
             return $cpNavItem;
         }
 
-        if (! $this->settings->isValid()) {
+        if (!$this->settings->isValid()) {
             return $cpNavItem;
         }
 
-        if (! $currentUser->can('accessPlugin-ohdear')) {
+        if (!$currentUser->can('accessPlugin-ohdear')) {
             return $cpNavItem;
         }
 
@@ -234,7 +234,7 @@ class OhDear extends Plugin
             Event::on(
                 Dashboard::class,
                 Dashboard::EVENT_REGISTER_WIDGET_TYPES,
-                function (RegisterComponentTypesEvent $event) {
+                function(RegisterComponentTypesEvent $event) {
                     $event->types[] = OhDearWidget::class;
                 }
             );
@@ -246,7 +246,7 @@ class OhDear extends Plugin
         Event::on(
             Utilities::class,
             Utilities::EVENT_REGISTER_UTILITY_TYPES,
-            function (RegisterComponentTypesEvent $event) {
+            function(RegisterComponentTypesEvent $event) {
                 $event->types[] = HealthCheckUtility::class;
             }
         );
@@ -257,7 +257,7 @@ class OhDear extends Plugin
         Event::on(
             UrlManager::class,
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
-            function (RegisterUrlRulesEvent $event) {
+            function(RegisterUrlRulesEvent $event) {
                 $event->rules['ohdear'] = ['template' => 'ohdear/overview'];
                 $event->rules['ohdear/overview'] = ['template' => 'ohdear/overview'];
                 $event->rules['ohdear/uptime'] = ['template' => 'ohdear/uptime'];
@@ -275,7 +275,7 @@ class OhDear extends Plugin
         Event::on(
             UrlManager::class,
             UrlManager::EVENT_REGISTER_SITE_URL_RULES,
-            function (RegisterUrlRulesEvent $event) {
+            function(RegisterUrlRulesEvent $event) {
                 $event->rules[self::HEALTH_REPORT_URI] = 'ohdear/health-check/results';
             }
         );
@@ -292,11 +292,9 @@ class OhDear extends Plugin
     {
         if (Craft::$app->getRequest()->getIsCpRequest() && method_exists(Html::class, 'redirectInput')) {
             if (is_string(Craft::$app->getRequest()->getReferrer())) {
-
                 Event::on(View::class,
                     View::EVENT_AFTER_RENDER_PAGE_TEMPLATE,
-                    function (TemplateEvent $event) {
-
+                    function(TemplateEvent $event) {
                         $cpTrigger = Craft::$app->config->general->cpTrigger;
 
                         if ($event->template === 'entries/_edit') {
@@ -308,10 +306,8 @@ class OhDear extends Plugin
                                 $event->output = preg_replace('/<input type="hidden" name="redirect" value=".*">/', Html::redirectInput("/{$cpTrigger}/ohdear/mixed-content"), $event->output);
                             }
                         }
-
                     }
                 );
-
             }
         }
     }

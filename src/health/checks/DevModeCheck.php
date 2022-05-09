@@ -10,7 +10,7 @@ class DevModeCheck extends Check
 
     public function expectToBeDisabled(bool $bool = true): self
     {
-        return $this->expectToBe(! $bool);
+        return $this->expectToBe(!$bool);
     }
 
     public function expectToBeEnabled(bool $bool = true): self

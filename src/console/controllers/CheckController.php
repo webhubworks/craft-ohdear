@@ -18,7 +18,6 @@ use yii\console\ExitCode;
 
 class CheckController extends Controller
 {
-
     /**
      * @var string Specify the check type. Can be one of 'uptime', 'broken-links', 'mixed-content', 'certificate-health' or 'certificate-transparency' or a comma separated list of them.
      */
@@ -51,7 +50,7 @@ class CheckController extends Controller
     public function options($actionID)
     {
         return [
-            'type'
+            'type',
         ];
     }
 
@@ -174,7 +173,7 @@ class CheckController extends Controller
      */
     private function transformCase($array)
     {
-        return array_map(function ($item) {
+        return array_map(function($item) {
             return str_replace('-', '_', mb_strtolower($item));
         }, $array);
     }
@@ -207,7 +206,7 @@ class CheckController extends Controller
             return [];
         }
 
-        return array_filter(OhDear::$plugin->api->getSite()->checks, function ($check) use ($types) {
+        return array_filter(OhDear::$plugin->api->getSite()->checks, function($check) use ($types) {
             /** @var Check $check */
             return in_array($check->type, $types);
         });

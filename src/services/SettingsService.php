@@ -11,16 +11,8 @@
 namespace webhubworks\ohdear\services;
 
 use craft\base\Component;
-use craft\elements\GlobalSet;
 use OhDear\PhpSdk\OhDear as OhDearSdk;
-use OhDear\PhpSdk\Resources\BrokenLink;
-use OhDear\PhpSdk\Resources\CertificateHealth;
-use OhDear\PhpSdk\Resources\Check;
-use OhDear\PhpSdk\Resources\MixedContentItem;
-use OhDear\PhpSdk\Resources\Site;
-use Spatie\Url\Url;
 use webhubworks\ohdear\OhDear;
-use yii\base\Exception;
 
 /**
  * https://craftcms.com/docs/plugins/services

@@ -8,7 +8,7 @@ class DuplicateCheckNamesFound extends Exception
 {
     public static function make(array $duplicateCheckNames): self
     {
-        $duplicateCheckNamesString = array_map(fn (string $name) => "`{$name}`", $duplicateCheckNames);
+        $duplicateCheckNamesString = array_map(fn(string $name) => "`{$name}`", $duplicateCheckNames);
 
         $duplicateCheckNamesString = implode(', ', $duplicateCheckNamesString);
 

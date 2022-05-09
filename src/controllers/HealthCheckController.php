@@ -2,10 +2,7 @@
 
 namespace webhubworks\ohdear\controllers;
 
-use craft\helpers\DateTimeHelper;
 use craft\web\Controller;
-use OhDear\HealthCheckResults\CheckResults;
-use webhubworks\ohdear\health\checks\Check;
 use webhubworks\ohdear\OhDear;
 use yii\web\ForbiddenHttpException;
 

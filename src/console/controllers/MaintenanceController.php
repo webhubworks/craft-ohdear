@@ -38,7 +38,7 @@ class MaintenanceController extends Controller
             return ExitCode::OK;
         }
 
-        usort($periods, function ($a, $b) {
+        usort($periods, function($a, $b) {
             return strtotime($a->startsAt) > strtotime($b->startsAt);
         });
 
@@ -102,7 +102,7 @@ class MaintenanceController extends Controller
      */
     private function displayTable($periods)
     {
-        $rows = array_map(function ($period) {
+        $rows = array_map(function($period) {
             $startTime = strtotime($period->startsAt);
             $endTime = strtotime($period->endsAt);
 
@@ -120,14 +120,13 @@ class MaintenanceController extends Controller
                 $period->siteId,
                 $period->startsAt,
                 $period->endsAt,
-                $status
+                $status,
             ];
         }, $periods);
 
         echo Table::widget([
             'headers' => $headers = ['ID', 'Site ID', 'Starts at', 'Ends at', 'Status'],
-            'rows' => $rows
+            'rows' => $rows,
         ]);
     }
-
 }

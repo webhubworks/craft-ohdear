@@ -60,7 +60,7 @@ class OhDearWidget extends Widget
             $rules,
             [
                 ['period', 'string'],
-                ['period', 'in', 'range' => ['hour', 'day', 'month']]
+                ['period', 'in', 'range' => ['hour', 'day', 'month']],
             ]
         );
         return $rules;
@@ -76,11 +76,10 @@ class OhDearWidget extends Widget
      */
     public function getSettingsHtml(): ?string
     {
-
         return Craft::$app->getView()->renderTemplate(
             'ohdear/_components/widgets/OhDearWidget_settings',
             [
-                'widget' => $this
+                'widget' => $this,
             ]
         );
     }
@@ -101,7 +100,7 @@ class OhDearWidget extends Widget
             'ohdear/_components/widgets/OhDearWidget_body',
             [
                 'period' => $this->period,
-                'checks' => $this->checks
+                'checks' => $this->checks,
             ]
         );
     }

@@ -35,7 +35,8 @@ abstract class Check
         return basename(static::class);
     }
 
-    public function getGenericCrashResult(string $errorMessage = "An unhandled error occured") {
+    public function getGenericCrashResult(string $errorMessage = "An unhandled error occured")
+    {
         return new CheckResult(
             name: $this->getName(),
             label: $this->getName(),

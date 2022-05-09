@@ -11,7 +11,6 @@
 namespace webhubworks\ohdear\assetbundles\ohdear;
 
 use Craft;
-use craft\helpers\FileHelper;
 use craft\helpers\Json;
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;

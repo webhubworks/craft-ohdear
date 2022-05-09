@@ -94,7 +94,7 @@ class OhDearService extends Component
 
     public function leftPadUptimeToMonday(array $uptimes): array
     {
-        if (! count($uptimes)) {
+        if (!count($uptimes)) {
             return $uptimes;
         }
 
@@ -124,24 +124,24 @@ class OhDearService extends Component
 
     public function getBrokenLinks(): array
     {
-        return array_map(function (BrokenLink $brokenLink) {
+        return array_map(function(BrokenLink $brokenLink) {
             return [
                 'crawledUrl' => $brokenLink->crawledUrl,
                 'foundOnUrl' => $brokenLink->foundOnUrl,
                 'statusCode' => $brokenLink->statusCode,
-                'element' => $this->findElementByBrokenLink($brokenLink)
+                'element' => $this->findElementByBrokenLink($brokenLink),
             ];
         }, $this->ohDearClient->brokenLinks($this->siteId));
     }
 
     public function getMixedContent(): array
     {
-        return array_map(function (MixedContentItem $mixedContentItem) {
+        return array_map(function(MixedContentItem $mixedContentItem) {
             return [
                 'mixedContentUrl' => $mixedContentItem->mixedContentUrl,
                 'foundOnUrl' => $mixedContentItem->foundOnUrl,
                 'elementName' => $mixedContentItem->elementName,
-                'element' => $this->findElementByMixedContentItem($mixedContentItem)
+                'element' => $this->findElementByMixedContentItem($mixedContentItem),
             ];
         }, $this->ohDearClient->mixedContent($this->siteId));
     }
@@ -217,7 +217,7 @@ class OhDearService extends Component
                     'title' => $element->title,
                     'status' => $element->status,
                     'cpEditUrl' => $element->cpEditUrl,
-                    'dateUpdated' => $element->dateUpdated->format(DATE_ISO8601)
+                    'dateUpdated' => $element->dateUpdated->format(DATE_ISO8601),
                 ];
             }
 
@@ -227,7 +227,7 @@ class OhDearService extends Component
                     'title' => $element->name,
                     'status' => $element->status,
                     'cpEditUrl' => $element->cpEditUrl,
-                    'dateUpdated' => $element->dateUpdated->format(DATE_ISO8601)
+                    'dateUpdated' => $element->dateUpdated->format(DATE_ISO8601),
                 ];
             }
 
@@ -237,7 +237,7 @@ class OhDearService extends Component
                     'title' => $element->owner->title ?? $element->owner->name ?? 'Element',
                     'status' => $element->status,
                     'cpEditUrl' => $element->owner->cpEditUrl ?? '#!',
-                    'dateUpdated' => $element->dateUpdated->format(DATE_ISO8601)
+                    'dateUpdated' => $element->dateUpdated->format(DATE_ISO8601),
                 ];
             }
 
@@ -247,10 +247,9 @@ class OhDearService extends Component
                     'title' => $element->owner->title ?? $element->owner->name ?? 'Element',
                     'status' => $element->status,
                     'cpEditUrl' => $element->cpEditUrl ?? '#!',
-                    'dateUpdated' => $element->dateUpdated->format(DATE_ISO8601)
+                    'dateUpdated' => $element->dateUpdated->format(DATE_ISO8601),
                 ];
             }
-
         } catch (Exception $exception) {
             return null;
         }
@@ -310,7 +309,7 @@ class OhDearService extends Component
     {
         $cleanKeywords = Search::normalizeKeywords($crawledUrl);
 
-        $elementId = (new Query)
+        $elementId = (new Query())
             ->select(['elementId'])
             ->from([Table::SEARCHINDEX])
             ->where(['keywords' => ' ' . $cleanKeywords . ' '])
