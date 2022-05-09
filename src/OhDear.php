@@ -156,8 +156,11 @@ class OhDear extends Plugin
             UserPermissions::EVENT_REGISTER_PERMISSIONS,
             function(RegisterUserPermissionsEvent $event) {
                 $event->permissions['Oh Dear'] = [
-                    'ohdear:plugin-settings' => [
-                        'label' => Craft::t('ohdear', 'Manage plugin settings'),
+                    'heading' => 'Oh Dear',
+                    'permissions' => [
+                        'ohdear:plugin-settings' => [
+                            'label' => Craft::t('ohdear', 'Manage plugin settings'),
+                        ],
                     ],
                 ];
             }
