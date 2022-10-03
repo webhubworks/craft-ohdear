@@ -14,6 +14,7 @@ import Vue from 'vue';
 import { VTooltip } from 'v-tooltip'
 import DayJs from "dayjs";
 import Translator from "./Translator";
+import CheckPermissions from "./CheckPermissions";
 
 Vue.component('card', require('./components/Card').default);
 Vue.component('overview', require('./components/pages/Overview').default);
@@ -36,8 +37,11 @@ Vue.directive('tooltip', VTooltip)
 Vue.mixin({
     methods: {
         $t(key, replace = {}) {
-            return Translator(window.OhDear.translations, key, replace)
+            return Translator(window.OhDear.translations, key, replace);
         },
+        $can(ability, check) {
+            return CheckPermissions(window.OhDear.permissions, ability, check);
+        }
     },
 })
 
