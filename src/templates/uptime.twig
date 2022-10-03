@@ -1,6 +1,8 @@
 {# @var craft \craft\web\twig\variables\CraftVariable #}
 {% extends '_layouts/cp' %}
 
+{% requirePermission 'ohdear:view-uptime' %}
+
 {% do view.registerAssetBundle('webhubworks\\ohdear\\assetbundles\\ohdear\\OhDearAsset') %}
 
 {% set title = 'Oh Dear Uptime'|t('ohdear') %}

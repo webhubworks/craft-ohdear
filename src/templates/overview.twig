@@ -2,6 +2,8 @@
 
 {% extends '_layouts/cp' %}
 
+{% requirePermission 'ohdear:view-overview' %}
+
 {% do view.registerAssetBundle('webhubworks\\ohdear\\assetbundles\\ohdear\\OhDearAsset') %}
 
 {% set title = 'Oh Dear Overview'|t('ohdear') %}
