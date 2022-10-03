@@ -30,7 +30,7 @@
         <section class="oh-mt-4 oh-flex oh-justify-between">
 
             <div class="oh-flex">
-                <div class="lightswitch-field" v-if="checkEnabled !== null">
+                <div class="lightswitch-field" v-if="checkEnabled !== null && $can('toggle', check.type)">
                     <div class="heading oh-sr-only">
                         <label :id="`ohdear-status-${check.type}`" class="">{{ check.label }} status</label>
                     </div>
@@ -48,7 +48,7 @@
                 <loader class="oh-w-5 oh-h-5 oh-ml-1 oh-p-0.5" v-show="cardLoading"></loader>
             </div>
 
-            <div class="oh-text-xs oh-text-gray-500" v-if="check.enabled">
+            <div class="oh-text-xs oh-text-gray-500" v-if="check.enabled && $can('request', check.type)">
                 <button :class="{'oh-pointer-events-none': newRunRequested}" class="oh-outline-none hover:oh-underline" @click.prevent="requestNewRun" :disabled="newRunRequested">
                     {{ newRunLabel }}
                 </button>
