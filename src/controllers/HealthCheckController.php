@@ -8,7 +8,7 @@ use yii\web\ForbiddenHttpException;
 
 class HealthCheckController extends Controller
 {
-    protected $allowAnonymous = ['results'];
+    protected array|bool|int $allowAnonymous = ['results'];
 
     public function actionResults()
     {
