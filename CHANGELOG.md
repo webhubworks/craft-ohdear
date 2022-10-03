@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.0.2 - 2022-10-03
+### Fixed
+- Fixed missing type definition in controller property ([PR #32](https://github.com/webhubworks/craft-ohdear/pull/32), thanks @jorisnoo)
+
 ## 4.0.1 - 2022-05-23
 ### Fixed
 - Fixed bug where the settings page quick links broke when setting the site ID in the settings to an env var
