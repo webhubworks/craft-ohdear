@@ -47,21 +47,22 @@ export default class Check {
      * @return {string|null}
      */
     get reportUrl() {
+        const cpTriggerPrefix = window.Craft.cpTrigger !== null ? `/${window.Craft.cpTrigger}` : '';
         switch (this.type) {
             case 'uptime':
-                return `/${window.Craft.cpTrigger}/ohdear/uptime`;
+                return `${cpTriggerPrefix}/ohdear/uptime`;
             case 'performance':
-                return `/${window.Craft.cpTrigger}/ohdear/performance`;
+                return `${cpTriggerPrefix}/ohdear/performance`;
             case 'broken_links':
-                return `/${window.Craft.cpTrigger}/ohdear/broken-links`;
+                return `${cpTriggerPrefix}/ohdear/broken-links`;
             case 'mixed_content':
-                return `/${window.Craft.cpTrigger}/ohdear/mixed-content`;
+                return `${cpTriggerPrefix}/ohdear/mixed-content`;
             case 'certificate_health':
-                return `/${window.Craft.cpTrigger}/ohdear/certificate-health`;
+                return `${cpTriggerPrefix}/ohdear/certificate-health`;
             case 'certificate_transparency':
-                return `/${window.Craft.cpTrigger}/ohdear/certificate-health`;
+                return `${cpTriggerPrefix}/ohdear/certificate-health`;
             case 'application_health':
-                return `/${window.Craft.cpTrigger}/ohdear/application-health`;
+                return `${cpTriggerPrefix}/ohdear/application-health`;
             default:
                 return null;
         }

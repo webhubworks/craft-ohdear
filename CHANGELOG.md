@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.1.0 - 2023-04-14
+### Added
+- As per issue #30 added support for granular Control Panel permissions including:
+  - View, toggle and request permissions for each check
+  - View permission for the Application Health check utility
+  - View permission for the Overview page
+### Fixed
+  - Check card report links now respect a `cpTrigger` set to `null` (issue #40)
+
 ## 4.0.2 - 2022-10-03
 ### Fixed
 - Fixed missing type definition in controller property ([PR #32](https://github.com/webhubworks/craft-ohdear/pull/32), thanks @jorisnoo)
