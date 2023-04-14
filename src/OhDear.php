@@ -367,6 +367,10 @@ class OhDear extends Plugin
                 /** @var User|null $currentUser */
                 $currentUser = Craft::$app->getUser()->getIdentity();
 
+                if (is_null($currentUser)) {
+                    return;
+                }
+
                 if ($currentUser->can('ohdear:view-overview')) {
                     $event->rules['ohdear'] = ['template' => 'ohdear/overview'];
                     $event->rules['ohdear/overview'] = ['template' => 'ohdear/overview'];
@@ -414,7 +418,7 @@ JS;
         /** @var User|null $currentUser */
         $currentUser = Craft::$app->getUser()->getIdentity();
 
-        $checkPermissions = [
+        $checkPermissions = is_null($currentUser) ? null : [
             'uptime' => [
                 'view' => $currentUser->can('ohdear:view-uptime'),
                 'toggle' => $currentUser->can('ohdear:toggle-uptime-check'),
