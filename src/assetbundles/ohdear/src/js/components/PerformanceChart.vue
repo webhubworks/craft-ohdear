@@ -3,8 +3,8 @@
 
         <div class="oh-flex oh-justify-end">
             <div id="timespan-field" class="field first oh-flex oh-items-center">
-                <div class="heading oh-mr-2">
-                    <label id="timespan-label" for="timespan">{{ $t('Range') }}</label>
+                <div class="oh-mr-2">
+                    <label id="timespan-label" for="timespan" class="oh-font-bold">{{ $t('Range') }}</label>
                 </div>
                 <div class="input ltr">
                     <div class="flex">

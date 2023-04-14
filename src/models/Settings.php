@@ -1,6 +1,6 @@
 <?php
 /**
- * Oh Dear plugin for Craft CMS 3.x
+ * Oh Dear plugin for Craft CMS 4.x
  *
  * Integrate Oh Dear into Craft CMS.
  *
