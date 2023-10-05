@@ -8,7 +8,9 @@ Integrate Oh Dear into Craft CMS.
 
 This plugin requires **Craft CMS 4.0.0** or later and **PHP 8.0** or later.
 
-You'll also have to provide an Oh Dear API key. You can create an Oh Dear account using our affiliate link: [Oh Dear](https://ohdear.app/?via=webhub) 🙏
+You'll also have to provide an Oh Dear API key.
+
+🙏 You can create an Oh Dear account using our affiliate link: [Oh Dear](https://ohdear.app/?via=webhub) We will offer you a free license key for Craft Oh Dear if you sign up using our affiliate link. Just send us a message.
 
 ## Installation
 
