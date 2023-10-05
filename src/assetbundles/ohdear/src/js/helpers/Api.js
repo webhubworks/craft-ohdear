@@ -102,20 +102,24 @@ function handleError(error) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
         if (error.response.data.hasOwnProperty('error')) {
-            if (error.response.data.error === '{"error":"Unauthenticated."}') {
-                alert('The Oh Dear API key is invalid.');
+            if (window.OhDear.throttleAlerts) {
+                return;
             }
+            alert(error.response.data.error);
+            window.OhDear.throttleAlerts = true;
         }
-        console.log(error.response.status);
-        console.log(error.response.headers);
+        // console.log(error.response.status);
+        // console.log(error.response.headers);
     } else if (error.request) {
         // The request was made but no response was received
         // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
         // http.ClientRequest in node.js
-        console.log(error.request);
+        alert('Unable to connect to Oh Dear!');
+        // console.log(error.request);
     } else {
         // Something happened in setting up the request that triggered an Error
-        console.log('Error', error.message);
+        // console.log('Error', error.message);
+        alert('Unable to connect to Oh Dear!');
     }
-    console.log(error.config);
+    // console.log(error.config);
 }

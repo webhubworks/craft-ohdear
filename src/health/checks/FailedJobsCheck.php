@@ -3,6 +3,7 @@
 namespace webhubworks\ohdear\health\checks;
 
 use OhDear\HealthCheckResults\CheckResult;
+use yii\base\NotSupportedException;
 
 class FailedJobsCheck extends Check
 {
@@ -25,6 +26,10 @@ class FailedJobsCheck extends Check
 
     public function run(): CheckResult
     {
+        if (! method_exists(\Craft::$app->getQueue(), 'getTotalFailed')) {
+            throw new NotSupportedException('The current queue driver is not supported for the failed jobs health check.');
+        }
+
         $failedJobCount = \Craft::$app->getQueue()->getTotalFailed();
 
         $result = (new CheckResult(

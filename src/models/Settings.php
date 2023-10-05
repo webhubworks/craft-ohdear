@@ -12,19 +12,15 @@ namespace webhubworks\ohdear\models;
 
 use Craft;
 use craft\base\Model;
+use craft\helpers\App;
+use OhDear\PhpSdk\OhDear as OhDearSdk;
 use OhDear\PhpSdk\Resources\Site;
 use webhubworks\ohdear\OhDear;
+use OhDear\PhpSdk\Exceptions\UnauthorizedException;
+use OhDear\PhpSdk\Resources\User as OhDearUser;
+use OhDear\PhpSdk\Resources\Site as OhDearSite;
 
 /**
- * OhDear Settings Model
- *
- * This is a model used to define the plugin's settings.
- *
- * Models are containers for data. Just about every time information is passed
- * between services, controllers, and templates in Craft, it’s passed via a model.
- *
- * https://craftcms.com/docs/plugins/models
- *
  * @author    webhub GmbH
  * @package   OhDear
  * @since     1.0.0
@@ -34,25 +30,13 @@ class Settings extends Model
     // Public Properties
     // =========================================================================
 
-    /**
-     * @var string
-     */
-    public $apiToken = '';
+    public string $apiToken = '';
 
-    /**
-     * @var string
-     */
-    public $selectedSiteId = '';
+    public string $selectedSiteId = '';
 
-    /**
-     * @var ?string
-     */
-    public $healthCheckSecret = null;
+    public ?string $healthCheckSecret = null;
 
-    /**
-     * @var array
-     */
-    public $healthChecks = [];
+    public array $healthChecks = [];
 
     /**
      * Determines if the plugin has an API key and
@@ -60,7 +44,7 @@ class Settings extends Model
      */
     public function isValid(): bool
     {
-        return !empty($this->apiToken) && !empty($this->selectedSiteId);
+        return ! empty($this->apiToken) && ! empty($this->selectedSiteId);
     }
 
     /**
@@ -69,7 +53,7 @@ class Settings extends Model
      */
     public function getSelectedSiteId(): string
     {
-        return Craft::parseEnv($this->selectedSiteId);
+        return App::parseEnv($this->selectedSiteId);
     }
 
     /**
@@ -78,45 +62,62 @@ class Settings extends Model
      */
     public function getApiToken(): string
     {
-        return Craft::parseEnv($this->apiToken);
-    }
-
-    public function getSite(): ?Site
-    {
-        if (!$this->isValid()) {
-            return null;
-        }
-
-        return OhDear::$plugin->api->getSite($this->selectedSiteId);
+        return App::parseEnv($this->apiToken);
     }
 
     public function getHealthReportUrl(string $healthReportUri): ?string
     {
-        $site = $this->getSite();
-
-        if ($site instanceof Site) {
-            return implode("/", [$site->url, $healthReportUri]);
+        if (! $this->isValid()) {
+            return null;
         }
 
-        return null;
+        try {
+            $site = OhDear::$plugin->api->getSite();
+            if ($site instanceof Site) {
+                return implode("/", [$site->url, $healthReportUri]);
+            }
+            return null;
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
-    /**
-     * Returns the validation rules for attributes.
-     *
-     * Validation rules are used by [[validate()]] to check if attribute values are valid.
-     * Child classes may override this method to declare different validation rules.
-     *
-     * More info: http://www.yiiframework.com/doc-2.0/guide-input-validation.html
-     */
     public function rules(): array
     {
         return [
             [['apiToken', 'selectedSiteId'], 'trim'],
             [['apiToken', 'selectedSiteId'], 'default', 'value' => ''],
-            ['selectedSiteId', 'required', 'when' => function($model) {
-                return !empty($model->apiToken);
+            ['selectedSiteId', 'required', 'when' => function ($model) {
+                return ! empty($model->apiToken);
             }],
+            [['apiToken'], 'validApiToken'],
+            [['selectedSiteId'], 'validSelectedSiteId'],
         ];
+    }
+
+    public function validApiToken($attribute, $params): void
+    {
+        try {
+            OhDear::$plugin->settingsService->getMe($this[$attribute]);
+        } catch (UnauthorizedException $e) {
+            $this->addError('apiToken', 'API authentication failed.');
+        } catch (\Exception $e) {
+            $this->addError('apiToken', $e->getMessage());
+        }
+    }
+
+    public function validSelectedSiteId($attribute, $params): void
+    {
+        if (! $this->isValid()) {
+            return;
+        }
+
+        try {
+            OhDear::$plugin->settingsService->getSite($this->apiToken, (int) $this[$attribute]);
+        } catch (UnauthorizedException $e) {
+            $this->addError('selectedSiteId', 'API authentication failed.');
+        } catch (\Exception $e) {
+            $this->addError('selectedSiteId', $e->getMessage());
+        }
     }
 }

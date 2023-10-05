@@ -11,6 +11,7 @@
 namespace webhubworks\ohdear;
 
 use Craft;
+use craft\base\Model;
 use craft\base\Plugin;
 use craft\elements\User;
 use craft\events\RegisterComponentTypesEvent;
@@ -25,6 +26,7 @@ use craft\services\Utilities;
 use craft\web\UrlManager;
 use craft\web\View;
 use Spatie\Url\Url;
+use webhubworks\ohdear\assetbundles\ohdear\OhDearAsset;
 use webhubworks\ohdear\models\Settings;
 use webhubworks\ohdear\services\HealthCheckService;
 use webhubworks\ohdear\services\OhDearService;
@@ -53,45 +55,21 @@ class OhDear extends Plugin
     /**
      * Static property that is an instance of this plugin class so that it can be accessed via
      * OhDear::$plugin
-     *
-     * @var OhDear
      */
-    public static $plugin;
+    public static OhDear $plugin;
 
     /**
      * To execute your plugin’s migrations, you’ll need to increase its schema version.
-     *
-     * @var string
      */
     public string $schemaVersion = '1.0.0';
 
-    /**
-     * @var bool Whether the plugin has a settings page in the control panel
-     */
     public bool $hasCpSettings = true;
 
-    /**
-     * @var bool Whether the plugin has its own section in the control panel
-     */
     public bool $hasCpSection = true;
 
-    /**
-     * @var bool Whether the Craft version has been facelifted.
-     */
-    public $isPreCraft34 = false;
+    public bool $isPreCraft34 = false;
 
-    /**
-     * Set our $plugin static property to this class so that it can be accessed via
-     * OhDear::$plugin
-     *
-     * Called after the plugin class is instantiated; do any one-time initialization
-     * here such as hooks and events.
-     *
-     * If you have a '/vendor/autoload.php' file, it will be loaded for you automatically;
-     * you do not need to load it in your init() method.
-     *
-     */
-    public function init()
+    public function init(): void
     {
         // Set the controllerNamespace based on whether this is a console request
         if (Craft::$app->getRequest()->getIsConsoleRequest()) {
@@ -111,37 +89,25 @@ class OhDear extends Plugin
 
         $this->registerPermissions();
 
-        $this->registerCheckPermissions();
+        if (Craft::$app->request->isCpRequest && Craft::$app->user->getIdentity()) {
+            OhDearAsset::registerLangFile();
+            $this->registerFrontendPermissions();
+            $this->registerWidgets();
+            $this->registerUtilityTypes();
+        }
 
         $this->registerUrlRules();
 
         $this->registerCpRoutes();
 
-        $this->registerWidgets();
-
-        $this->registerUtilityTypes();
-
-        $this->registerPermissions();
-
         $this->registerEntryEditRedirectOverride();
     }
 
-    /**
-     * Creates and returns the model used to store the plugin’s settings.
-     *
-     * @return Settings
-     */
-    protected function createSettingsModel(): ?\craft\base\Model
+    protected function createSettingsModel(): ?Model
     {
         return new Settings();
     }
 
-    /**
-     * Returns the rendered settings HTML, which will be inserted into the content
-     * block on the settings page.
-     *
-     * @return string The rendered settings HTML
-     */
     protected function settingsHtml(): ?string
     {
         return Craft::$app->view->renderTemplate(
@@ -153,7 +119,7 @@ class OhDear extends Plugin
         );
     }
 
-    private function registerPermissions()
+    private function registerPermissions(): void
     {
         Event::on(
             UserPermissions::class,
@@ -329,7 +295,7 @@ class OhDear extends Plugin
         return $cpNavItem;
     }
 
-    private function registerWidgets()
+    private function registerWidgets(): void
     {
         if ($this->settings->isValid()) {
             Event::on(
@@ -342,7 +308,7 @@ class OhDear extends Plugin
         }
     }
 
-    private function registerUtilityTypes()
+    private function registerUtilityTypes(): void
     {
         Event::on(
             Utilities::class,
@@ -358,7 +324,7 @@ class OhDear extends Plugin
         );
     }
 
-    private function registerCpRoutes()
+    private function registerCpRoutes(): void
     {
         Event::on(
             UrlManager::class,
@@ -397,7 +363,7 @@ class OhDear extends Plugin
         );
     }
 
-    private function registerUrlRules()
+    private function registerUrlRules(): void
     {
         Event::on(
             UrlManager::class,
@@ -408,7 +374,7 @@ class OhDear extends Plugin
         );
     }
 
-    private function registerCheckPermissions()
+    private function registerFrontendPermissions(): void
     {
         $js = <<<JS
 window.OhDear = window.OhDear || {};
@@ -467,7 +433,7 @@ JS;
      * - request is coming from our plugin's broken link or
      *   mixed content pages
      */
-    private function registerEntryEditRedirectOverride()
+    private function registerEntryEditRedirectOverride(): void
     {
         if (Craft::$app->getRequest()->getIsCpRequest() && method_exists(Html::class, 'redirectInput')) {
             if (is_string(Craft::$app->getRequest()->getReferrer())) {

@@ -29,8 +29,6 @@ class OhDearAsset extends AssetBundle
         // define the path that your publishable resources live
         $this->sourcePath = "@webhubworks/ohdear/assetbundles/ohdear/dist";
 
-        static::registerLangFile();
-
         // define the dependencies
         $this->depends = [
             CpAsset::class,
