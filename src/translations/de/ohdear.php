@@ -25,6 +25,8 @@ return [
     'Manage plugin settings' => 'Plugin-Einstellungen verwalten',
     'Overview' => 'Überblick',
     'Disabled' => 'Deaktiviert',
+    'Show navigation item badges' => 'Badges in der Navigation anzeigen',
+    'Show counter badges on the navigation items for broken links and mixed content items.' => 'Zeige Counter-Badges für tote Links und Mixed Content in der Navigation.',
     'The site has never been down. Nice work!' => 'Die Seite war noch nie offline. Gute Arbeit!',
     'Site was down' => 'Seite war offline',
     'This check is currently disabled.' => 'Dieser Check ist momentan deaktiviert.',

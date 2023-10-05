@@ -39,6 +39,15 @@
     errors: settings.getErrors('selectedSiteId'),
 }) }}
 
+{{ forms.checkbox({
+    label: "Show navigation item badges"|t('ohdear'),
+    id: 'show-nav-badges',
+    name: 'showNavBadges',
+    value: settings['showNavBadges'],
+    instructions: 'Show counter badges on the navigation items for broken links and mixed content items.'|t('ohdear'),
+    errors: settings.getErrors('showNavBadges'),
+}) }}
+
 <hr/>
 
 <h2>{{ 'Application health'|t('ohdear') }}</h2>
