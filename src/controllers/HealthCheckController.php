@@ -8,7 +8,7 @@ use yii\web\ForbiddenHttpException;
 
 class HealthCheckController extends Controller
 {
-    protected $allowAnonymous = ['results'];
+    protected array|int|bool $allowAnonymous = ['results'];
 
     public function actionResults()
     {
@@ -24,6 +24,10 @@ class HealthCheckController extends Controller
         }
 
         $secretHeader = $this->request->headers->get('oh-dear-health-check-secret');
+
+        if (is_string(OhDear::$plugin->settings->healthCheckSecret) && empty(OhDear::$plugin->settings->healthCheckSecret)) {
+            throw new ForbiddenHttpException('No secret configured');
+        }
 
         if (is_null($secretHeader)) {
             throw new ForbiddenHttpException('Invalid secret');
