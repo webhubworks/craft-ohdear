@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ### Added
 - Added API validations for API token and  site ID fields in settings page
+- Added feature for badge counts in the CP navigation, added  settings to disable this feature
 ### Changed
 - Updated `ohdearapp/ohdear-php-sdk` and `ohdearapp/health-check-results`
 - Improved  secret check in health check results endpoint
