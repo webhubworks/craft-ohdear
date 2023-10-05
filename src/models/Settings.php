@@ -14,25 +14,12 @@ use Craft;
 use craft\base\Model;
 use OhDear\PhpSdk\OhDear as OhDearSdk;
 use OhDear\PhpSdk\Resources\Site;
-use Symfony\Component\Translation\Exception\NotFoundResourceException;
 use webhubworks\ohdear\OhDear;
 use OhDear\PhpSdk\Exceptions\UnauthorizedException;
-use OhDear\PhpSdk\Exceptions\FailedActionException;
-use OhDear\PhpSdk\Exceptions\NotFoundException;
-use OhDear\PhpSdk\Exceptions\ValidationException;
 use OhDear\PhpSdk\Resources\User as OhDearUser;
 use OhDear\PhpSdk\Resources\Site as OhDearSite;
 
 /**
- * OhDear Settings Model
- *
- * This is a model used to define the plugin's settings.
- *
- * Models are containers for data. Just about every time information is passed
- * between services, controllers, and templates in Craft, it’s passed via a model.
- *
- * https://craftcms.com/docs/plugins/models
- *
  * @author    webhub GmbH
  * @package   OhDear
  * @since     1.0.0
@@ -42,25 +29,13 @@ class Settings extends Model
     // Public Properties
     // =========================================================================
 
-    /**
-     * @var string
-     */
-    public $apiToken = '';
+    public string $apiToken = '';
 
-    /**
-     * @var string
-     */
-    public $selectedSiteId = '';
+    public string $selectedSiteId = '';
 
-    /**
-     * @var ?string
-     */
-    public $healthCheckSecret = null;
+    public ?string $healthCheckSecret = null;
 
-    /**
-     * @var array
-     */
-    public $healthChecks = [];
+    public array $healthChecks = [];
 
     /**
      * Determines if the plugin has an API key and
@@ -95,7 +70,7 @@ class Settings extends Model
             return null;
         }
 
-        return OhDear::$plugin->api->getSite($this->selectedSiteId);
+        return OhDear::$plugin->api->getSite();
     }
 
     public function getHealthReportUrl(string $healthReportUri): ?string
@@ -111,14 +86,6 @@ class Settings extends Model
         }
     }
 
-    /**
-     * Returns the validation rules for attributes.
-     *
-     * Validation rules are used by [[validate()]] to check if attribute values are valid.
-     * Child classes may override this method to declare different validation rules.
-     *
-     * More info: http://www.yiiframework.com/doc-2.0/guide-input-validation.html
-     */
     public function rules(): array
     {
         return [

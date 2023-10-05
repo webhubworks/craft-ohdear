@@ -10,6 +10,10 @@ class HealthCheckController extends Controller
 {
     protected array|int|bool $allowAnonymous = ['results'];
 
+    /**
+     * @throws \Throwable
+     * @throws ForbiddenHttpException
+     */
     public function actionResults()
     {
         $this->ensureSecretIsValid();
@@ -17,7 +21,12 @@ class HealthCheckController extends Controller
         return OhDear::$plugin->health->getCheckResults()->toJson();
     }
 
-    private function ensureSecretIsValid()
+    /**
+     * @return void
+     * @throws ForbiddenHttpException
+     * @throws \Throwable
+     */
+    private function ensureSecretIsValid(): void
     {
         if (\Craft::$app->getUser()->getIdentity() && \Craft::$app->getUser()->getIdentity()->admin) {
             return;
