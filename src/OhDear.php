@@ -25,6 +25,7 @@ use craft\services\Utilities;
 use craft\web\UrlManager;
 use craft\web\View;
 use Spatie\Url\Url;
+use webhubworks\ohdear\assetbundles\ohdear\OhDearAsset;
 use webhubworks\ohdear\models\Settings;
 use webhubworks\ohdear\services\HealthCheckService;
 use webhubworks\ohdear\services\OhDearService;
@@ -111,17 +112,16 @@ class OhDear extends Plugin
 
         $this->registerPermissions();
 
-        $this->registerCheckPermissions();
+        if (Craft::$app->request->isCpRequest && Craft::$app->user->getIdentity()) {
+            OhDearAsset::registerLangFile();
+            $this->registerFrontendPermissions();
+            $this->registerWidgets();
+            $this->registerUtilityTypes();
+        }
 
         $this->registerUrlRules();
 
         $this->registerCpRoutes();
-
-        $this->registerWidgets();
-
-        $this->registerUtilityTypes();
-
-        $this->registerPermissions();
 
         $this->registerEntryEditRedirectOverride();
     }
@@ -408,7 +408,7 @@ class OhDear extends Plugin
         );
     }
 
-    private function registerCheckPermissions()
+    private function registerFrontendPermissions()
     {
         $js = <<<JS
 window.OhDear = window.OhDear || {};
