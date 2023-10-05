@@ -39,8 +39,8 @@ use webhubworks\ohdear\OhDear;
 class OhDearService extends Component
 {
     private OhDearSdk $ohDearClient;
-    private $siteId;
-    private $apiToken;
+    private int $siteId;
+    private string $apiToken;
 
     public function __construct($config = [])
     {
@@ -57,7 +57,7 @@ class OhDearService extends Component
         return $this->ohDearClient->createSiteMaintenance($this->siteId, $startsAt, $endsAt);
     }
 
-    public function deleteMaintenancePeriod(int $maintenancePeriodId)
+    public function deleteMaintenancePeriod(int $maintenancePeriodId): void
     {
         $this->ohDearClient->deleteSiteMaintenance($maintenancePeriodId);
     }
@@ -67,7 +67,7 @@ class OhDearService extends Component
         return $this->ohDearClient->startSiteMaintenance($this->siteId, $stopMaintenanceAfterSeconds);
     }
 
-    public function stopMaintenancePeriod()
+    public function stopMaintenancePeriod(): void
     {
         $this->ohDearClient->stopSiteMaintenance($this->siteId);
     }

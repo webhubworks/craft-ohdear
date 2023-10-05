@@ -12,6 +12,7 @@ namespace webhubworks\ohdear\models;
 
 use Craft;
 use craft\base\Model;
+use craft\helpers\App;
 use OhDear\PhpSdk\OhDear as OhDearSdk;
 use OhDear\PhpSdk\Resources\Site;
 use webhubworks\ohdear\OhDear;
@@ -52,7 +53,7 @@ class Settings extends Model
      */
     public function getSelectedSiteId(): string
     {
-        return Craft::parseEnv($this->selectedSiteId);
+        return App::parseEnv($this->selectedSiteId);
     }
 
     /**
@@ -61,22 +62,17 @@ class Settings extends Model
      */
     public function getApiToken(): string
     {
-        return Craft::parseEnv($this->apiToken);
+        return App::parseEnv($this->apiToken);
     }
 
-    public function getSite(): ?Site
+    public function getHealthReportUrl(string $healthReportUri): ?string
     {
         if (! $this->isValid()) {
             return null;
         }
 
-        return OhDear::$plugin->api->getSite();
-    }
-
-    public function getHealthReportUrl(string $healthReportUri): ?string
-    {
         try {
-            $site = $this->getSite();
+            $site = OhDear::$plugin->api->getSite();
             if ($site instanceof Site) {
                 return implode("/", [$site->url, $healthReportUri]);
             }
@@ -102,10 +98,7 @@ class Settings extends Model
     public function validApiToken($attribute, $params): void
     {
         try {
-            $user = (new OhDearSdk($this[$attribute]))->me();
-            if (! ($user instanceof OhDearUser)) {
-                throw new \Exception('Invalid API response. Please contact support.');
-            }
+            OhDear::$plugin->settingsService->getMe($this[$attribute]);
         } catch (UnauthorizedException $e) {
             $this->addError('apiToken', 'API authentication failed.');
         } catch (\Exception $e) {
@@ -120,10 +113,7 @@ class Settings extends Model
         }
 
         try {
-            $site = (new OhDearSdk($this->apiToken))->site($this[$attribute]);
-            if (! ($site instanceof OhDearSite)) {
-                throw new \Exception('Invalid API response. Please contact support.');
-            }
+            OhDear::$plugin->settingsService->getSite($this->apiToken, (int) $this[$attribute]);
         } catch (UnauthorizedException $e) {
             $this->addError('selectedSiteId', 'API authentication failed.');
         } catch (\Exception $e) {

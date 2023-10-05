@@ -12,23 +12,28 @@ namespace webhubworks\ohdear\services;
 
 use craft\base\Component;
 use OhDear\PhpSdk\OhDear as OhDearSdk;
-use webhubworks\ohdear\OhDear;
+use OhDear\PhpSdk\Resources\Site;
+use OhDear\PhpSdk\Resources\User;
 
 /**
- * https://craftcms.com/docs/plugins/services
- *
  * @author    webhub GmbH
  * @package   OhDear
  * @since     1.0.0
  */
 class SettingsService extends Component
 {
-    /**
-     * @param string $apiToken
-     * @return array
-     */
-    public function getSites($apiToken)
+    public function getSite(string $apiToken, int $siteId): Site
+    {
+        return (new OhDearSdk($apiToken))->site($siteId);
+    }
+
+    public function getSites(string $apiToken): array
     {
         return (new OhDearSdk($apiToken))->sites();
+    }
+
+    public function getMe(string $apiToken): User
+    {
+        return (new OhDearSdk($apiToken))->me();
     }
 }
