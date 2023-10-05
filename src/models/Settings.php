@@ -12,8 +12,16 @@ namespace webhubworks\ohdear\models;
 
 use Craft;
 use craft\base\Model;
+use OhDear\PhpSdk\OhDear as OhDearSdk;
 use OhDear\PhpSdk\Resources\Site;
+use Symfony\Component\Translation\Exception\NotFoundResourceException;
 use webhubworks\ohdear\OhDear;
+use OhDear\PhpSdk\Exceptions\UnauthorizedException;
+use OhDear\PhpSdk\Exceptions\FailedActionException;
+use OhDear\PhpSdk\Exceptions\NotFoundException;
+use OhDear\PhpSdk\Exceptions\ValidationException;
+use OhDear\PhpSdk\Resources\User as OhDearUser;
+use OhDear\PhpSdk\Resources\Site as OhDearSite;
 
 /**
  * OhDear Settings Model
@@ -60,7 +68,7 @@ class Settings extends Model
      */
     public function isValid(): bool
     {
-        return !empty($this->apiToken) && !empty($this->selectedSiteId);
+        return ! empty($this->apiToken) && ! empty($this->selectedSiteId);
     }
 
     /**
@@ -83,7 +91,7 @@ class Settings extends Model
 
     public function getSite(): ?Site
     {
-        if (!$this->isValid()) {
+        if (! $this->isValid()) {
             return null;
         }
 
@@ -92,13 +100,15 @@ class Settings extends Model
 
     public function getHealthReportUrl(string $healthReportUri): ?string
     {
-        $site = $this->getSite();
-
-        if ($site instanceof Site) {
-            return implode("/", [$site->url, $healthReportUri]);
+        try {
+            $site = $this->getSite();
+            if ($site instanceof Site) {
+                return implode("/", [$site->url, $healthReportUri]);
+            }
+            return null;
+        } catch (\Exception $e) {
+            return null;
         }
-
-        return null;
     }
 
     /**
@@ -114,9 +124,43 @@ class Settings extends Model
         return [
             [['apiToken', 'selectedSiteId'], 'trim'],
             [['apiToken', 'selectedSiteId'], 'default', 'value' => ''],
-            ['selectedSiteId', 'required', 'when' => function($model) {
-                return !empty($model->apiToken);
+            ['selectedSiteId', 'required', 'when' => function ($model) {
+                return ! empty($model->apiToken);
             }],
+            [['apiToken'], 'validApiToken'],
+            [['selectedSiteId'], 'validSelectedSiteId'],
         ];
+    }
+
+    public function validApiToken($attribute, $params): void
+    {
+        try {
+            $user = (new OhDearSdk($this[$attribute]))->me();
+            if (! ($user instanceof OhDearUser)) {
+                throw new \Exception('Invalid API response. Please contact support.');
+            }
+        } catch (UnauthorizedException $e) {
+            $this->addError('apiToken', 'API authentication failed.');
+        } catch (\Exception $e) {
+            $this->addError('apiToken', $e->getMessage());
+        }
+    }
+
+    public function validSelectedSiteId($attribute, $params): void
+    {
+        if (! $this->isValid()) {
+            return;
+        }
+
+        try {
+            $site = (new OhDearSdk($this->apiToken))->site($this[$attribute]);
+            if (! ($site instanceof OhDearSite)) {
+                throw new \Exception('Invalid API response. Please contact support.');
+            }
+        } catch (UnauthorizedException $e) {
+            $this->addError('selectedSiteId', 'API authentication failed.');
+        } catch (\Exception $e) {
+            $this->addError('selectedSiteId', $e->getMessage());
+        }
     }
 }
