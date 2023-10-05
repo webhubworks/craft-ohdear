@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.2.0 - 2023-10-05
+
+### Added
+- Added API validations for API token and  site ID fields in settings page
+### Changed
+- Updated `ohdearapp/ohdear-php-sdk` and `ohdearapp/health-check-results`
+- Improved  secret check in health check results endpoint
+- Improve error handling for the internal API if the APIT token or site ID are invalid
+
+### Fixed
+- Fixed bug where empty Oh Dear browser window objects were leaked into  guest web requests (issue #47, thanks @jorisnoo)
+- Fix Oh Dear deep links in settings
+- Handle unsupported queue drivers for the failed jobs check
+
 ## 4.1.0 - 2023-04-14
 ### Added
 - As per issue #30 added support for granular Control Panel permissions including:
