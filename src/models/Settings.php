@@ -101,7 +101,7 @@ class Settings extends Model
     public function validApiToken($attribute, $params): void
     {
         try {
-            OhDear::$plugin->settingsService->getMe($this[$attribute]);
+            OhDear::$plugin->settingsService->getMe(App::parseEnv($this[$attribute]));
         } catch (UnauthorizedException $e) {
             $this->addError('apiToken', 'API authentication failed.');
         } catch (\Exception $e) {
@@ -116,7 +116,7 @@ class Settings extends Model
         }
 
         try {
-            OhDear::$plugin->settingsService->getSite($this->apiToken, (int) $this[$attribute]);
+            OhDear::$plugin->settingsService->getSite($this->apiToken, (int) App::parseEnv($this[$attribute]));
         } catch (UnauthorizedException $e) {
             $this->addError('selectedSiteId', 'API authentication failed.');
         } catch (\Exception $e) {
