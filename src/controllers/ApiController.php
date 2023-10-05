@@ -46,8 +46,8 @@ class ApiController extends Controller
             return $this->asJson([
                 'sites' => $sites,
             ]);
-        } catch (UnauthorizedException $e) {
-            return $this->handleInvalidApiTokenError();
+        } catch (\Exception $e) {
+            return $this->handleError($e);
         }
     }
 
@@ -63,7 +63,7 @@ class ApiController extends Controller
             return $this->asJson([
                 'site' => OhDear::$plugin->api->getSite(),
             ]);
-        } catch (UnauthorizedException|NotFoundException $e) {
+        } catch (\Exception $e) {
             return $this->handleError($e);
         }
     }
@@ -85,7 +85,7 @@ class ApiController extends Controller
             return $this->asJson([
                 'uptime' => OhDear::$plugin->api->getUptime($startedAt, $endedAt, $split),
             ]);
-        } catch (UnauthorizedException|NotFoundException $e) {
+        } catch (\Exception $e) {
             return $this->handleError($e);
         }
     }
@@ -109,7 +109,7 @@ class ApiController extends Controller
                     OhDear::$plugin->api->getUptime($startedAt, $endedAt, $split)
                 ),
             ]);
-        } catch (UnauthorizedException|NotFoundException $e) {
+        } catch (\Exception $e) {
             return $this->handleError($e);
         }
     }
@@ -130,7 +130,7 @@ class ApiController extends Controller
             return $this->asJson([
                 'downtime' => OhDear::$plugin->api->getDowntime($startedAt, $endedAt),
             ]);
-        } catch (UnauthorizedException|NotFoundException $e) {
+        } catch (\Exception $e) {
             return $this->handleError($e);
         }
     }
@@ -147,7 +147,7 @@ class ApiController extends Controller
             return $this->asJson([
                 'brokenLinks' => OhDear::$plugin->api->getBrokenLinks(),
             ]);
-        } catch (UnauthorizedException|NotFoundException $e) {
+        } catch (\Exception $e) {
             return $this->handleError($e);
         }
     }
@@ -164,7 +164,7 @@ class ApiController extends Controller
             return $this->asJson([
                 'mixedContentItems' => OhDear::$plugin->api->getMixedContent(),
             ]);
-        } catch (UnauthorizedException|NotFoundException $e) {
+        } catch (\Exception $e) {
             return $this->handleError($e);
         }
     }
@@ -181,7 +181,7 @@ class ApiController extends Controller
             return $this->asJson([
                 'certificateHealth' => OhDear::$plugin->api->getCertificateHealth(),
             ]);
-        } catch (UnauthorizedException|NotFoundException $e) {
+        } catch (\Exception $e) {
             return $this->handleError($e);
         }
     }
@@ -198,7 +198,7 @@ class ApiController extends Controller
             return $this->asJson([
                 'applicationHealthChecks' => OhDear::$plugin->api->getApplicationHealthChecks(),
             ]);
-        } catch (UnauthorizedException|NotFoundException $e) {
+        } catch (\Exception $e) {
             return $this->handleError($e);
         }
     }
@@ -219,7 +219,7 @@ class ApiController extends Controller
             return $this->asJson([
                 'applicationHealthCheckResults' => OhDear::$plugin->api->getApplicationHealthCheckResults($checkId),
             ]);
-        } catch (UnauthorizedException|NotFoundException $e) {
+        } catch (\Exception $e) {
             return $this->handleError($e);
         }
     }
@@ -236,7 +236,7 @@ class ApiController extends Controller
             return $this->asJson([
                 'cronChecks' => OhDear::$plugin->api->getCronChecks(),
             ]);
-        } catch (UnauthorizedException|NotFoundException $e) {
+        } catch (\Exception $e) {
             return $this->handleError($e);
         }
     }
@@ -253,7 +253,7 @@ class ApiController extends Controller
             return $this->asJson([
                 'currentPerformance' => OhDear::$plugin->api->getCurrentPerformance(),
             ]);
-        } catch (UnauthorizedException|NotFoundException $e) {
+        } catch (\Exception $e) {
             return $this->handleError($e);
         }
     }
@@ -275,7 +275,7 @@ class ApiController extends Controller
             return $this->asJson([
                 'performance' => OhDear::$plugin->api->getPerformance($start, $end, $groupBy),
             ]);
-        } catch (UnauthorizedException|NotFoundException $e) {
+        } catch (\Exception $e) {
             return $this->handleError($e);
         }
     }
@@ -296,7 +296,7 @@ class ApiController extends Controller
             return $this->asJson([
                 'check' => OhDear::$plugin->api->disableCheck($checkId),
             ]);
-        } catch (UnauthorizedException|NotFoundException $e) {
+        } catch (\Exception $e) {
             return $this->handleError($e);
         }
     }
@@ -317,7 +317,7 @@ class ApiController extends Controller
             return $this->asJson([
                 'check' => OhDear::$plugin->api->enableCheck($checkId),
             ]);
-        } catch (UnauthorizedException|NotFoundException $e) {
+        } catch (\Exception $e) {
             return $this->handleError($e);
         }
     }
@@ -338,7 +338,7 @@ class ApiController extends Controller
             return $this->asJson([
                 'check' => OhDear::$plugin->api->requestRun($checkId),
             ]);
-        } catch (UnauthorizedException|NotFoundException $e) {
+        } catch (\Exception $e) {
             return $this->handleError($e);
         }
     }
@@ -348,6 +348,7 @@ class ApiController extends Controller
         return match (get_class($e)) {
             NotFoundException::class => $this->handleInvalidSiteIdError(),
             UnauthorizedException::class => $this->handleInvalidApiTokenError(),
+            default => $this->handleGenericError($e),
         };
 
     }
@@ -365,6 +366,23 @@ class ApiController extends Controller
         $this->response->setStatusCode(404);
         return $this->asJson([
             'error' => 'The Oh Dear site could not be found. Please check your site ID.',
+        ]);
+    }
+
+    private function handleGenericError(\Exception $e): Response
+    {
+        $this->response->setStatusCode(500);
+
+        $json = json_decode($e->getMessage());
+
+        if (is_object($json) && isset($json->message)) {
+            return $this->asJson([
+                'error' => $json->message,
+            ]);
+        }
+
+        return $this->asJson([
+            'error' => $e->getMessage(),
         ]);
     }
 }
