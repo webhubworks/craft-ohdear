@@ -24,8 +24,8 @@
     "require": {
     	"php": "^8.0",
         "craftcms/cms": "^4.0.0",
-        "ohdearapp/ohdear-php-sdk": "^3.4.0",
-        "ohdearapp/health-check-results": "^1.0.0",
+        "ohdearapp/ohdear-php-sdk": "^3.4.4",
+        "ohdearapp/health-check-results": "^1.0.1",
         "nesbot/carbon": "^2.35.0",
         "spatie/url": "^2.0",
         "spatie/regex": "^3.0.0",

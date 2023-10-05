@@ -12,6 +12,7 @@ namespace webhubworks\ohdear\controllers;
 
 use Craft;
 use craft\web\Controller;
+use OhDear\PhpSdk\Exceptions\UnauthorizedException;
 use webhubworks\ohdear\OhDear;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
@@ -58,9 +59,15 @@ class ApiController extends Controller
         $this->requireAcceptsJson();
         $this->requireLogin();
 
-        return $this->asJson([
-            'site' => OhDear::$plugin->api->getSite(),
-        ]);
+        try {
+            return $this->asJson([
+                'site' => OhDear::$plugin->api->getSite(),
+            ]);
+        } catch (UnauthorizedException $e) {
+            return $this->asJson([
+                'error' => $e->getMessage(),
+            ]);
+        }
     }
 
     /**
