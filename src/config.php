@@ -28,6 +28,7 @@ return [
 //    'apiToken' => null,
 //    'siteId' => null,
 //    'healthCheckSecret' => null,
+//    'showNavBadges' => false,
 //    'healthChecks' => [
 //        Check::availableUpdates()->warnWhenTotalAvailableUpdatesIsAtLeast(3),
 //    ],

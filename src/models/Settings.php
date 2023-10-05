@@ -34,6 +34,8 @@ class Settings extends Model
 
     public string $selectedSiteId = '';
 
+    public bool $showNavBadges = false;
+
     public ?string $healthCheckSecret = null;
 
     public array $healthChecks = [];
@@ -85,6 +87,7 @@ class Settings extends Model
     public function rules(): array
     {
         return [
+            [['showNavBadges'], 'boolean'],
             [['apiToken', 'selectedSiteId'], 'trim'],
             [['apiToken', 'selectedSiteId'], 'default', 'value' => ''],
             ['selectedSiteId', 'required', 'when' => function ($model) {

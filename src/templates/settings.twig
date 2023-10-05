@@ -17,7 +17,7 @@
 
 {% import "_includes/forms" as forms %}
 
-<h2>{{ 'General'|t('ohdear') }}</h2>
+<h2>{{ 'API Connection'|t('ohdear') }}</h2>
 
 {{ forms.autosuggestField({
     label: "Oh Dear API Token"|t('ohdear'),
@@ -69,3 +69,18 @@
 {% else %}
     <p>{{ 'Please provide a valid API token and site ID.'|t('ohdear') }}</p>
 {% endif %}
+
+<hr/>
+
+<h2>{{ 'Other'|t('ohdear') }}</h2>
+
+<p>{{ 'Show counter badges on the navigation items for broken links and mixed content items.'|t('ohdear') }}</p>
+
+{{ forms.checkbox({
+    label: "Show navigation item badges"|t('ohdear'),
+    id: 'show-nav-badges',
+    name: 'showNavBadges',
+    info: 'Badge counts are cached for 60 seconds.'|t('ohdear'),
+    checked: settings['showNavBadges'],
+    errors: settings.getErrors('showNavBadges'),
+}) }}

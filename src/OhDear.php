@@ -28,6 +28,7 @@ use craft\web\View;
 use Spatie\Url\Url;
 use webhubworks\ohdear\assetbundles\ohdear\OhDearAsset;
 use webhubworks\ohdear\models\Settings;
+use webhubworks\ohdear\services\BadgeCountService;
 use webhubworks\ohdear\services\HealthCheckService;
 use webhubworks\ohdear\services\OhDearService;
 use webhubworks\ohdear\services\SettingsService;
@@ -44,9 +45,10 @@ use yii\web\View as ViewAlias;
  * @property HealthCheckService $health
  * @property SettingsService $settingsService
  * @property OhDearService $api
+ * @property BadgeCountService $badgeCount
  * @property mixed $cpNavItem
- * @property  Settings $settings
- * @method    Settings getSettings()
+ * @property Settings $settings
+ * @method Settings getSettings()
  */
 class OhDear extends Plugin
 {
@@ -85,6 +87,7 @@ class OhDear extends Plugin
             'settingsService' => SettingsService::class,
             'api' => OhDearService::class,
             'health' => HealthCheckService::class,
+            'badgeCount' => BadgeCountService::class,
         ]);
 
         $this->registerPermissions();
@@ -224,6 +227,10 @@ class OhDear extends Plugin
     {
         $cpNavItem = parent::getCpNavItem();
 
+        if ($this->settings->showNavBadges) {
+            $cpNavItem['badgeCount'] = $this->badgeCount->getTotalCount();
+        }
+
         /** @var User|null $currentUser */
         $currentUser = Craft::$app->getUser()->getIdentity();
 
@@ -262,6 +269,9 @@ class OhDear extends Plugin
                 'url' => 'ohdear/broken-links',
                 'label' => Craft::t('ohdear', 'Broken Links'),
             ];
+            if ($this->settings->showNavBadges) {
+                $cpNavItem['subnav']['broken-links']['badgeCount'] = $this->badgeCount->getBrokenLinksCount();
+            }
         }
 
         if ($currentUser->can('ohdear:view-mixed-content')) {
@@ -269,6 +279,9 @@ class OhDear extends Plugin
                 'url' => 'ohdear/mixed-content',
                 'label' => Craft::t('ohdear', 'Mixed Content'),
             ];
+            if ($this->settings->showNavBadges) {
+                $cpNavItem['subnav']['mixed-content']['badgeCount'] = $this->badgeCount->getMixedContentCount();
+            }
         }
 
         if ($currentUser->can('ohdear:view-certificate-health')) {
