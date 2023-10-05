@@ -21,10 +21,13 @@
  * @since     1.0.0
  */
 return [
+    'API Connection' => 'API-Verbindung',
+    'Other' => 'Sonstiges',
     'Oh Dear plugin loaded' => 'Oh Dear plugin loaded',
     'Manage plugin settings' => 'Plugin-Einstellungen verwalten',
     'Overview' => 'Überblick',
     'Disabled' => 'Deaktiviert',
+    'Badge counts are cached for 60 seconds.' => 'Badges werden für 60 Sekunden gecached.',
     'Show navigation item badges' => 'Badges in der Navigation anzeigen',
     'Show counter badges on the navigation items for broken links and mixed content items.' => 'Zeige Counter-Badges für tote Links und Mixed Content in der Navigation.',
     'The site has never been down. Nice work!' => 'Die Seite war noch nie offline. Gute Arbeit!',
@@ -38,7 +41,7 @@ return [
     'Certificate Health' => 'Zertifikat-Health',
     'Certificate health' => 'Zertifikat-Health',
     'Certificate transparency' => 'Zertifikat-Transparenz',
-    'Please enter your Oh Dear API token. You can create a token on the {link} page.' => 'Bitte geben Sie Ihren Oh Dear API Token ein. Sie können auf {link} Seite neue Token erstellen.',
+    'Please enter your Oh Dear API token. You can create a token on the {link} page.' => 'Bitte geben Sie Ihren Oh Dear API Token ein. Sie können auf der {link} Seite neue Token erstellen.',
     'Please enter the site ID that is associated to this Craft site. You can find the site ID on the settings page of one of your {link}.' => 'Bitte geben Sie die Site-ID ein, die zu dieser Craft-Seite gehört. Sie können die Site-ID in den Einstellungen von einer Ihrer {link} finden.',
     'Oh Dear Overview' => 'Oh Dear Überblick',
     'Oh Dear Broken Links' => 'Oh Dear Tote Links',

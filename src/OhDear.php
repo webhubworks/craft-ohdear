@@ -270,7 +270,7 @@ class OhDear extends Plugin
                 'label' => Craft::t('ohdear', 'Broken Links'),
             ];
             if ($this->settings->showNavBadges) {
-                $cpNavItem['badgeCount'] = $this->badgeCount->getBrokenLinksCount();
+                $cpNavItem['subnav']['broken-links']['badgeCount'] = $this->badgeCount->getBrokenLinksCount();
             }
         }
 
@@ -280,7 +280,7 @@ class OhDear extends Plugin
                 'label' => Craft::t('ohdear', 'Mixed Content'),
             ];
             if ($this->settings->showNavBadges) {
-                $cpNavItem['badgeCount'] = $this->badgeCount->getMixedContentCount();
+                $cpNavItem['subnav']['mixed-content']['badgeCount'] = $this->badgeCount->getMixedContentCount();
             }
         }
 

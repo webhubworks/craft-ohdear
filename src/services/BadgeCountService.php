@@ -17,7 +17,7 @@ class BadgeCountService extends Component
             } catch (\Exception $e) {
                 return null;
             }
-        }, 30);
+        }, 60);
     }
 
     public function getBrokenLinksCount(): ?int
@@ -29,7 +29,7 @@ class BadgeCountService extends Component
             } catch (\Exception $e) {
                 return null;
             }
-        }, 30);
+        }, 60);
     }
 
     public function getTotalCount(): ?int
