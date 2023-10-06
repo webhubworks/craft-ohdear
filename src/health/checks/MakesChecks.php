@@ -33,4 +33,9 @@ trait MakesChecks
     {
         return UsedDiskSpaceCheck::new();
     }
+
+    public static function queueHealth(): QueueCheck
+    {
+        return QueueCheck::new();
+    }
 }
