@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.3.0 - 2023-10-07
+
+### Added
+- New health checks: Queue Health, Redis Connection (See [docs for Application Health Checks](https://github.com/webhubworks/craft-ohdear/wiki/Application-health-checks))
+-  Added delete action to the maintenance  console commands
+### Changed
+- Improve error handling in console commands
+
+### Fixed
+- Fixed bug  in Server Requirements Check where the `$warnForOptionalRequirements` setting was not respected
+-  Fixed bug in  maintenance console command where the status of a maintenance period was not calculated properly due to timezone differences
+
 ## 4.2.0 - 2023-10-05
 
 ### Added
