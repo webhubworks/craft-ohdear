@@ -37,7 +37,7 @@ class ServerRequirementsCheck extends Check
                 ->notificationMessage('Some mandatory requirements are not met.');
         }
 
-        if ($this->summary['warnings'] > 0) {
+        if ($this->summary['warnings'] > 0 && $this->warnForOptionalRequirements) {
             return $result->status(CheckResult::STATUS_WARNING)
                 ->notificationMessage('Some optional requirements are not met.');
         }
@@ -46,7 +46,7 @@ class ServerRequirementsCheck extends Check
             ->notificationMessage('The server meets all requirements.');
     }
 
-    private function checkRequirements()
+    private function checkRequirements(): void
     {
         $reqCheck = new \RequirementsChecker();
         $dbConfig = \Craft::$app->getConfig()->getDb();
