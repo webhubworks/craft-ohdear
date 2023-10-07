@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Added
 - New health checks: Queue Health, Redis Connection (See [docs for Application Health Checks](https://github.com/webhubworks/craft-ohdear/wiki/Application-health-checks))
 -  Added delete action to the maintenance  console commands
+- Added section about the latest queue heartbeat to the App Health utility page
 ### Changed
 - Improve error handling in console commands
 
