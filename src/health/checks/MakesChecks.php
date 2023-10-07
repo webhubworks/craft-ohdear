@@ -38,4 +38,9 @@ trait MakesChecks
     {
         return QueueCheck::new();
     }
+
+    public static function redis(): RedisCheck
+    {
+        return RedisCheck::new();
+    }
 }

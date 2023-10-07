@@ -14,7 +14,7 @@ class HealthCheckController extends Controller
      * @throws \Throwable
      * @throws ForbiddenHttpException
      */
-    public function actionResults()
+    public function actionResults(): string
     {
         $this->ensureSecretIsValid();
 
