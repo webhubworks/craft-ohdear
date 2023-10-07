@@ -6,6 +6,7 @@ use craft\helpers\Queue;
 use webhubworks\ohdear\health\jobs\QueueHealthJob;
 use yii\console\Controller;
 use yii\console\ExitCode;
+use yii\helpers\BaseConsole;
 
 class QueueHealthController extends Controller
 {
@@ -15,6 +16,8 @@ class QueueHealthController extends Controller
     public function actionRun(): int
     {
         Queue::push(new QueueHealthJob());
+
+        $this->stdout('Queue health check job dispatched.' . PHP_EOL, BaseConsole::FG_GREEN);
 
         return ExitCode::OK;
     }
