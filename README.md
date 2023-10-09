@@ -45,15 +45,8 @@ Go to the settings page and paste your Oh Dear API key. (You can create a token 
 Currently there is no multi-site support. You can only connect to a single Oh Dear site from one Craft installation. Multi-site support is on our Roadmap. Let us know if you desperately need it.
 
 ## Oh Dear Roadmap
-
-### In progress
-- DNS monitoring
-- Scheduled tasks monitoring
-
-### Planning
-- Multi-site support
-- Optimizing the element edit workflow for broken links and mixed content
-- Manage status page updates directly from the Control Panel
+- Application Health Checks for site security
+- More Checks like Lighthouse etc.
 
 ## Questions and answers
 
