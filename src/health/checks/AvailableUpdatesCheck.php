@@ -32,14 +32,14 @@ class AvailableUpdatesCheck extends Check
             ],
         ));
 
-        if ($totalUpdates >= $this->warningThreshold) {
-            return $result->status(CheckResult::STATUS_WARNING)
-                ->notificationMessage($totalUpdates === 1 ? "There is a Craft or plugin update available!" : "There are {$totalUpdates} Craft or plugin updates available!");
-        }
-
         if ($hasCritical) {
             return $result->status(CheckResult::STATUS_FAILED)
                 ->notificationMessage('There are one or more critical Craft or plugin updates available!');
+        }
+        
+        if ($totalUpdates >= $this->warningThreshold) {
+            return $result->status(CheckResult::STATUS_WARNING)
+                ->notificationMessage($totalUpdates === 1 ? "There is a Craft or plugin update available!" : "There are {$totalUpdates} Craft or plugin updates available!");
         }
 
         return $result->status(CheckResult::STATUS_OK)
