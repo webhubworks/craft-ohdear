@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.3.1 - 2023-11-08
+
+### Changed
+- Prioritise critical available updates over total update count when determining the failed or warning state in the Available Updates Health Check
+
 ## 4.3.0 - 2023-10-07
 
 ### Added
