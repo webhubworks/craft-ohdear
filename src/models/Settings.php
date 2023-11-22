@@ -76,7 +76,10 @@ class Settings extends Model
         try {
             $site = OhDear::$plugin->api->getSite();
             if ($site instanceof Site) {
-                return implode("/", [$site->url, $healthReportUri]);
+                return implode('/', [
+                    rtrim($site->url, '/'),
+                    ltrim($healthReportUri, '/'),
+                ]);
             }
             return null;
         } catch (\Exception $e) {
