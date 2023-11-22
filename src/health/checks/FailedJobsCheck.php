@@ -33,7 +33,7 @@ class FailedJobsCheck extends Check
         $failedJobCount = \Craft::$app->getQueue()->getTotalFailed();
 
         $result = (new CheckResult(
-            name: 'Queue',
+            name: 'FailedJobs',
             label: 'Failed jobs',
             shortSummary: $failedJobCount,
             meta: [
