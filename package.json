@@ -8,7 +8,7 @@
   "license": "ISC",
   "dependencies": {
     "autoprefixer": "^10.4.2",
-    "axios": "^0.27.2",
+    "axios": "^0.28.0",
     "chart.js": "^3.7.1",
     "dayjs": "^1.8.16",
     "humanize-duration": "^3.22.0",
