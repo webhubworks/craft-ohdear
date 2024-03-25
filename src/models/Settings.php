@@ -119,7 +119,10 @@ class Settings extends Model
         }
 
         try {
-            OhDear::$plugin->settingsService->getSite($this->apiToken, (int) App::parseEnv($this[$attribute]));
+            OhDear::$plugin->settingsService->getSite(
+                App::parseEnv($this->apiToken), 
+                (int) App::parseEnv($this[$attribute])
+            );
         } catch (UnauthorizedException $e) {
             $this->addError('selectedSiteId', 'API authentication failed.');
         } catch (\Exception $e) {
