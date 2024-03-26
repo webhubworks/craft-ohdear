@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.3.4 - 2024-03-26
+
+### Fixed
+Bug where calling the health check endpoint unauthenticated failed due to not resolving an ENV variable.
+
 ## 4.3.3 - 2024-03-25
 
 ### Fixed

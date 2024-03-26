@@ -3,6 +3,7 @@
 namespace webhubworks\ohdear\controllers;
 
 use craft\web\Controller;
+use craft\helpers\App;
 use webhubworks\ohdear\OhDear;
 use yii\web\ForbiddenHttpException;
 
@@ -42,7 +43,7 @@ class HealthCheckController extends Controller
             throw new ForbiddenHttpException('Invalid secret');
         }
 
-        if ($secretHeader !== OhDear::$plugin->settings->healthCheckSecret) {
+        if ($secretHeader !== App::parseEnv(OhDear::$plugin->settings->healthCheckSecret)) {
             throw new ForbiddenHttpException('Invalid secret');
         }
     }
