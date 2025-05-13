@@ -15,4 +15,9 @@ class QueueHealthJob extends BaseJob
             DateTimeHelper::currentUTCDateTime()->format('U'),
         );
     }
+
+    protected function defaultDescription(): ?string
+    {
+        return 'Oh Dear Queue Health Check';
+    }
 }
