@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.2.3 - 2025-06-02
+
+### Fixed
+- Prevent unnecessary API calls against the Oh Dear API.
+
 ## 5.2.2 - 2025-05-13
 
 ### Added
