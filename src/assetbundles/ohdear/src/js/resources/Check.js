@@ -31,7 +31,6 @@ export default class Check {
     }
 
     static fromJson(json) {
-        console.log('Check.js',json)
         return new this(
             json.enabled,
             json.id,

@@ -22,7 +22,6 @@ export default class BrokenLink {
     }
 
     static fromJson(json) {
-        console.log('BrokenLink.js',json)
         return new this(
             json.crawledUrl,
             json.foundOnUrl,

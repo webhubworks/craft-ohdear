@@ -17,7 +17,6 @@ export default class Element {
     }
 
     static fromJson(json) {
-        console.log('Check.js',json)
         return new this(
             json.cpEditUrl,
             json.dateUpdated,
