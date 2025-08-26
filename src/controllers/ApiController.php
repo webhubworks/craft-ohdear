@@ -302,7 +302,11 @@ class ApiController extends Controller
 
         try {
             return $this->asJson([
-                'performance' => OhDear::$plugin->api->getPerformance($start, $end, $groupBy),
+                'performance' => OhDear::$plugin->api->getPerformance(
+                    Carbon::parse($start),
+                    Carbon::parse($end),
+                    UptimeMetricsSplit::tryFrom($groupBy ?? "")
+                ),
             ]);
         } catch (\Exception $e) {
             return $this->handleError($e);
