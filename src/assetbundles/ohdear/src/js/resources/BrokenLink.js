@@ -22,7 +22,13 @@ export default class BrokenLink {
     }
 
     static fromJson(json) {
-        return new this(json.crawledUrl, json.foundOnUrl, json.statusCode, json.element);
+        console.log('BrokenLink.js',json)
+        return new this(
+            json.crawledUrl,
+            json.foundOnUrl,
+            json.statusCode,
+            json.element
+        );
     }
 
     /**

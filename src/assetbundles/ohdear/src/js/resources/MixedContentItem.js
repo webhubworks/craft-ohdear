@@ -27,7 +27,13 @@ export default class MixedContentItem {
     }
 
     static fromJson(json) {
-        return new this(json.mixedContentUrl, json.foundOnUrl, json.elementName, json.element);
+        console.log('MixedContentItem.js',json)
+        return new this(
+            json.mixedContentUrl,
+            json.foundOnUrl,
+            json.elementName,
+            json.element
+        );
     }
 
     /**

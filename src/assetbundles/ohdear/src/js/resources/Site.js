@@ -30,6 +30,7 @@ export default class Site {
     }
 
     static fromJson(json) {
+        console.log('Site.js',json)
         return new this(
             json.checks,
             json.createdAt,
@@ -42,6 +43,6 @@ export default class Site {
             json.updatedAt,
             json.url,
             json.usesHttps,
-        )
+        );
     }
 }

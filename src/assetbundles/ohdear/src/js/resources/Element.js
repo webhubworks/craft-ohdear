@@ -17,6 +17,13 @@ export default class Element {
     }
 
     static fromJson(json) {
-        return new this(json.cpEditUrl, json.dateUpdated, json.id, json.status, json.title);
+        console.log('Check.js',json)
+        return new this(
+            json.cpEditUrl,
+            json.dateUpdated,
+            json.id,
+            json.status,
+            json.title
+        );
     }
 }
