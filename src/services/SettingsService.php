@@ -12,8 +12,8 @@ namespace webhubworks\ohdear\services;
 
 use craft\base\Component;
 use OhDear\PhpSdk\OhDear as OhDearSdk;
-use OhDear\PhpSdk\Resources\Site;
-use OhDear\PhpSdk\Resources\User;
+use OhDear\PhpSdk\Dto\Monitor;
+use OhDear\PhpSdk\Dto\User;
 
 /**
  * @author    webhub GmbH
@@ -22,16 +22,19 @@ use OhDear\PhpSdk\Resources\User;
  */
 class SettingsService extends Component
 {
-    public function getSite(string $apiToken, int $siteId): Site
+    public function getMonitor(string $apiToken, int $monitorId): Monitor
     {
-        return (new OhDearSdk($apiToken))->site($siteId);
+        return (new OhDearSdk($apiToken))->monitor($monitorId);
     }
-
-    public function getSites(string $apiToken): array
+    
+    /**
+     * @return iterable|Monitor[]
+     */
+    public function getMonitors(string $apiToken): array
     {
-        return (new OhDearSdk($apiToken))->sites();
+        return (new OhDearSdk($apiToken))->monitors();
     }
-
+    
     public function getMe(string $apiToken): User
     {
         return (new OhDearSdk($apiToken))->me();

@@ -118,7 +118,7 @@ class Settings extends Model
     public function validSelectedSiteId($attribute, $params): void
     {
         try {
-            OhDear::$plugin->settingsService->getSite(
+            OhDear::$plugin->settingsService->getMonitor(
                 $this->apiToken,
                 (int)$this->{$attribute}
             );
