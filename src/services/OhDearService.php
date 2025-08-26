@@ -234,9 +234,11 @@ class OhDearService extends Component
         return (int)$avgTotalTime_ms;
     }
 
-    public function getPerformance(string $start, string $end): array
+    public function getPerformance(string $start, string $end, ?UptimeMetricsSplit $splitBy = null): array
     {
-        return $this->ohDearClient->httpUptimeMetrics($this->monitorId, $start, $end, UptimeMetricsSplit::Minute);
+        return $splitBy ?
+            $this->ohDearClient->httpUptimeMetrics($this->monitorId, $start, $end, $splitBy) :
+            $this->ohDearClient->httpUptimeMetrics($this->monitorId, $start, $end);
     }
 
     public function disableCheck(int $checkId): Check
