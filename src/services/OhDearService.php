@@ -19,14 +19,18 @@ use craft\errors\SiteNotFoundException;
 use craft\helpers\Search;
 use DateTimeInterface;
 use Exception;
+use OhDear\PhpSdk\Dto\ApplicationHealthCheck;
+use OhDear\PhpSdk\Dto\ApplicationHealthCheckHistoryItem;
+use OhDear\PhpSdk\Dto\BrokenLink;
+use OhDear\PhpSdk\Dto\CertificateHealth;
+use OhDear\PhpSdk\Dto\Check;
+use OhDear\PhpSdk\Dto\LighthouseReport;
+use OhDear\PhpSdk\Dto\MaintenancePeriod;
+use OhDear\PhpSdk\Dto\MixedContent;
+use OhDear\PhpSdk\Dto\Monitor;
+use OhDear\PhpSdk\Dto\UptimeMetric\HttpUptimeMetric;
+use OhDear\PhpSdk\Enums\UptimeMetricsSplit;
 use OhDear\PhpSdk\OhDear as OhDearSdk;
-use OhDear\PhpSdk\Resources\BrokenLink;
-use OhDear\PhpSdk\Resources\CertificateHealth;
-use OhDear\PhpSdk\Resources\Check;
-use OhDear\PhpSdk\Resources\MaintenancePeriod;
-use OhDear\PhpSdk\Resources\MixedContentItem;
-use OhDear\PhpSdk\Resources\Site;
-use OhDear\PhpSdk\Resources\Uptime;
 use Spatie\Url\Url;
 use webhubworks\ohdear\OhDear;
 
@@ -37,20 +41,19 @@ use webhubworks\ohdear\OhDear;
  *
  * @property-read array $brokenLinks
  * @property-read CertificateHealth $certificateHealth
- * @property-read Site $site
  * @property-read array $mixedContent
  */
 class OhDearService extends Component
 {
     private OhDearSdk $ohDearClient;
-    private int $siteId;
+    private int $monitorId;
     private string $apiToken;
 
     public function __construct($config = [])
     {
         parent::__construct($config);
 
-        $this->siteId = intval(OhDear::$plugin->getSettings()->getSelectedSiteId());
+        $this->monitorId = intval(OhDear::$plugin->getSettings()->getSelectedSiteId());
         $this->apiToken = OhDear::$plugin->getSettings()->getApiToken();
 
         $this->ohDearClient = new OhDearSdk($this->apiToken);
@@ -58,61 +61,82 @@ class OhDearService extends Component
 
     public function createMaintenancePeriod(string $startsAt, string $endsAt): MaintenancePeriod
     {
-        return $this->ohDearClient->createSiteMaintenance($this->siteId, $startsAt, $endsAt);
+        return $this->ohDearClient->createMaintenancePeriod([
+            'monitor_id' => $this->monitorId,
+            'starts_at' => $startsAt,
+            'ends_at' => $endsAt,
+        ]);
     }
 
     public function deleteMaintenancePeriod(int $maintenancePeriodId): void
     {
-        $this->ohDearClient->deleteSiteMaintenance($maintenancePeriodId);
+        $this->ohDearClient->deleteMaintenancePeriod($maintenancePeriodId);
     }
 
     public function startMaintenancePeriod(int $stopMaintenanceAfterSeconds = 60 * 60): MaintenancePeriod
     {
-        return $this->ohDearClient->startSiteMaintenance($this->siteId, $stopMaintenanceAfterSeconds);
+        return $this->ohDearClient->startMaintenancePeriod($this->monitorId, $stopMaintenanceAfterSeconds);
     }
 
     public function stopMaintenancePeriod(): void
     {
-        $this->ohDearClient->stopSiteMaintenance($this->siteId);
+        $this->ohDearClient->stopMaintenancePeriod($this->monitorId);
     }
 
+    /**
+     * @return MaintenancePeriod[]
+     */
     public function maintenancePeriods(): array
     {
-        return $this->ohDearClient->maintenancePeriods($this->siteId);
+        return (array)$this->ohDearClient->maintenancePeriods($this->monitorId);
     }
 
-    public function getSites(?string $apiToken = null): array
+    public function getMonitors(): array
     {
-        return $this->ohDearClient->sites();
+        return $this->ohDearClient->monitors();
     }
 
-    public function getSite(): Site
+    public function getMonitor(): Monitor
     {
-        return $this->ohDearClient->site($this->siteId);
+        return $this->ohDearClient->monitor($this->monitorId);
     }
 
-    public function getUptime(string $startedAt, string $endedAt, string $split = 'month'): array
+    /**
+     * @param Carbon $startedAt
+     * @param Carbon $endedAt
+     * @param UptimeMetricsSplit|null $splitBy
+     * @return HttpUptimeMetric[]
+     */
+    public function getUptime(Carbon $startedAt, Carbon $endedAt, ?UptimeMetricsSplit $splitBy = null): array
     {
-        return $this->ohDearClient->uptime($this->siteId, $startedAt, $endedAt, $split);
+        return $splitBy ?
+            $this->ohDearClient->httpUptimeMetrics($this->monitorId, $startedAt->toDateTimeString(), $endedAt->toDateTimeString(), $splitBy) :
+            $this->ohDearClient->httpUptimeMetrics($this->monitorId, $startedAt->toDateTimeString(), $endedAt->toDateTimeString());
     }
 
     public function leftPadUptimeToMonday(array $uptimes): array
     {
-        if (!count($uptimes)) {
+        if (! count($uptimes)) {
             return $uptimes;
         }
 
-        $firstUptimeDate = Carbon::parse($uptimes[0]->datetime);
+        $firstUptimeDate = Carbon::parse($uptimes[0]->date);
 
         $daysToPad = $firstUptimeDate->isoWeekday() - 1;
 
         $pad = [];
 
         for ($i = $daysToPad; $i > 0; $i--) {
-            $pad[] = new Uptime([
-                'datetime' => $firstUptimeDate->copy()->subDays($i)->toDateTimeString(),
-                'uptimePercentage' => 0,
-            ]);
+            $pad[] = new HttpUptimeMetric(
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                [],
+                $firstUptimeDate->copy()->subDays($i)->toDateTimeString(),
+            );
         }
 
         return [
@@ -121,58 +145,75 @@ class OhDearService extends Component
         ];
     }
 
-    public function getDowntime(string $startedAt, string $endedAt): array
+    public function getDowntime(Carbon $startedAt, Carbon $endedAt): array
     {
-        return $this->ohDearClient->downtime($this->siteId, $startedAt, $endedAt);
+        return $this->ohDearClient->downtime($this->monitorId, $startedAt->toDateTimeString(), $endedAt->toDateTimeString());
     }
 
+    /**
+     * @throws SiteNotFoundException
+     */
     public function getBrokenLinks(): array
     {
-        return array_map(function(BrokenLink $brokenLink) {
-            return [
+        $brokenLinks = [];
+
+        /** @var BrokenLink $brokenLink */
+        foreach ($this->ohDearClient->brokenLinks($this->monitorId) as $brokenLink) {
+            $brokenLinks[] = [
                 'crawledUrl' => $brokenLink->crawledUrl,
                 'foundOnUrl' => $brokenLink->foundOnUrl,
                 'statusCode' => $brokenLink->statusCode,
                 'element' => $this->findElementByBrokenLink($brokenLink),
             ];
-        }, $this->ohDearClient->brokenLinks($this->siteId));
+        }
+
+        return $brokenLinks;
     }
 
     public function getMixedContent(): array
     {
-        return array_map(function(MixedContentItem $mixedContentItem) {
+        return array_map(/**
+         * @throws SiteNotFoundException
+         */ function (MixedContent $mixedContentItem) {
             return [
                 'mixedContentUrl' => $mixedContentItem->mixedContentUrl,
                 'foundOnUrl' => $mixedContentItem->foundOnUrl,
                 'elementName' => $mixedContentItem->elementName,
                 'element' => $this->findElementByMixedContentItem($mixedContentItem),
             ];
-        }, $this->ohDearClient->mixedContent($this->siteId));
+        }, $this->ohDearClient->mixedContent($this->monitorId));
     }
 
     public function getCertificateHealth(): CertificateHealth
     {
-        return $this->ohDearClient->certificateHealth($this->siteId);
+        return $this->ohDearClient->certificateHealth($this->monitorId);
     }
 
-    public function getLatestLighthouseReport()
+    public function getLatestLighthouseReport(): LighthouseReport
     {
-        return $this->ohDearClient->latestLighthouseReport($this->siteId);
+        return $this->ohDearClient->latestLighthouseReport($this->monitorId);
     }
 
+    /**
+     * @return ApplicationHealthCheck[]
+     */
     public function getApplicationHealthChecks(): array
     {
-        return $this->ohDearClient->applicationHealthChecks($this->siteId);
+        return $this->ohDearClient->applicationHealthChecks($this->monitorId);
     }
 
+    /**
+     * @param int $applicationHealthCheckId
+     * @return ApplicationHealthCheckHistoryItem[]
+     */
     public function getApplicationHealthCheckResults(int $applicationHealthCheckId): array
     {
-        return $this->ohDearClient->applicationHealthCheckResults($this->siteId, $applicationHealthCheckId);
+        return $this->ohDearClient->applicationHealthCheckHistory($this->monitorId, $applicationHealthCheckId);
     }
 
     public function getCronChecks(): array
     {
-        return $this->ohDearClient->cronChecks($this->siteId);
+        return (array)$this->ohDearClient->cronCheckDefinitions($this->monitorId);
     }
 
     /**
@@ -193,13 +234,9 @@ class OhDearService extends Component
         return (int)$avgTotalTime_ms;
     }
 
-    public function getPerformance(string $start, string $end, ?string $groupBy = null): array
+    public function getPerformance(string $start, string $end): array
     {
-        if (is_null($groupBy)) {
-            return $this->ohDearClient->performanceRecords($this->siteId, $start, $end);
-        }
-
-        return $this->ohDearClient->performanceRecords($this->siteId, $start, $end, $groupBy);
+        return $this->ohDearClient->httpUptimeMetrics($this->monitorId, $start, $end, UptimeMetricsSplit::Minute);
     }
 
     public function disableCheck(int $checkId): Check
@@ -214,7 +251,7 @@ class OhDearService extends Component
 
     public function requestRun(int $checkId): Check
     {
-        return $this->ohDearClient->requestRun($checkId);
+        return $this->ohDearClient->requestCheckRun($checkId);
     }
 
     private function transformElement(?ElementInterface $element): ?array
@@ -234,7 +271,7 @@ class OhDearService extends Component
                 return [
                     'id' => intval($element->id),
                     'title' => $element->title,
-                    'status' => $element->status,
+                    'status' => $element->getStatus(),
                     'cpEditUrl' => $element->cpEditUrl,
                     'dateUpdated' => $element->dateUpdated->format(DateTimeInterface::ATOM),
                 ];
@@ -302,7 +339,7 @@ class OhDearService extends Component
      *
      * @throws SiteNotFoundException
      */
-    private function findElementByMixedContentItem(MixedContentItem $mixedContentItem): ?array
+    private function findElementByMixedContentItem(MixedContent $mixedContentItem): ?array
     {
         $element = $this->findElementBySearchIndex($mixedContentItem->mixedContentUrl);
 

@@ -35,9 +35,9 @@ export default class Check {
             json.enabled,
             json.id,
             json.label,
-            json.latestRunEndedAt,
-            json.latestRunResult,
-            json.type,
+            json.latest_run_ended_at,
+            json.latest_run_result,
+            json.type
         );
     }
 
