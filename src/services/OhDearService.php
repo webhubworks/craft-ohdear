@@ -28,8 +28,10 @@ use OhDear\PhpSdk\Dto\LighthouseReport;
 use OhDear\PhpSdk\Dto\MaintenancePeriod;
 use OhDear\PhpSdk\Dto\MixedContent;
 use OhDear\PhpSdk\Dto\Monitor;
+use OhDear\PhpSdk\Dto\Uptime;
 use OhDear\PhpSdk\Dto\UptimeMetric\HttpUptimeMetric;
 use OhDear\PhpSdk\Enums\UptimeMetricsSplit;
+use OhDear\PhpSdk\Enums\UptimeSplit;
 use OhDear\PhpSdk\OhDear as OhDearSdk;
 use Spatie\Url\Url;
 use webhubworks\ohdear\OhDear;
@@ -104,38 +106,36 @@ class OhDearService extends Component
     /**
      * @param Carbon $startedAt
      * @param Carbon $endedAt
-     * @param UptimeMetricsSplit|null $splitBy
-     * @return HttpUptimeMetric[]
+     * @param UptimeSplit|null $splitBy
+     * @return Uptime[]
      */
-    public function getUptime(Carbon $startedAt, Carbon $endedAt, ?UptimeMetricsSplit $splitBy = null): array
+    public function getUptime(Carbon $startedAt, Carbon $endedAt, ?UptimeSplit $splitBy = null): array
     {
         return $splitBy ?
-            $this->ohDearClient->httpUptimeMetrics($this->monitorId, $startedAt->toDateTimeString(), $endedAt->toDateTimeString(), $splitBy) :
-            $this->ohDearClient->httpUptimeMetrics($this->monitorId, $startedAt->toDateTimeString(), $endedAt->toDateTimeString());
+            $this->ohDearClient->uptime($this->monitorId, $startedAt->toDateTimeString(), $endedAt->toDateTimeString(), $splitBy) :
+            $this->ohDearClient->uptime($this->monitorId, $startedAt->toDateTimeString(), $endedAt->toDateTimeString());
     }
-
+    
+    /**
+     * @param Uptime[] $uptimes
+     * @return Uptime[]
+     */
     public function leftPadUptimeToMonday(array $uptimes): array
     {
         if (! count($uptimes)) {
             return $uptimes;
         }
 
-        $firstUptimeDate = Carbon::parse($uptimes[0]->date);
+        $firstUptimeDate = Carbon::parse($uptimes[0]->datetime);
 
         $daysToPad = $firstUptimeDate->isoWeekday() - 1;
 
         $pad = [];
 
         for ($i = $daysToPad; $i > 0; $i--) {
-            $pad[] = new HttpUptimeMetric(
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                [],
+            $pad[] = new Uptime(
                 $firstUptimeDate->copy()->subDays($i)->toDateTimeString(),
+                0
             );
         }
 
