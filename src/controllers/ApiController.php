@@ -11,6 +11,7 @@ use Craft;
 use craft\helpers\App;
 use craft\web\Controller;
 use OhDear\PhpSdk\Enums\UptimeMetricsSplit;
+use OhDear\PhpSdk\Enums\UptimeSplit;
 use OhDear\PhpSdk\Exceptions\NotFoundException;
 use OhDear\PhpSdk\Exceptions\UnauthorizedException;
 use webhubworks\ohdear\OhDear;
@@ -87,7 +88,7 @@ class ApiController extends Controller
                 'uptime' => OhDear::$plugin->api->getUptime(
                     Carbon::parse($startedAt),
                     Carbon::parse($endedAt),
-                    UptimeMetricsSplit::tryFrom($split ?? "")
+                    UptimeSplit::tryFrom($split ?? "")
                 ),
             ]);
         } catch (\Exception $e) {
@@ -114,7 +115,7 @@ class ApiController extends Controller
                     OhDear::$plugin->api->getUptime(
                         Carbon::parse($startedAt),
                         Carbon::parse($endedAt),
-                        UptimeMetricsSplit::tryFrom($split ?? "")
+                        UptimeSplit::tryFrom($split ?? "")
                     )
                 ),
             ]);
