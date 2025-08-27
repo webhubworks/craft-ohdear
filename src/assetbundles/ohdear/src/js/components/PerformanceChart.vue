@@ -2,27 +2,19 @@
     <div>
 
         <div class="oh-flex oh-justify-end">
-            <div id="timespan-field" class="field first oh-flex oh-items-center">
+            <div id="timespan-field" class="field first oh-flex oh-items-center lg:oh-mr-[1%] 3xl:oh-mr-[0.5%]">
                 <div class="oh-mr-2">
                     <label id="timespan-label" for="timespan" class="oh-font-bold">{{ $t('Range') }}</label>
                 </div>
                 <div class="input ltr">
-                    <div class="flex">
-                        <div>
-                            <div class="select">
-                                <select id="timespan" name="timespan" @change="update($event.target.value)">
-                                    <option value="last-hour">{{ $t('Last hour') }}</option>
-                                    <option value="last-24-hours">{{ $t('Last 24 hours') }}</option>
-                                    <option value="last-week">{{ $t('Last week') }}</option>
-                                    <option value="last-month">{{ $t('Last month') }}</option>
-                                    <option value="last-year">{{ $t('Last year') }}</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="flex-grow">
-                            <input type="text" id="tempSubpath" class="ltr hidden text fullwidth" name="tempSubpath"
-                                   autocomplete="off" placeholder="Pfad/zum/Unterverzeichnis" dir="ltr">
-                        </div>
+                    <div class="select">
+                        <select id="timespan" name="timespan" @change="update($event.target.value)">
+                            <option value="last-hour">{{ $t('Last hour') }}</option>
+                            <option value="last-24-hours">{{ $t('Last 24 hours') }}</option>
+                            <option value="last-week">{{ $t('Last week') }}</option>
+                            <option value="last-month">{{ $t('Last month') }}</option>
+                            <option value="last-year">{{ $t('Last year') }}</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -58,7 +50,7 @@ export default {
     },
     methods: {
         getLabels(data) {
-            return _.map(data, 'createdAt');
+            return _.map(data, 'date');
         },
         getDataColumn(data, columnName) {
             return _.map(data, columnName);

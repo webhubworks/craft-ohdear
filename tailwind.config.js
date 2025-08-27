@@ -8,11 +8,11 @@ module.exports = {
     ],
     prefix: 'oh-',
     theme: {
-        screens: {
-            'xs': '475px',
-            ...defaultTheme.screens,
-        },
         extend: {
+            screens: {
+                'xs': '475px',
+                '3xl': '1920px',
+            },
             padding: {
                 '0.5': '0.125rem',
                 '2.5': '0.625rem',
