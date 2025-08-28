@@ -13,7 +13,7 @@ namespace webhubworks\ohdear\console\controllers;
 use craft\helpers\Console;
 use craft\helpers\DateTimeHelper;
 use Exception;
-use OhDear\PhpSdk\Resources\MaintenancePeriod;
+use OhDear\PhpSdk\Dto\MaintenancePeriod;
 use webhubworks\ohdear\OhDear;
 use yii\console\Controller;
 use yii\console\ExitCode;

@@ -11,7 +11,7 @@
 namespace webhubworks\ohdear\console\controllers;
 
 use craft\helpers\Console;
-use OhDear\PhpSdk\Resources\Check;
+use OhDear\PhpSdk\Dto\Check;
 use webhubworks\ohdear\OhDear;
 use yii\console\Controller;
 use yii\console\ExitCode;
@@ -40,7 +40,7 @@ class CheckController extends Controller
      * @param string $actionID
      * @return array|string[]
      */
-    public function options($actionID)
+    public function options($actionID): array
     {
         return [
             'type',

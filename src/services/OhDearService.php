@@ -20,7 +20,6 @@ use OhDear\PhpSdk\Dto\ApplicationHealthCheckHistoryItem;
 use OhDear\PhpSdk\Dto\BrokenLink;
 use OhDear\PhpSdk\Dto\CertificateHealth;
 use OhDear\PhpSdk\Dto\Check;
-use OhDear\PhpSdk\Dto\LighthouseReport;
 use OhDear\PhpSdk\Dto\MaintenancePeriod;
 use OhDear\PhpSdk\Dto\MixedContent;
 use OhDear\PhpSdk\Dto\Monitor;

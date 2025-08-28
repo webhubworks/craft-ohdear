@@ -14,12 +14,8 @@ use Craft;
 use craft\base\Model;
 use craft\behaviors\EnvAttributeParserBehavior;
 use craft\helpers\App;
-use OhDear\PhpSdk\OhDear as OhDearSdk;
-use OhDear\PhpSdk\Resources\Site;
+use Saloon\Exceptions\Request\Statuses\UnauthorizedException;
 use webhubworks\ohdear\OhDear;
-use OhDear\PhpSdk\Exceptions\UnauthorizedException;
-use OhDear\PhpSdk\Resources\User as OhDearUser;
-use OhDear\PhpSdk\Resources\Site as OhDearSite;
 
 /**
  * @author    webhub GmbH
@@ -76,13 +72,10 @@ class Settings extends Model
     {
         try {
             $site = OhDear::$plugin->api->getMonitor();
-            if ($site instanceof Site) {
-                return implode('/', [
-                    rtrim($site->url, '/'),
-                    ltrim($healthReportUri, '/'),
-                ]);
-            }
-            return null;
+            return implode('/', [
+                rtrim($site->url, '/'),
+                ltrim($healthReportUri, '/'),
+            ]);
         } catch (\Exception $e) {
             return null;
         }
@@ -118,7 +111,7 @@ class Settings extends Model
     public function validSelectedSiteId($attribute, $params): void
     {
         try {
-            OhDear::$plugin->settingsService->getSite(
+            OhDear::$plugin->settingsService->getMonitor(
                 $this->apiToken,
                 (int)$this->{$attribute}
             );
