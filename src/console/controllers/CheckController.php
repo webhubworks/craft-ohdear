@@ -206,7 +206,7 @@ class CheckController extends Controller
             return [];
         }
 
-        return array_filter(OhDear::$plugin->api->getSite()->checks, function ($check) use ($types) {
+        return array_filter(OhDear::$plugin->api->getMonitor()->checks, function ($check) use ($types) {
             return in_array($check->type, $types);
         });
     }

@@ -75,7 +75,7 @@ class Settings extends Model
     public function getHealthReportUrl(string $healthReportUri): ?string
     {
         try {
-            $site = OhDear::$plugin->api->getSite();
+            $site = OhDear::$plugin->api->getMonitor();
             if ($site instanceof Site) {
                 return implode('/', [
                     rtrim($site->url, '/'),

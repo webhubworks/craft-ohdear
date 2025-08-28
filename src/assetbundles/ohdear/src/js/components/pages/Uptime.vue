@@ -57,7 +57,7 @@
                              @mouseover="setTooltipContent(day)"
                              :style="getCellStyle(day)"
                              class="oh-h-8 oh-w-8 oh-m-0.5 oh-rounded-sm oh-flex oh-justify-center oh-items-center cell">
-                            <span class="oh-whitespace-nowrap oh-text-xs oh-font-medium pointer-events-none" style="color: rgba(0,0,0,0.45)">{{day.uptimePercentage}}</span>
+                            <span class="oh-whitespace-nowrap oh-text-2xs oh-font-medium pointer-events-none oh-text-black/50">{{day.uptimePercentage}}</span>
                         </div>
 
                         <div v-for="day in daysToGoThisWeek" class="oh-bg-gray-300 oh-h-8 oh-w-8 oh-m-0.5 oh-rounded-sm"></div>

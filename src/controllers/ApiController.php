@@ -6,9 +6,11 @@
 
 namespace webhubworks\ohdear\controllers;
 
+use Carbon\Carbon;
 use Craft;
 use craft\helpers\App;
 use craft\web\Controller;
+use OhDear\PhpSdk\Enums\UptimeSplit;
 use OhDear\PhpSdk\Exceptions\NotFoundException;
 use OhDear\PhpSdk\Exceptions\UnauthorizedException;
 use webhubworks\ohdear\OhDear;
@@ -35,9 +37,9 @@ class ApiController extends Controller
 
         try {
             if ($apiTokenParam === null) {
-                $sites = OhDear::$plugin->api->getSites();
+                $sites = OhDear::$plugin->api->getMonitors();
             } else {
-                $sites = OhDear::$plugin->settingsService->getSites(
+                $sites = OhDear::$plugin->settingsService->getMonitors(
                     App::parseEnv($apiTokenParam)
                 );
             }
@@ -60,7 +62,7 @@ class ApiController extends Controller
 
         try {
             return $this->asJson([
-                'site' => OhDear::$plugin->api->getSite(),
+                'site' => OhDear::$plugin->api->getMonitor(),
             ]);
         } catch (\Exception $e) {
             return $this->handleError($e);
@@ -82,7 +84,11 @@ class ApiController extends Controller
 
         try {
             return $this->asJson([
-                'uptime' => OhDear::$plugin->api->getUptime($startedAt, $endedAt, $split),
+                'uptime' => OhDear::$plugin->api->getUptime(
+                    Carbon::parse($startedAt),
+                    Carbon::parse($endedAt),
+                    UptimeSplit::tryFrom($split ?? "")
+                ),
             ]);
         } catch (\Exception $e) {
             return $this->handleError($e);
@@ -105,7 +111,11 @@ class ApiController extends Controller
         try {
             return $this->asJson([
                 'uptime' => OhDear::$plugin->api->leftPadUptimeToMonday(
-                    OhDear::$plugin->api->getUptime($startedAt, $endedAt, $split)
+                    OhDear::$plugin->api->getUptime(
+                        Carbon::parse($startedAt),
+                        Carbon::parse($endedAt),
+                        UptimeSplit::tryFrom($split ?? "")
+                    )
                 ),
             ]);
         } catch (\Exception $e) {
@@ -127,7 +137,10 @@ class ApiController extends Controller
 
         try {
             return $this->asJson([
-                'downtime' => OhDear::$plugin->api->getDowntime($startedAt, $endedAt),
+                'downtime' => OhDear::$plugin->api->getDowntime(
+                    Carbon::parse($startedAt),
+                    Carbon::parse($endedAt),
+                ),
             ]);
         } catch (\Exception $e) {
             return $this->handleError($e);
@@ -272,7 +285,11 @@ class ApiController extends Controller
 
         try {
             return $this->asJson([
-                'performance' => OhDear::$plugin->api->getPerformance($start, $end, $groupBy),
+                'performance' => OhDear::$plugin->api->getPerformance(
+                    Carbon::parse($start),
+                    Carbon::parse($end),
+                    UptimeSplit::tryFrom($groupBy ?? "")
+                ),
             ]);
         } catch (\Exception $e) {
             return $this->handleError($e);
