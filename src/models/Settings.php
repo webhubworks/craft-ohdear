@@ -55,15 +55,15 @@ class Settings extends Model
      */
     public function hasApiCredentials(): bool
     {
-        return ! empty($this->apiToken) && ! empty($this->selectedSiteId);
+        return ! empty($this->apiToken) && ! empty($this->selectedSiteId) && ! empty($this->getApiToken()) && ! empty($this->getSelectedSiteId());
     }
 
-    public function getApiToken(): string
+    public function getApiToken(): ?string
     {
         return App::parseEnv($this->apiToken);
     }
 
-    public function getSelectedSiteId(): string
+    public function getSelectedSiteId(): ?string
     {
         return App::parseEnv($this->selectedSiteId);
     }

@@ -49,6 +49,10 @@ class OhDearService extends Component
     public function __construct($config = [])
     {
         parent::__construct($config);
+        
+        if (! OhDear::$plugin->getSettings()->hasApiCredentials()) {
+            throw new Exception('Oh Dear credentials are not set. Please check your settings.');
+        }
 
         $this->monitorId = intval(OhDear::$plugin->getSettings()->getSelectedSiteId());
         $this->apiToken = OhDear::$plugin->getSettings()->getApiToken();

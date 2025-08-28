@@ -158,7 +158,7 @@ class OhDear extends Plugin
 
     private function registerWidgets(): void
     {
-        if (! $this->settings->hasApiCredentials()) {
+        if (! $this->getSettings()->hasApiCredentials()) {
             return;
         }
 
