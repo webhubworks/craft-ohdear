@@ -135,6 +135,7 @@ return [
     'Paste the secret from Oh Dear here.' => 'Fügen Sie das Secret von Oh Dear hier ein.',
     'Your Health Check endpoint is protected by this secret. You can find the secret on Oh Dear\'s {link} page. If you change it, make sure to change it in Oh Dear as well.' => 'Der Health-Check-Endpunkt ist durch dieses Secret gesichert. Sie können das Secret in Oh Dears {link} finden. Falls Sie es ändern, stellen Sie sicher, dass Sie es auch in Oh Dear anpassen.',
     'Please provide a valid API token and site ID.' => 'Bitte geben Sie zuerst einen API-Token und eine Site-ID ein.',
+    'Please provide a valid API token and site ID in the Oh Dear plugin settings.' => 'Bitte geben Sie in den Oh Dear Plugin Einstellungen zuerst einen API-Token und eine Site-ID ein.',
     'API authentication failed.' => 'API-Authentifizierung fehlgeschlagen.',
     'A site with the ID "{id}" was not found.' => 'Eine Seite mit der ID {id} konnte nicht gefunden werden.',
     'Please enter a valid site ID.' => 'Bitte geben Sie eine gültige Site-ID ein.',

@@ -11,8 +11,6 @@ use Craft;
 use craft\helpers\App;
 use craft\web\Controller;
 use OhDear\PhpSdk\Enums\UptimeSplit;
-use Saloon\Exceptions\Request\Statuses\NotFoundException;
-use Saloon\Exceptions\Request\Statuses\UnauthorizedException;
 use webhubworks\ohdear\OhDear;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
