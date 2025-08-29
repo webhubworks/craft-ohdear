@@ -54,6 +54,10 @@ class OhDearService extends Component
     public function __construct($config = [])
     {
         parent::__construct($config);
+        
+        if (! OhDear::$plugin->getSettings()->hasApiCredentials()) {
+            throw new Exception('Please provide a valid API token and site ID in the Oh Dear plugin settings.');
+        }
 
         $this->monitorId = intval(OhDear::$plugin->getSettings()->getSelectedSiteId());
         $this->apiToken = OhDear::$plugin->getSettings()->getApiToken();

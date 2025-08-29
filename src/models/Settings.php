@@ -32,9 +32,9 @@ class Settings extends Model
 
     public string $pluginName = 'Oh Dear';
 
-    public string $apiToken = '';
+    public ?string $apiToken = '';
 
-    public string $selectedSiteId = '';
+    public ?string $selectedSiteId = '';
 
     public bool $showNavBadges = false;
 
@@ -63,12 +63,12 @@ class Settings extends Model
             ! empty($this->getSelectedSiteId());
     }
 
-    public function getApiToken(): string
+    public function getApiToken(): ?string
     {
         return App::parseEnv($this->apiToken);
     }
 
-    public function getSelectedSiteId(): string
+    public function getSelectedSiteId(): ?string
     {
         return App::parseEnv($this->selectedSiteId);
     }
