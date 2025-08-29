@@ -141,4 +141,8 @@ return [
     'bestPracticesScore' => 'Best Practices',
     'seoScore' => 'SEO',
     'API authentication failed.' => 'API-Authentifizierung fehlgeschlagen.',
+    'A site with the ID "{id}" was not found.' => 'Eine Seite mit der ID {id} konnte nicht gefunden werden.',
+    'Please enter a valid site ID.' => 'Bitte geben Sie eine gültige Site-ID ein.',
+    'The Oh Dear API token "{apiToken}" is invalid.' => 'Der Oh Dear API-Token "{apiToken}" ist invalide.',
+    'The Oh Dear site with the ID "{siteId}" could not be found.' => 'Die Oh Dear Seite mit der ID "{siteId}" konnte nicht gefunden werden.',
 ];

@@ -17,7 +17,6 @@ use craft\helpers\App;
 use OhDear\PhpSdk\OhDear as OhDearSdk;
 use OhDear\PhpSdk\Resources\Site;
 use webhubworks\ohdear\OhDear;
-use OhDear\PhpSdk\Exceptions\UnauthorizedException;
 use OhDear\PhpSdk\Resources\User as OhDearUser;
 use OhDear\PhpSdk\Resources\Site as OhDearSite;
 
@@ -54,12 +53,14 @@ class Settings extends Model
     }
 
     /**
-     * Determines if the plugin has an API key and
-     * a selected site ID.
+     * Determines if the plugin has an API key and a selected site ID.
      */
     public function hasApiCredentials(): bool
     {
-        return ! empty($this->apiToken) && ! empty($this->selectedSiteId);
+        return ! empty($this->apiToken) &&
+            ! empty($this->selectedSiteId) &&
+            ! empty($this->getApiToken()) &&
+            ! empty($this->getSelectedSiteId());
     }
 
     public function getApiToken(): string
@@ -98,34 +99,43 @@ class Settings extends Model
             [['apiToken', 'selectedSiteId'], 'default', 'value' => ''],
             ['selectedSiteId', 'required', 'when' => function ($model) {
                 return ! empty($model->apiToken);
-            }],
+            }, 'message' => Craft::t('ohdear', 'Please enter a valid site ID.')],
             [['apiToken'], 'validApiToken'],
             [['selectedSiteId'], 'validSelectedSiteId'],
         ];
     }
 
-    public function validApiToken($attribute, $params): void
+    public function validApiToken($attribute, $params): bool
     {
         try {
             OhDear::$plugin->settingsService->getMe($this->{$attribute});
-        } catch (UnauthorizedException $e) {
-            $this->addError('apiToken', Craft::t('ohdear', 'API authentication failed.'));
+            return true;
+            
         } catch (\Exception $e) {
-            $this->addError('apiToken', $e->getMessage());
+            match ($e->getCode()) {
+                401 => $this->addError('apiToken', Craft::t('ohdear', 'API authentication failed.')),
+                default => $this->addError('apiToken', $e->getMessage()),
+            };
+            return false;
         }
     }
 
-    public function validSelectedSiteId($attribute, $params): void
+    public function validSelectedSiteId($attribute, $params): bool
     {
         try {
             OhDear::$plugin->settingsService->getMonitor(
                 $this->apiToken,
                 (int)$this->{$attribute}
             );
-        } catch (UnauthorizedException $e) {
-            $this->addError('selectedSiteId', Craft::t('ohdear', 'API authentication failed.'));
+            return true;
+            
         } catch (\Exception $e) {
-            $this->addError('selectedSiteId', $e->getMessage());
+            match ($e->getCode()) {
+                404 => $this->addError('selectedSiteId', Craft::t('ohdear', 'A site with the ID "{id}" was not found.', ['id' => $this->{$attribute}])),
+                401 => $this->addError('selectedSiteId', Craft::t('ohdear', 'API authentication failed.')),
+                default => $this->addError('selectedSiteId', $e->getMessage()),
+            };
+            return false;
         }
     }
 }
