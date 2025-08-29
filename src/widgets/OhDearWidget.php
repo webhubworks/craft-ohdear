@@ -57,14 +57,14 @@ class OhDearWidget extends Widget
     public function rules(): array
     {
         $rules = parent::rules();
-        $rules = array_merge(
+        
+        return array_merge(
             $rules,
             [
                 ['period', 'string'],
                 ['period', 'in', 'range' => ['hour', 'day', 'month']],
             ]
         );
-        return $rules;
     }
 
     /**
@@ -95,6 +95,10 @@ class OhDearWidget extends Widget
      */
     public function getBodyHtml(): ?string
     {
+        if (! OhDear::$plugin->getSettings()->hasApiCredentials()) {
+            return null;
+        }
+        
         OhDearAsset::registerLangFile();
 
         return Craft::$app->getView()->renderTemplate(

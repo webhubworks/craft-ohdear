@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.6.1 - 2025-08-29
+
+### Fixed
+- Fixed and improved the handling of errors related to the plugin settings.
+
 ## 4.6.0 - 2025-08-28
 
 ### Added

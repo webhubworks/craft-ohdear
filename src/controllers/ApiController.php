@@ -359,21 +359,22 @@ class ApiController extends Controller
         }
     }
 
-    private function handleError($e): Response
+    private function handleError(\Exception $e): Response
     {
-        return match (get_class($e)) {
-            NotFoundException::class => $this->handleInvalidSiteIdError(),
-            UnauthorizedException::class => $this->handleInvalidApiTokenError(),
+        return match ($e->getCode()) {
+            404 => $this->handleInvalidSiteIdError(),
+            401, 403 => $this->handleInvalidApiTokenError(),
             default => $this->handleGenericError($e),
         };
-
     }
 
     private function handleInvalidApiTokenError(): Response
     {
         $this->response->setStatusCode(403);
         return $this->asJson([
-            'error' => 'The Oh Dear API token is invalid.',
+            'error' => Craft::t('ohdear', 'The Oh Dear API token "{apiToken}" is invalid.', [
+                'apiToken' => OhDear::$plugin->getSettings()->getApiToken(),
+            ]),
         ]);
     }
 
@@ -381,7 +382,9 @@ class ApiController extends Controller
     {
         $this->response->setStatusCode(404);
         return $this->asJson([
-            'error' => 'The Oh Dear site could not be found. Please check your site ID.',
+            'error' => Craft::t('ohdear', 'The Oh Dear site with the ID "{siteId}" could not be found.', [
+                'siteId' => OhDear::$plugin->getSettings()->getSelectedSiteId()
+            ]),
         ]);
     }
 

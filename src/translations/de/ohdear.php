@@ -136,4 +136,8 @@ return [
     'Your Health Check endpoint is protected by this secret. You can find the secret on Oh Dear\'s {link} page. If you change it, make sure to change it in Oh Dear as well.' => 'Der Health-Check-Endpunkt ist durch dieses Secret gesichert. Sie können das Secret in Oh Dears {link} finden. Falls Sie es ändern, stellen Sie sicher, dass Sie es auch in Oh Dear anpassen.',
     'Please provide a valid API token and site ID.' => 'Bitte geben Sie zuerst einen API-Token und eine Site-ID ein.',
     'API authentication failed.' => 'API-Authentifizierung fehlgeschlagen.',
+    'A site with the ID "{id}" was not found.' => 'Eine Seite mit der ID {id} konnte nicht gefunden werden.',
+    'Please enter a valid site ID.' => 'Bitte geben Sie eine gültige Site-ID ein.',
+    'The Oh Dear API token "{apiToken}" is invalid.' => 'Der Oh Dear API-Token "{apiToken}" ist invalide.',
+    'The Oh Dear site with the ID "{siteId}" could not be found.' => 'Die Oh Dear Seite mit der ID "{siteId}" konnte nicht gefunden werden.',
 ];
