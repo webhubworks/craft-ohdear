@@ -4,6 +4,11 @@ namespace webhubworks\ohdear\health\checks;
 
 trait MakesChecks
 {
+    public static function allowAdminChanges(): AllowAdminChangesCheck
+    {
+        return AllowAdminChangesCheck::new();
+    }
+
     public static function availableUpdates(): AvailableUpdatesCheck
     {
         return AvailableUpdatesCheck::new();
