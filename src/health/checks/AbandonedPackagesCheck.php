@@ -4,6 +4,7 @@ namespace webhubworks\ohdear\health\checks;
 
 use Illuminate\Support\Collection;
 use OhDear\HealthCheckResults\CheckResult;
+use webhubworks\ohdear\health\exceptions\ComposerCommandFailed;
 use yii\base\Exception;
 
 class AbandonedPackagesCheck extends Check
@@ -16,27 +17,37 @@ class AbandonedPackagesCheck extends Check
      */
     public function run(): CheckResult
     {
-        $auditResult = $this->getAuditResult();
-        $abandonedPackages = $auditResult['abandoned'] ?? [];
+        try {
+            $auditResult = $this->getAuditResult();
+            $abandonedPackages = $auditResult['abandoned'] ?? [];
 
-        $abandonedPackages = collect($abandonedPackages)->map(function (string $newPackage, string $abandonedPackage) {
-            $whyResult = $this->getWhyResult($abandonedPackage);
-            $packageInformation = $this->getPackageInformation($abandonedPackage);
+            $abandonedPackages = collect($abandonedPackages)->map(function (string $newPackage, string $abandonedPackage) {
+                $whyResult = $this->getWhyResult($abandonedPackage);
+                $packageInformation = $this->getPackageInformation($abandonedPackage);
 
-            $requiredByPackage = $whyResult[0];
-            $requiredByPackageVersion = $whyResult[1];
-            $installedVersionConstraint = trim($whyResult[4], "()");
-            $installedVersion = $packageInformation['versions'][0] ?? null;
+                $requiredByPackage = $whyResult[0];
+                $requiredByPackageVersion = $whyResult[1];
+                $installedVersionConstraint = trim($whyResult[4], "()");
+                $installedVersion = $packageInformation['versions'][0] ?? null;
 
-            return [
-                'installedVersion' => $installedVersion,
-                'installedVersionConstraint' => $installedVersionConstraint,
-                'requiredBy' => [
-                    'packageName' => $requiredByPackage,
-                    'installedVersion' => $requiredByPackageVersion,
-                ]
-            ];
-        });
+                return [
+                    'installedVersion' => $installedVersion,
+                    'installedVersionConstraint' => $installedVersionConstraint,
+                    'requiredBy' => [
+                        'packageName' => $requiredByPackage,
+                        'installedVersion' => $requiredByPackageVersion,
+                    ]
+                ];
+            });
+        } catch (ComposerCommandFailed $e) {
+            return new CheckResult(
+                name: 'AbandonedPackages',
+                label: 'Abandoned Packages',
+                notificationMessage: $e->getMessage(),
+                shortSummary: 'Check could not run',
+                status: CheckResult::STATUS_WARNING,
+            );
+        }
 
         return (new CheckResult(
             name: 'AbandonedPackages',

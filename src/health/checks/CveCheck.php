@@ -4,6 +4,7 @@ namespace webhubworks\ohdear\health\checks;
 
 use Illuminate\Support\Collection;
 use OhDear\HealthCheckResults\CheckResult;
+use webhubworks\ohdear\health\exceptions\ComposerCommandFailed;
 use yii\base\Exception;
 
 class CveCheck extends Check
@@ -15,29 +16,39 @@ class CveCheck extends Check
      */
     public function run(): CheckResult
     {
-        $auditResult = $this->getAuditResult();
-        $advisoriesPerPackage = $auditResult['advisories'] ?? [];
+        try {
+            $auditResult = $this->getAuditResult();
+            $advisoriesPerPackage = $auditResult['advisories'] ?? [];
 
-        $advisoriesPerPackage = collect($advisoriesPerPackage)->map(function (array $advisories, string $packageName) {
+            $advisoriesPerPackage = collect($advisoriesPerPackage)->map(function (array $advisories, string $packageName) {
 
-            $whyResult = $this->getWhyResult($packageName);
-            $packageInformation = $this->getPackageInformation($packageName);
+                $whyResult = $this->getWhyResult($packageName);
+                $packageInformation = $this->getPackageInformation($packageName);
 
-            $requiredByPackage = $whyResult[0];
-            $requiredByPackageVersion = $whyResult[1];
-            $installedVersionConstraint = trim($whyResult[4], "()");
-            $installedVersion = $packageInformation['versions'][0] ?? null;
+                $requiredByPackage = $whyResult[0];
+                $requiredByPackageVersion = $whyResult[1];
+                $installedVersionConstraint = trim($whyResult[4], "()");
+                $installedVersion = $packageInformation['versions'][0] ?? null;
 
-            return [
-                'advisories' => $advisories,
-                'installedVersion' => $installedVersion,
-                'installedVersionConstraint' => $installedVersionConstraint,
-                'requiredBy' => [
-                    'packageName' => $requiredByPackage,
-                    'installedVersion' => $requiredByPackageVersion,
-                ]
-            ];
-        });
+                return [
+                    'advisories' => $advisories,
+                    'installedVersion' => $installedVersion,
+                    'installedVersionConstraint' => $installedVersionConstraint,
+                    'requiredBy' => [
+                        'packageName' => $requiredByPackage,
+                        'installedVersion' => $requiredByPackageVersion,
+                    ]
+                ];
+            });
+        } catch (ComposerCommandFailed $e) {
+            return new CheckResult(
+                name: 'SecurityVulnerabilities',
+                label: 'Security Vulnerabilities',
+                notificationMessage: $e->getMessage(),
+                shortSummary: 'Check could not run',
+                status: CheckResult::STATUS_WARNING,
+            );
+        }
 
         return (new CheckResult(
             name: 'SecurityVulnerabilities',

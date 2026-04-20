@@ -6,12 +6,14 @@ use Craft;
 use craft\helpers\App;
 use craft\helpers\FileHelper;
 use Symfony\Component\Process\Process;
+use webhubworks\ohdear\health\exceptions\ComposerCommandFailed;
 use yii\base\Exception;
 
 trait RunsComposer
 {
     /**
      * @throws Exception
+     * @throws ComposerCommandFailed
      */
     private function getAuditResult(): array
     {
@@ -20,11 +22,12 @@ trait RunsComposer
             ['--format=json', 'audit'],
         );
 
-        return json_decode($auditCommand->getOutput(), true);
+        return $this->decodeJsonOutput($auditCommand, 'composer audit');
     }
 
     /**
      * @throws Exception
+     * @throws ComposerCommandFailed
      */
     private function getPackageInformation(string $requiredByPackage): array
     {
@@ -33,22 +36,49 @@ trait RunsComposer
             ['--format=json', 'show', $requiredByPackage],
         );
 
-        return json_decode($showCommand->getOutput(), true);
+        return $this->decodeJsonOutput($showCommand, sprintf('composer show %s', $requiredByPackage));
     }
 
     /**
      * @throws Exception
+     * @throws ComposerCommandFailed
      */
     private function getWhyResult(string $packageName): array
     {
+        $label = sprintf('composer why %s', $packageName);
+
         $whyCommand = $this->runComposerCommand(
             Craft::$app->composer->getJsonPath(),
             ['why', $packageName],
         );
 
-        $whyOutput = $whyCommand->getOutput();
+        $whyOutput = trim($whyCommand->getOutput());
 
-        return explode(" ", $whyOutput);
+        if ($whyOutput === '') {
+            throw ComposerCommandFailed::emptyOutput($whyCommand, $label);
+        }
+
+        $parts = explode(' ', $whyOutput);
+
+        if (count($parts) < 5) {
+            throw ComposerCommandFailed::unexpectedOutput($label, $whyOutput);
+        }
+
+        return $parts;
+    }
+
+    /**
+     * @throws ComposerCommandFailed
+     */
+    private function decodeJsonOutput(Process $process, string $label): array
+    {
+        $decoded = json_decode($process->getOutput(), true);
+
+        if (is_array($decoded)) {
+            return $decoded;
+        }
+
+        throw ComposerCommandFailed::invalidJsonOutput($process, $label);
     }
 
     /**
