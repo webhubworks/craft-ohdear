@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.5.0 - 2026-04-20
+
+### Fixed
+- The CVE and Abandoned Packages health checks no longer crash with a cryptic TypeError when `composer audit` produces non-JSON output. They now return a warning result carrying Composer's actual error message.
+
 ## 5.4.0 - 2026-03-17
 
 ### Added
