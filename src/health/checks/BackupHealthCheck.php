@@ -11,7 +11,7 @@ class BackupHealthCheck extends Check
 {
     private const BACKUP_PLUGIN_HANDLE = 'backup';
 
-    private const MISSING_COMMAND_MESSAGE = 'The `backup/health` craft command is not available. Install https://github.com/webhubworks/craft-backup to enable this check.';
+    private const MISSING_COMMAND_MESSAGE = 'The `backup/monitor` craft command is not available. Install https://github.com/webhubworks/craft-backup to enable this check.';
 
     public function run(): CheckResult
     {
@@ -29,7 +29,7 @@ class BackupHealthCheck extends Check
         $process = new Process([
             App::phpExecutable() ?? 'php',
             $craftBinary,
-            'backup/health',
+            'backup/monitor',
             '--color=0',
         ], $rootPath);
         $process->setTimeout(60);
@@ -45,7 +45,7 @@ class BackupHealthCheck extends Check
             }
 
             return $this->checkCouldNotRun(
-                "The `backup/health` craft command did not return a valid response.",
+                "The `backup/monitor` craft command did not return a valid response.",
                 [
                     'exitCode' => $process->getExitCode(),
                     'stdout' => $stdout,
