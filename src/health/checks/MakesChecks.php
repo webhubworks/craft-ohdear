@@ -58,4 +58,9 @@ trait MakesChecks
     {
         return AbandonedPackagesCheck::new();
     }
+
+    public static function backupHealth(): BackupHealthCheck
+    {
+        return BackupHealthCheck::new();
+    }
 }

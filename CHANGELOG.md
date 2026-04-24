@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.6.0 - 2026-04-24
+
+### Added
+- Added a health check that calls the `backup/health` craft command to monitor backups managed by the [Craft Backup](https://github.com/webhubworks/craft-backup) plugin.
+
 ## 5.5.0 - 2026-04-20
 
 ### Fixed
