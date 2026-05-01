@@ -98,10 +98,14 @@ class BackupHealthCheck extends Check
 
         $reasons = [];
         foreach ($decoded['checks'] ?? [] as $check) {
-            if (($check['status'] ?? null) === 'failure' && ! empty($check['reason'])) {
-                $reasons[] = $check['reason'];
+            if (($check['status'] ?? null) !== 'failure' || empty($check['reason'])) {
+                continue;
             }
+            $target = is_string($check['target'] ?? null) && $check['target'] !== '' ? $check['target'] : null;
+            $reasons[] = $target !== null ? "[{$target}] {$check['reason']}" : $check['reason'];
         }
+
+        $reasons = array_values(array_unique($reasons));
 
         if ($reasons !== []) {
             return implode(' ', $reasons);
