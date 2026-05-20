@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.6.1 - 2026-05-20
+
+### Fixed
+- The CVE and Abandoned Packages health checks now copy `composer.phar` to a unique per-call path and validate the copy succeeded. This prevents concurrent checks from clobbering each other's phar (which surfaced as `Cannot open phar archive` errors) and surfaces a clear warning if the phar can't be prepared.
+
 ## 5.6.0 - 2026-04-24
 
 ### Added

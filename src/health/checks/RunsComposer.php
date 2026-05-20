@@ -85,15 +85,15 @@ trait RunsComposer
      * This is copied from Craft's code base. It uses a Composer binary that is
      * shipped with the CMS package.
      *
-     * @param string $jsonPath
-     * @param array $command
-     * @return Process
+     * Each invocation gets a unique phar path so concurrent health checks can't
+     * clobber each other's copy (which would surface as a "Cannot open phar
+     * archive" error in the running process).
+     *
+     * @throws ComposerCommandFailed
      */
     private function runComposerCommand(string $jsonPath, array $command): Process
     {
-        // Copy composer.phar into storage/
-        $pharPath = sprintf('%s/composer.phar', Craft::$app->getPath()->getRuntimePath());
-        copy(Craft::getAlias('@lib/composer.phar'), $pharPath);
+        $pharPath = $this->prepareComposerPhar();
 
         $command = array_merge([
             App::phpExecutable() ?? 'php',
@@ -119,7 +119,44 @@ trait RunsComposer
             $process->wait();
             return $process;
         } finally {
-            unlink($pharPath);
+            @unlink($pharPath);
         }
+    }
+
+    /**
+     * @throws ComposerCommandFailed
+     */
+    private function prepareComposerPhar(): string
+    {
+        $source = Craft::getAlias('@lib/composer.phar');
+
+        if (!is_string($source) || !is_readable($source)) {
+            throw ComposerCommandFailed::setupFailed(sprintf(
+                'source phar at %s is missing or unreadable',
+                is_string($source) ? $source : '@lib/composer.phar',
+            ));
+        }
+
+        $runtimePath = Craft::$app->getPath()->getRuntimePath();
+        $pharPath = sprintf('%s/composer-%s.phar', $runtimePath, bin2hex(random_bytes(8)));
+
+        if (!@copy($source, $pharPath)) {
+            $error = error_get_last();
+            throw ComposerCommandFailed::setupFailed(sprintf(
+                'copy to %s failed: %s',
+                $pharPath,
+                $error['message'] ?? 'unknown error',
+            ));
+        }
+
+        if (!is_readable($pharPath) || filesize($pharPath) === 0) {
+            @unlink($pharPath);
+            throw ComposerCommandFailed::setupFailed(sprintf(
+                'copied phar at %s is unreadable or empty',
+                $pharPath,
+            ));
+        }
+
+        return $pharPath;
     }
 }

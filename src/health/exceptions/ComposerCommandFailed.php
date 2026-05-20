@@ -31,4 +31,9 @@ class ComposerCommandFailed extends Exception
     {
         return new self(sprintf('%s returned unexpected output: %s', $label, $output));
     }
+
+    public static function setupFailed(string $reason): self
+    {
+        return new self(sprintf('Could not prepare composer.phar: %s', $reason));
+    }
 }
