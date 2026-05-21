@@ -12,17 +12,33 @@ use yii\base\Exception;
 trait RunsComposer
 {
     /**
+     * Process-scoped memo of the most recent `composer audit` result. Lets
+     * CveCheck and AbandonedPackagesCheck share one audit subprocess when
+     * both run in the same process (refresh command, or one HTTP request
+     * with caching disabled).
+     *
+     * @var array<string, array>
+     */
+    private static array $auditResultMemo = [];
+
+    /**
      * @throws Exception
      * @throws ComposerCommandFailed
      */
     private function getAuditResult(): array
     {
+        $jsonPath = Craft::$app->composer->getJsonPath();
+
+        if (isset(self::$auditResultMemo[$jsonPath])) {
+            return self::$auditResultMemo[$jsonPath];
+        }
+
         $auditCommand = $this->runComposerCommand(
-            Craft::$app->composer->getJsonPath(),
+            $jsonPath,
             ['--format=json', 'audit'],
         );
 
-        return $this->decodeJsonOutput($auditCommand, 'composer audit');
+        return self::$auditResultMemo[$jsonPath] = $this->decodeJsonOutput($auditCommand, 'composer audit');
     }
 
     /**

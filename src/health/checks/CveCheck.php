@@ -7,14 +7,15 @@ use OhDear\HealthCheckResults\CheckResult;
 use webhubworks\ohdear\health\exceptions\ComposerCommandFailed;
 use yii\base\Exception;
 
-class CveCheck extends Check
+class CveCheck extends Check implements Cacheable
 {
+    use CachesResult;
     use RunsComposer;
 
     /**
      * @throws Exception
      */
-    public function run(): CheckResult
+    protected function compute(): CheckResult
     {
         try {
             $auditResult = $this->getAuditResult();

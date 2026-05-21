@@ -44,6 +44,32 @@ Go to the settings page and paste your Oh Dear API key. (You can create a token 
 
 Currently there is no multi-site support. You can only connect to a single Oh Dear site from one Craft installation. Multi-site support is on our Roadmap. Let us know if you desperately need it.
 
+### Caching expensive health checks via cron
+
+`Check::cve()` and `Check::abandonedPackages()` spawn one or more `composer` subprocesses every time the health-check endpoint is hit. With several outstanding advisories this can easily push the endpoint past Oh Dear's response-time budget.
+
+Opt into cron-refreshed caching in `config/ohdear.php`:
+
+```php
+use webhubworks\ohdear\health\checks\Check;
+
+return [
+    'healthChecks' => [
+        Check::cve()->cachedViaCron(60 * 60 * 12),
+        Check::abandonedPackages()->cachedViaCron(60 * 60 * 12),
+        // …
+    ],
+];
+```
+
+Then schedule the refresh command on cron, more frequently than the staleness threshold you configured:
+
+```cron
+*/30 * * * * cd /path/to/site && php craft ohdear/health-check/refresh >/dev/null 2>&1
+```
+
+While caching is enabled the health-check endpoint reads from cache only. Until the first refresh has run, the check returns `STATUS_WARNING` with a "Not yet computed" message. If the cached result is older than the staleness threshold, the previous result is still returned but its status is downgraded to `STATUS_WARNING` with `staleSince` in meta. With caching disabled (default), behavior is unchanged.
+
 ## Oh Dear Roadmap
 - Application Health Checks for site security
 - More Checks like Sitemap, DNS, Scheduled Tasks etc.

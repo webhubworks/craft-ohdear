@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.7.0 - 2026-05-21
+
+### Added
+- The CVE and Abandoned Packages health checks can opt into cron-refreshed caching via `->cachedViaCron(int $staleAfterSeconds)`. When enabled, the health-check endpoint reads the cached result instead of spawning composer subprocesses inline (which can take several seconds per advisory). Run `craft ohdear/health-check/refresh` on cron to populate the cache.
+- New console command `craft ohdear/health-check/refresh` iterates registered checks and refreshes the cached result for those that opted into `cachedViaCron`.
+
+### Changed
+- `CveCheck` and `AbandonedPackagesCheck` now share a single `composer audit` invocation when both run in the same process (refresh command, or one HTTP request with caching disabled), eliminating the duplicate audit subprocess.
+
 ## 5.6.3 - 2026-05-20
 
 ### Fixed

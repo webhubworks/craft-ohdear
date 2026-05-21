@@ -31,5 +31,10 @@ return [
 //    'showNavBadges' => false,
 //    'healthChecks' => [
 //        Check::availableUpdates()->warnWhenTotalAvailableUpdatesIsAtLeast(3),
+//
+//        // Composer-backed checks are slow inline. Cache them via cron with
+//        // a 12-hour staleness threshold; refresh on cron (see README).
+//        Check::cve()->cachedViaCron(60 * 60 * 12),
+//        Check::abandonedPackages()->cachedViaCron(60 * 60 * 12),
 //    ],
 ];
