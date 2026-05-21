@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.7.1 - 2026-05-21
+
+### Fixed
+- Cache-miss and stale-cache warnings produced by `cachedViaCron` now carry the same `name` and `label` (e.g. `Security Vulnerabilities`, `Abandoned Packages`) as a successfully computed result, instead of the fully-qualified class name. Also fixed `Check::getName()` to return the short class name on Linux, where `basename()` did not split on backslashes.
+
 ## 5.7.0 - 2026-05-21
 
 ### Added
