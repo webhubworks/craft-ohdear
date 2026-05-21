@@ -32,7 +32,7 @@ abstract class Check
             return $this->name;
         }
 
-        return basename(static::class);
+        return (new \ReflectionClass(static::class))->getShortName();
     }
 
     public function getGenericCrashResult(string $errorMessage = "An unhandled error occurred"): CheckResult

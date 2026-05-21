@@ -13,6 +13,16 @@ class AbandonedPackagesCheck extends Check implements Cacheable
     use CachesResult;
     use RunsComposer;
 
+    protected function checkResultName(): string
+    {
+        return 'AbandonedPackages';
+    }
+
+    protected function checkResultLabel(): string
+    {
+        return 'Abandoned Packages';
+    }
+
     /**
      * @throws Exception
      */

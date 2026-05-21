@@ -75,19 +75,29 @@ trait CachesResult
 
     abstract protected function compute(): CheckResult;
 
+    /**
+     * The `name` field set on the CheckResult returned by compute(). Used to
+     * keep cache-miss/stale warnings consistent with successful results in
+     * the Oh Dear UI.
+     */
+    abstract protected function checkResultName(): string;
+
+    /**
+     * The `label` field set on the CheckResult returned by compute().
+     */
+    abstract protected function checkResultLabel(): string;
+
     private function getCacheKey(): string
     {
-        return 'ohdear-check-result:' . $this->getName();
+        return 'ohdear-check-result:' . $this->checkResultName();
     }
 
     private function notYetComputedResult(): CheckResult
     {
         return new CheckResult(
-            name: $this->getName(),
-            label: $this->getName(),
-            notificationMessage: sprintf(
-                'No cached result yet. Schedule `craft ohdear/health-check/refresh` on cron to populate this check.',
-            ),
+            name: $this->checkResultName(),
+            label: $this->checkResultLabel(),
+            notificationMessage: 'No cached result yet. Schedule `craft ohdear/health-check/refresh` on cron to populate this check.',
             shortSummary: 'Not yet computed',
             status: CheckResult::STATUS_WARNING,
         );

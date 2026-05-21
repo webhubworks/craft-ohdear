@@ -12,6 +12,16 @@ class CveCheck extends Check implements Cacheable
     use CachesResult;
     use RunsComposer;
 
+    protected function checkResultName(): string
+    {
+        return 'SecurityVulnerabilities';
+    }
+
+    protected function checkResultLabel(): string
+    {
+        return 'Security Vulnerabilities';
+    }
+
     /**
      * @throws Exception
      */
