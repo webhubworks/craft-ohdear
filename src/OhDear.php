@@ -180,7 +180,7 @@ class OhDear extends Plugin
                 /** @var User|null $currentUser */
                 $currentUser = Craft::$app->getUser()->getIdentity();
 
-                if ($currentUser->can('ohdear:view-utility')) {
+                if ($currentUser?->can('ohdear:view-utility')) {
                     $event->types[] = HealthCheckUtility::class;
                 }
             }
