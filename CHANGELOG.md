@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.7.1 - 2026-06-15
+
+### Fixed
+- `registerUtilityTypes()` no longer throws `Call to a member function can() on null` on CP requests without a logged-in user (e.g. while an SSO login is in progress). The current-user permission check is now null-safe.
+
 ## 4.7.0 - 2026-03-17
 
 ### Added
