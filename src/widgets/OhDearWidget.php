@@ -30,9 +30,38 @@ use yii\base\Exception;
  */
 class OhDearWidget extends Widget
 {
+    public const CHECK_TYPES = [
+        'uptime',
+        'broken_links',
+        'mixed_content',
+        'certificate_health',
+        'application_health',
+        'performance',
+    ];
+
     public string $period = 'month';
 
-    public $checks;
+    /**
+     * @var string[]|string|null
+     */
+    public $checks = self::CHECK_TYPES;
+
+    /**
+     * @inheritDoc
+     */
+    public function init(): void
+    {
+        parent::init();
+
+        // A widget whose settings were never saved stores `null`, so it shows
+        // every check. The settings form submits an empty string when no box
+        // is ticked, so that widget shows none.
+        if ($this->checks === null) {
+            $this->checks = self::CHECK_TYPES;
+        } elseif (! is_array($this->checks)) {
+            $this->checks = [];
+        }
+    }
 
     /**
      * @inheritDoc
