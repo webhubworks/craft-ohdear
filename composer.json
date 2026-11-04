@@ -32,7 +32,6 @@
         "symfony/process": "^5.4|^6.0|^7.0"
     },
     "require-dev": {
-        "craftcms/cms": "^3.6.0",
         "codeception/codeception": "^3.0",
         "vlucas/phpdotenv": "^3.0"
     },
