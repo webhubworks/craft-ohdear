@@ -127,9 +127,10 @@ export default {
             return this.getCheckByType('performance');
         },
         enabledChecks() {
+            const checks = Array.isArray(this.checks) ? this.checks : [];
             let enabledChecks = [];
             ['uptime', 'broken_links', 'mixed_content', 'lighthouse', 'certificate_health', 'application_health', 'performance'].forEach(checkType => {
-                if (this.checks.includes(checkType)) {
+                if (checks.includes(checkType)) {
                     enabledChecks.push(checkType);
                 }
             });
