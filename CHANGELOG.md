@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.0.3 - 2026-11-04
+### Fixed
+- The dashboard widget now shows every check when its settings were never saved. Before, it stayed empty and threw `Cannot read properties of null (reading 'includes')` in the browser console.
+
+### Security
+- Updated the bundled `axios` to 0.35.0 and refreshed the build dependencies to resolve open Dependabot alerts.
+
 ## 2.0.2 - 2022-05-09
 ### Changed
 - Improved settings page
