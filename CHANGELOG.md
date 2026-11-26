@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.7.4 - 2026-11-26
+
+### Security
+- The dashboard widget now mounts Vue on its own element only. Before, Vue compiled the whole dashboard as a template, so `{{ }}` in other widgets, such as an entry title in Recent Entries, ran as JavaScript in the browser of whoever viewed the dashboard.
+- Overrode the vulnerable build dependencies `postcss`, `uuid`, and `webpack-dev-server` to resolve open Dependabot alerts.
+
 ## 5.7.3 - 2026-11-04
 
 ### Fixed
