@@ -32,9 +32,6 @@ Vue.mixin({
     },
 })
 
-const dashboardGrid = document.getElementById('dashboard-grid');
-if (dashboardGrid) {
-    new Vue({
-        el: dashboardGrid
-    });
-}
+// Mount on our own widget only: Vue compiles the mount element's HTML as a
+// template, so mounting the whole dashboard ran {{ }} in other widgets' content.
+document.querySelectorAll('[data-init="ohdear-widget"]').forEach(el => new Vue({ el }));
