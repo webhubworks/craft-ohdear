@@ -34,4 +34,10 @@ Vue.mixin({
 
 // Mount on our own widget only: Vue compiles the mount element's HTML as a
 // template, so mounting the whole dashboard ran {{ }} in other widgets' content.
-document.querySelectorAll('[data-init="ohdear-widget"]').forEach(el => new Vue({ el }));
+// The widget body template calls this again after Craft re-renders a widget.
+window.OhDear.mountWidgets = () => document.querySelectorAll('[data-init="ohdear-widget"]:not([data-mounted])').forEach(el => {
+    // Vue renders the element's own attributes, so the marker stops a second mount.
+    el.setAttribute('data-mounted', '');
+    new Vue({ el });
+});
+window.OhDear.mountWidgets();
