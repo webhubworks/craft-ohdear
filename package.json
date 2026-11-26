@@ -27,6 +27,9 @@
     "webpack": "5.104.1"
   },
   "overrides": {
-    "webpack": "$webpack"
+    "webpack": "$webpack",
+    "postcss": "$postcss",
+    "webpack-dev-server": "^5.2.6",
+    "uuid": "^11.1.1"
   }
 }
