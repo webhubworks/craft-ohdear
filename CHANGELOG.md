@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.7.4 - 2026-11-26
+
+### Fixed
+- The dashboard widget now shows its data right after you save its settings or add it with "New widget". Before, it stayed empty until you reloaded the page.
+
 ## 4.7.3 - 2026-11-26
 
 ### Security
