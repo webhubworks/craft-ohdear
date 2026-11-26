@@ -20,3 +20,8 @@
     <widget period="{{ period }}" :checks="{{ checks|json_encode }}"></widget>
 
 </div>
+
+{# Craft doesn't rerun the bundle after it re-renders a widget, for example on saving its settings. #}
+{% js %}
+    window.OhDear?.mountWidgets?.();
+{% endjs %}
