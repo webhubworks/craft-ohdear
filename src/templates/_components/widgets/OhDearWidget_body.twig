@@ -15,11 +15,7 @@
 
 {% do view.registerAssetBundle('webhubworks\\ohdear\\assetbundles\\ohdear\\OhDearWidgetAsset') %}
 
-<div data-init="ohdear-widget">
-
-    <widget period="{{ period }}" :checks="{{ checks|json_encode }}"></widget>
-
-</div>
+<div data-init="ohdear-widget" data-period="{{ period }}" data-checks="{{ checks|json_encode }}"></div>
 
 {# Craft doesn't rerun the bundle after it re-renders a widget, for example on saving its settings. #}
 {% js %}

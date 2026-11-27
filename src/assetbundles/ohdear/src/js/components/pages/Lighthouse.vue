@@ -59,8 +59,8 @@
 <script>
 import Api from "../../helpers/Api";
 import {fetchesSite, hasCheck} from "../../helpers/Mixins";
-import LighthouseMetrics from "../LighthouseMetrics";
-import LighthouseScores from "../LighthouseScores";
+import LighthouseMetrics from "../LighthouseMetrics.vue";
+import LighthouseScores from "../LighthouseScores.vue";
 
 export default {
   name: "Lighthouse",

@@ -1,6 +1,6 @@
 // TODO: Can this be replaced with the DayJs implementation?
 
-import * as humanizeDuration from "humanize-duration";
+import humanizeDuration from "humanize-duration";
 
 const prettyTime = humanizeDuration.humanizer({
     spacer: '',

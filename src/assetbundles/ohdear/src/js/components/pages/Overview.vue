@@ -2,7 +2,6 @@
     <div>
         <div class="oh-grid md:oh-grid-cols-2 oh-gap-4 oh-max-w-6xl" v-if="site">
             <card v-for="check in supportedChecks"
-                  v-if="$can('view', check.type)"
                   :check="check"
                   :siteLoading="loading"
                   @should-refresh-site="fetchSite"
@@ -36,7 +35,7 @@ export default {
     computed: {
         supportedChecks() {
             return this.site.checks.filter(check => {
-                return VALID_TYPES.includes(check.type);
+                return VALID_TYPES.includes(check.type) && this.$can('view', check.type);
             });
         }
     },

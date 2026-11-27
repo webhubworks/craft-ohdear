@@ -74,12 +74,12 @@
 <script>
 import Api from "../../helpers/Api";
 import LocalDate from '../../helpers/LocalDate';
-import {localDateFilter, fetchesSite} from "../../helpers/Mixins";
+import {localDateMethod, fetchesSite} from "../../helpers/Mixins";
 import DayJs from "dayjs";
 
 export default {
     name: "ApplicationHealth",
-    mixins: [localDateFilter, fetchesSite],
+    mixins: [localDateMethod, fetchesSite],
     data() {
         return {
             checkType: 'application_health',

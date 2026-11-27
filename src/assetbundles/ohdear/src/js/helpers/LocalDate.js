@@ -1,7 +1,7 @@
 import DayJs from 'dayjs';
 
-require(`dayjs/locale/de`);
-require(`dayjs/locale/en`);
+import "dayjs/locale/de";
+import "dayjs/locale/en";
 
 // Set locale globally if it is supported, depending on user settings
 if (window.Craft.language && ['de', 'en'].includes(window.Craft.language)) {

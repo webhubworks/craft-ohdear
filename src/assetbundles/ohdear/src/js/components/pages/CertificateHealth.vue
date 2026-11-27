@@ -53,11 +53,11 @@
                 </tr>
                 <tr>
                     <th class="light">{{ $t('Valid form') }}</th>
-                    <td>{{ certificateHealth.certificateDetails.valid_from|localDate('llll') }}</td>
+                    <td>{{ localDate(certificateHealth.certificateDetails.valid_from, 'llll') }}</td>
                 </tr>
                 <tr>
                     <th class="light">{{ $t('Valid until') }}</th>
-                    <td>{{ certificateHealth.certificateDetails.valid_until|localDate('llll') }}</td>
+                    <td>{{ localDate(certificateHealth.certificateDetails.valid_until, 'llll') }}</td>
                 </tr>
                 </tbody>
             </table>
@@ -86,11 +86,11 @@
 
 <script>
 import Api from "../../helpers/Api";
-import {localDateFilter} from "../../helpers/Mixins";
+import {localDateMethod} from "../../helpers/Mixins";
 
 export default {
     name: "CertificateHealth",
-    mixins: [localDateFilter],
+    mixins: [localDateMethod],
     data() {
         return {
             certificateHealth: null
