@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.8.0 - 2026-11-27
+
+### Changed
+- The control panel pages and the dashboard widget now run on Vue 3 instead of Vue 2, which reached end of life on 2023-12-31. Vite replaces laravel-mix for the build, and the templates are compiled at build time.
+- Tooltips on the Uptime page now use `floating-vue` instead of `v-tooltip`.
+
+### Security
+- Resolved the Dependabot alerts for `vue`, `vue-template-compiler`, and `elliptic`, which had no fix on the laravel-mix and Vue 2 stack.
+
 ## 4.7.4 - 2026-11-26
 
 ### Fixed
