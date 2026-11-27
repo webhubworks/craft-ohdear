@@ -12,7 +12,7 @@
             <dl class="ohdear-widget__stat ohdear-widget__stat--numeric"
                 v-if="enabledChecks.includes('uptime') && !loadingUptime">
                 <dt>{{ $t('Downtime') }}</dt>
-                <dl>{{ downtime|friendlyDuration }}</dl>
+                <dl>{{ friendlyDuration(downtime) }}</dl>
             </dl>
             <dl v-if="enabledChecks.includes('broken_links') && !loadingSite" class="ohdear-widget__stat">
                 <dt>{{ $t(brokenLinksCheck.label) }}</dt>
@@ -53,7 +53,7 @@
 import DayJs from 'dayjs';
 import Api from '../helpers/Api';
 import Site from "../resources/Site";
-import Loader from './Loader';
+import Loader from './Loader.vue';
 
 function average(array) {
     let sum = 0;
@@ -158,7 +158,11 @@ export default {
             });
         }
     },
-    filters: {
+    mounted() {
+        this.fetchSite();
+        this.fetchUptime();
+    },
+    methods: {
         /**
          * @param minutes
          * @returns {string}
@@ -177,13 +181,7 @@ export default {
                 duration += `${remainingMinutes}m`;
             }
             return duration;
-        }
-    },
-    mounted() {
-        this.fetchSite();
-        this.fetchUptime();
-    },
-    methods: {
+        },
         /**
          * @param {string} type
          * @return {Object|undefined}

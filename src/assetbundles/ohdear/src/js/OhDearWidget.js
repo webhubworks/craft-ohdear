@@ -10,34 +10,33 @@
  * @since     1.0.0
  */
 
-import Vue from 'vue';
-import DayJs from "dayjs";
-import Translator from "./Translator";
+import '../css/OhDearWidget.css';
+import { createApp } from 'vue';
+import DayJs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import Translator from './Translator';
+import Widget from './components/Widget.vue';
+import Badge from './components/Badge.vue';
+import CheckBadge from './components/CheckBadge.vue';
+import Loader from './components/Loader.vue';
 
-Vue.component('widget', require('./components/Widget').default);
-Vue.component('badge', require('./components/Badge').default);
-Vue.component('check-badge', require('./components/CheckBadge').default);
-Vue.component('loader', require('./components/Loader').default);
+DayJs.extend(utc);
 
-/**
- * DayJs Plugins
- */
-DayJs.extend(require('dayjs/plugin/utc'));
-
-Vue.mixin({
-    methods: {
-        $t(key, replace = {}) {
-            return Translator(window.OhDear.translations, key, replace)
-        },
-    },
-})
-
-// Mount on our own widget only: Vue compiles the mount element's HTML as a
-// template, so mounting the whole dashboard ran {{ }} in other widgets' content.
 // The widget body template calls this again after Craft re-renders a widget.
 window.OhDear.mountWidgets = () => document.querySelectorAll('[data-init="ohdear-widget"]:not([data-mounted])').forEach(el => {
-    // Vue renders the element's own attributes, so the marker stops a second mount.
     el.setAttribute('data-mounted', '');
-    new Vue({ el });
+
+    const app = createApp(Widget, {
+        period: el.dataset.period,
+        checks: JSON.parse(el.dataset.checks),
+    });
+
+    app.component('badge', Badge);
+    app.component('check-badge', CheckBadge);
+    app.component('loader', Loader);
+
+    app.config.globalProperties.$t = (key, replace = {}) => Translator(window.OhDear.translations, key, replace);
+
+    app.mount(el);
 });
 window.OhDear.mountWidgets();

@@ -34,6 +34,7 @@
 <script>
 import Api from '../helpers/Api';
 import DayJs from "dayjs";
+import {map} from "lodash";
 
 export default {
     name: "PerformanceChart",
@@ -50,10 +51,10 @@ export default {
     },
     methods: {
         getLabels(data) {
-            return _.map(data, 'date');
+            return map(data, 'date');
         },
         getDataColumn(data, columnName) {
-            return _.map(data, columnName);
+            return map(data, columnName);
         },
         update(timespan) {
             this.set(timespan);

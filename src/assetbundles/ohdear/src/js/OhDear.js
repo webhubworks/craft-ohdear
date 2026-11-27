@@ -10,60 +10,71 @@
  * @since     1.0.0
  */
 
-import Vue from 'vue';
-import { VTooltip } from 'v-tooltip'
-import DayJs from "dayjs";
-import Translator from "./Translator";
-import CheckPermissions from "./CheckPermissions";
+import '../css/OhDear.css';
+import 'floating-vue/dist/style.css';
+import { createApp } from 'vue';
+import { vTooltip } from 'floating-vue';
+import DayJs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
+import isoWeek from 'dayjs/plugin/isoWeek';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import isToday from 'dayjs/plugin/isToday';
+import Translator from './Translator';
+import CheckPermissions from './CheckPermissions';
+import Card from './components/Card.vue';
+import Overview from './components/pages/Overview.vue';
+import Uptime from './components/pages/Uptime.vue';
+import Performance from './components/pages/Performance.vue';
+import PerformanceChart from './components/PerformanceChart.vue';
+import BrokenLinks from './components/pages/BrokenLinks.vue';
+import MixedContent from './components/pages/MixedContent.vue';
+import CertificateHealth from './components/pages/CertificateHealth.vue';
+import ApplicationHealth from './components/pages/ApplicationHealth.vue';
+import HttpStatusBadge from './components/HttpStatusBadge.vue';
+import Badge from './components/Badge.vue';
+import CheckBadge from './components/CheckBadge.vue';
+import CheckBody from './components/CheckBody.vue';
+import Loader from './components/Loader.vue';
+import InfoIcon from './components/InfoIcon.vue';
 
-Vue.component('card', require('./components/Card').default);
-Vue.component('overview', require('./components/pages/Overview').default);
-Vue.component('uptime', require('./components/pages/Uptime').default);
-Vue.component('performance', require('./components/pages/Performance').default);
-Vue.component('performance-chart', require('./components/PerformanceChart').default);
-Vue.component('broken-links', require('./components/pages/BrokenLinks').default);
-Vue.component('mixed-content', require('./components/pages/MixedContent').default);
-Vue.component('certificate-health', require('./components/pages/CertificateHealth').default);
-Vue.component('application-health', require('./components/pages/ApplicationHealth').default);
-Vue.component('http-status-badge', require('./components/HttpStatusBadge').default);
-Vue.component('badge', require('./components/Badge').default);
-Vue.component('check-badge', require('./components/CheckBadge').default);
-Vue.component('check-body', require('./components/CheckBody').default);
-Vue.component('loader', require('./components/Loader').default);
-Vue.component('info-icon', require('./components/InfoIcon').default);
+DayJs.extend(customParseFormat);
+DayJs.extend(utc);
+DayJs.extend(timezone);
+DayJs.extend(localizedFormat);
+DayJs.extend(isoWeek);
+DayJs.extend(relativeTime);
+DayJs.extend(isToday);
 
-Vue.directive('tooltip', VTooltip)
+// Keyed by the data-page attribute of #ohdear-app in the page templates.
+const pages = {
+    'overview': Overview,
+    'uptime': Uptime,
+    'performance': Performance,
+    'broken-links': BrokenLinks,
+    'mixed-content': MixedContent,
+    'certificate-health': CertificateHealth,
+    'application-health': ApplicationHealth,
+};
 
-Vue.mixin({
-    methods: {
-        $t(key, replace = {}) {
-            return Translator(window.OhDear.translations, key, replace);
-        },
-        $can(ability, check) {
-            return CheckPermissions(window.OhDear.permissions, ability, check);
-        }
-    },
-})
+const el = document.getElementById('ohdear-app');
+if (el) {
+    const app = createApp(pages[el.dataset.page]);
 
-/**
- * DayJs Plugins
- */
-DayJs.extend(require('dayjs/plugin/customParseFormat'));
-DayJs.extend(require('dayjs/plugin/utc'));
-DayJs.extend(require('dayjs/plugin/timezone'));
-DayJs.extend(require('dayjs/plugin/localizedFormat'));
-DayJs.extend(require('dayjs/plugin/isoWeek'));
-DayJs.extend(require('dayjs/plugin/relativeTime'));
-DayJs.extend(require('dayjs/plugin/isToday'));
+    app.component('card', Card);
+    app.component('performance-chart', PerformanceChart);
+    app.component('http-status-badge', HttpStatusBadge);
+    app.component('badge', Badge);
+    app.component('check-badge', CheckBadge);
+    app.component('check-body', CheckBody);
+    app.component('loader', Loader);
+    app.component('info-icon', InfoIcon);
+    app.directive('tooltip', vTooltip);
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
-let page = document.getElementById('ohdear-app');
-if (page) {
-    new Vue({
-        el: page
-    });
+    app.config.globalProperties.$t = (key, replace = {}) => Translator(window.OhDear.translations, key, replace);
+    app.config.globalProperties.$can = (ability, check) => CheckPermissions(window.OhDear.permissions, ability, check);
+
+    app.mount(el);
 }

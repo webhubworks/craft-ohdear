@@ -176,8 +176,8 @@ const fetchesDowntime = {
     }
 };
 
-const localDateFilter = {
-    filters: {
+const localDateMethod = {
+    methods: {
         localDate(date, format = 'LLLL') {
             return LocalDate(date).format(format);
         }
@@ -188,5 +188,5 @@ export {
     fetchesSite,
     fetchesDowntime,
     hasCheck,
-    localDateFilter,
+    localDateMethod,
 };

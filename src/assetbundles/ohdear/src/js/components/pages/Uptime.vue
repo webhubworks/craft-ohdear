@@ -45,7 +45,7 @@
                 <div class="oh-w-full oh-overflow-x-auto" ref="heatmap">
 
                     <div class="oh-relative" :style="monthLegendStyle">
-                    <span v-for="month in legendMonths" v-if="month.show" class="oh-block oh-absolute oh-top-0 light oh-font-medium" :style="getMonthStyle(month)">
+                    <span v-for="month in legendMonths.filter(month => month.show)" class="oh-block oh-absolute oh-top-0 light oh-font-medium" :style="getMonthStyle(month)">
                         {{ $t(month.label) }}
                     </span>
                     </div>
